@@ -1,0 +1,23 @@
+{
+  "resultSets": [
+    {
+      "name": "CommonTeamRoster",
+      "headers": [
+        "TeamID",
+        "SEASON",
+        "LeagueID",
+        "PLAYER",
+        "PLAYER_ID"
+      ],
+      "rowSet": [
+        [
+          1610612738,
+          "2026",
+          "00",
+          "Synthetic Player",
+          10
+        ]
+      ]
+    }
+  ]
+}
