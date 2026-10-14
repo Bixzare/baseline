@@ -73,7 +73,7 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Linux locked install, 18 tests, checks, build, and fresh-kernel imports passed, including a second clean environment.
+Linux locked install, 19 tests, checks, build, and fresh-kernel imports passed; clean-environment checks also passed.
 Local Windows install and interactive VS Code/Jupyter kernel selection remain pending; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
