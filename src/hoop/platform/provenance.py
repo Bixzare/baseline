@@ -1,5 +1,6 @@
 """Immutable, credential-free observations and cutoff checks."""
 
+import copy
 import hashlib
 import json
 from datetime import UTC, datetime
@@ -47,7 +48,7 @@ class Archive:
 
     def observation(self, manifest: dict[str, Any]) -> dict[str, Any]:
         observation_id = uuid4().hex
-        result = {**manifest, "observation_id": observation_id}
+        result = copy.deepcopy({**manifest, "observation_id": observation_id})
         with (self.root / "observations" / f"{observation_id}.json").open("x") as stream:
             json.dump(result, stream, indent=2, sort_keys=True, allow_nan=False)
         return result

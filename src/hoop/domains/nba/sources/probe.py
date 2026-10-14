@@ -83,6 +83,20 @@ def local_requests(config: dict[str, Any]) -> list[ProbeRequest]:
     return requests
 
 
+def schedule_url(config: dict[str, Any], environment: str) -> str:
+    if environment != "local":
+        return str(config["schedule_url"])
+    from nba_api.stats.endpoints.scheduleleaguev2 import ScheduleLeagueV2
+    from nba_api.stats.library.http import NBAStatsHTTP
+
+    endpoint = ScheduleLeagueV2(season=config["season"], get_request=False)
+    return (
+        str(NBAStatsHTTP.base_url.format(endpoint=endpoint.endpoint))
+        + "?"
+        + urlencode(endpoint.parameters)
+    )
+
+
 def run_pass(
     runner: ProbeRunner, config: dict[str, Any], environment: str, *, repeat: bool = False
 ) -> None:
@@ -96,7 +110,9 @@ def run_pass(
         return runner.fetch(request, validate)
 
     context = {"season": config["season"], "opening_date": config["opening_date"]}
-    scheduled = fetch(ProbeRequest("schedule", config["schedule_url"], environment, context))
+    scheduled = fetch(
+        ProbeRequest("schedule", schedule_url(config, environment), environment, context)
+    )
     records = []
     if scheduled and scheduled["outcome"] == "verified_sample":
         records = list(scheduled["summary"]["records"])
@@ -142,8 +158,28 @@ def run_pass(
             reason="no_completed_game_id_in_retained_validated_sources",
         )
     if environment == "local":
-        for request in local_requests(config):
+        teams = []
+        if scheduled and scheduled["outcome"] == "verified_sample":
+            teams = sorted(
+                {
+                    team
+                    for game in scheduled["summary"]["opening_night"]
+                    for team in [game["home_team_id"], game["away_team_id"]]
+                }
+            )[:2]
+        for request in local_requests({**config, "team_ids": teams}):
             fetch(request)
+        if not teams and not repeat:
+            runner.save(
+                ProbeRequest(
+                    "roster",
+                    "https://stats.nba.com/stats/commonteamroster",
+                    environment,
+                    {"season": config["season"]},
+                ),
+                outcome="unverified",
+                reason="no_verified_opening_night_team_sample",
+            )
 
 
 def assessment(runner: ProbeRunner, environment: str) -> dict[str, Any]:

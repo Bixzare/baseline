@@ -70,6 +70,11 @@ def game_record(game: dict[str, Any], *, schedule: bool = False) -> dict[str, An
     if not unknown_time and not isinstance(timestamp, str):
         raise ValueError("Game UTC time must be a timestamp string")
     start = None if unknown_time else utc(parse_time(str(timestamp)))
+    if start is not None:
+        event_date = parse_time(start).date().isoformat()
+        first_year = int(season[:4])
+        if not f"{first_year}-09-01" <= event_date < f"{first_year + 1}-09-01":
+            raise ValueError("Game start conflicts with gameId season")
     return {
         "game_id": game_id,
         "competition": competition,
@@ -218,6 +223,10 @@ def boxscore(payload: dict[str, Any], request: ProbeRequest, now: datetime) -> d
                 if participation == "explicit_dnp" and Decimal(row["seconds"]) != 0:
                     raise ValueError("Explicit DNP contains playing minutes")
             players.append(row)
+        team_players = [row for row in players if row["team_id"] == team_id]
+        if all(row["participation"] != "unknown" for row in team_players):
+            if sum(row["points"] for row in team_players) != stats["points"]:
+                raise ValueError("Player points conflict with final team totals")
     unique(players, ("game_id", "player_id"))
     return {
         "record_count": len(players),

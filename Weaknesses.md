@@ -56,7 +56,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-03: Availability coverage may be incomplete or too early
 
-- **Evidence:** Injury ingestion may be deferred at launch; a chosen reliable source is still a Phase 0 decision. The publication target precedes tip-off by two hours.
+- **Evidence:** [SOURCE-001, issue #3](https://github.com/Bixzare/baseline/issues/3) has no verified target-season automated injury adapter and recommends explicit deferral for owner review; that decision is not yet accepted. The publication target precedes tip-off by two hours.
 - **Impact:** Forecasts may miss late injury news or lineup changes even when publication is correct.
 - **Current mitigation:** Unknown availability remains visible. Preserve all report versions if ingestion is adopted; official forecasts remain immutable.
 - **Improvement / timing:** Evaluate injury ingestion after launch if deferred. Later forecasts would require a separate, explicitly approved forecast-horizon policy and separate evaluation records.
@@ -96,9 +96,9 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-08: Collection and publication depend on fallible sources and runners
 
-- **Evidence:** NBA source access is unverified until Phase 0. The plan anticipates unofficial endpoint changes and scheduler delays; local fallback depends on an awake, connected machine.
+- **Evidence:** [SOURCE-001's report](docs/source-verification.md) records HTTP 403 on the CDN schedule candidate from GitHub Actions and the cloud-development runner on October 14, 2026. Each stopped after one request; status/final/roster/history gates remain unverified, and actual local probes are pending. Local fallback requires an awake, connected machine and observed working access.
 - **Impact:** Source or runner failures can leave missing forecasts and stale public data. Moving to another cloud does not establish source accessibility.
-- **Current mitigation:** Verify capabilities in the actual environments, retain fixtures, bound retries, monitor missing runs, rehearse the local fallback, and display missed coverage.
+- **Current mitigation:** Bounded probes retain immutable raw bytes/manifests and fail on denial or invalid content. Cloud evidence was downloaded and checksummed locally; synthetic fixture tests do not establish source access. Obtain local evidence or an owner-approved permitted-source decision before dependent collection; do not reroute the same failed request as if it were verified. Scheduling, fallback rehearsal, and public coverage remain later implementation gates.
 - **Improvement / timing:** After launch, use observed incidents to decide whether a permitted alternative source or more reliable runner is worth its cost.
 - **Closure evidence:** Recorded failure/recovery drills and operating history meet the agreed reliability target. Essential source access and working fallback remain launch gates, not future fixes.
 

@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: [BOOT-001, issue #1](https://github.com/Bixzare/baseline/issues/1) implements the Python package bootstrap and PR checks for owner review. Linux installation and kernel checks pass locally; hosted CI status belongs to the linked PR. Local Windows installation and VS Code kernel selection remain pending. Forecasting, service provisioning, source verification, and launch readiness remain outstanding.
+Status: BOOT-001 is merged. [SOURCE-001, issue #3](https://github.com/Bixzare/baseline/issues/3) adds bounded capability probes and a truthful [source report](docs/source-verification.md) for owner review. The candidate schedule request returned HTTP 403 on GitHub Actions and the cloud-development runner; required source gates remain unresolved. Actual local-machine probes and interactive VS Code kernel selection remain pending. Forecasting, service provisioning, and launch readiness remain outstanding.
 
 ## Brand
 
@@ -50,8 +50,8 @@ Approved dashboard hosting plan: GitHub Pages for initial testing, then Vercel f
 | [Coding agent guide](AGENTS.md) | Locked; 184 lines. |
 | [Project skills and provenance](skills/README.md) | Locked; seven skills installed in `.agents/skills/` and discovered in this session on October 13. |
 | [Known weaknesses and improvements](Weaknesses.md) | Locked v1.0; living register maintained through owner review. |
-| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1); bootstrap implemented on a review branch. Local Windows verification remains pending. |
-| [SOURCE-001: NBA source capability verification](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md) | Locked specification; observed access and source acceptance remain execution gates. |
+| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1), merged [PR #2](https://github.com/Bixzare/baseline/pull/2). Local Windows verification remains pending. |
+| [SOURCE-001: NBA source capability verification](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md) | [Issue #3](https://github.com/Bixzare/baseline/issues/3); probes and failure evidence prepared for review. Local sources and capability acceptance remain gates. |
 | [DATA-001: Local backfill and first notebook](docs/issues/DATA-001-local-seed-backfill-and-source-notebook.md) | Locked specification; requires accepted local historical source evidence during execution. |
 | [DB-001: Migrations, roles, and connectivity](docs/issues/DB-001-migrations-roles-and-supabase-connectivity.md) | Locked specification; dedicated Supabase Free project setup remains an execution gate. |
 | [DB-002: Private artifacts and source evidence](docs/issues/DB-002-private-artifacts-and-source-evidence.md) | Locked specification; hosted storage enforcement and evidence persistence remain execution gates. |
@@ -98,7 +98,7 @@ The revised [critical path](docs/critical-path.md#updated-execution-plan-october
 
 ### First execution assignment
 
-The owner assigned only [BOOT-001](docs/issues/BOOT-001-repository-python-and-pr-ci.md). Its bootstrap is prepared for review against [issue #1](https://github.com/Bixzare/baseline/issues/1). Do not merge, deploy, or begin SOURCE-001 during this assignment. A later issue requires a separate assignment after owner review.
+BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). The owner then assigned only [SOURCE-001](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md). Its probe implementation and failure report await review; source acceptance and any coverage revision require the owner. Do not merge, deploy, or start DATA-001 during this assignment.
 
 ### Setup inputs and stop conditions
 
@@ -119,7 +119,7 @@ The owner confirmed TypeScript, Tailwind CSS v4, and shadcn/ui for core componen
 
 ## Setup
 
-Use Python **3.12.14** and uv **0.12.23**. `.python-version` pins the interpreter; `pyproject.toml` pins the bootstrap tools and `uv.lock` records the full resolution and artifact hashes, including Windows dependencies. The installed distribution is `baseline-hoop`; imports remain `hoop`. No runtime dependencies are needed yet. Source, dataframe/Parquet, database, and model dependencies enter with their assigned features.
+Use Python **3.12.14** and uv **0.12.23**. `.python-version` pins the interpreter; `pyproject.toml` pins the bootstrap tools and nba_api **1.11.4**, and `uv.lock` records the full resolution and artifact hashes, including Windows dependencies. The installed distribution is `baseline-hoop`; imports remain `hoop`. nba_api brings requests, pandas, and NumPy for its supported interfaces. Database and model tools enter with their assigned features.
 
 From the repository root, Linux commands verified on October 14, 2026:
 
@@ -137,11 +137,11 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-The checks passed in `.venv` and in a second clean environment installed from the lockfile. The original 18 tests passed in both; the suite now has 19 passing tests, including an end-to-end boundary command regression. No tests are skipped. The build produced an sdist and wheel. The kernel check launches a fresh registered `baseline` kernel, verifies its interpreter matches the active project environment, and imports the package and both subpackages from the expected checkout path. It does not claim interactive VS Code kernel selection has been verified.
+Bootstrap installation was verified in `.venv` and a second clean environment. The SOURCE-001 suite now has 106 passing offline tests, including five cutoff/leakage tests and command-level boundary regression coverage. No tests are skipped. The build produced an sdist and wheel. The kernel check launches a fresh registered `baseline` kernel, verifies its interpreter matches the active project environment, and imports the package and both subpackages from the expected checkout path. It does not claim interactive VS Code kernel selection has been verified.
 
 In local VS Code, select the repository's `.venv` interpreter as the notebook kernel explicitly. The registration above writes into the project environment instead of global/user Jupyter settings; rerun it after recreating or moving the environment. On Windows, install the pinned Python/uv versions, run `uv sync --locked` from the repository root, and use the same `uv run` check and kernel commands in PowerShell. The Linux `export` line is specific to this cloud runner; a normal local Windows cache does not need that override. **Local Windows locked installation, imports, paths, and interactive Jupyter/VS Code kernel selection remain pending until performed on the owner's machine.** Hosted Windows CI is separate evidence.
 
-`.github/workflows/ci.yml` uses `uv python install 3.12.14` on Ubuntu 24.04 and Windows 2025 because the GitHub `setup-python` manifest does not supply that security-release version on Windows. uv's managed distribution is available on both platforms. The Linux job runs locked install, lint/format, strict types, boundary checks, tests, package build, and fresh-kernel imports on every PR. The minimal Windows job runs locked install, tests, and the same kernel/import/path checks. Both use pinned action revisions, a ten-minute timeout, and read-only repository permissions; neither uses live NBA services, production Supabase, or secrets. Postgres integration and actual walkthrough notebook tests enter with the first implementing issues. There are no database, leakage, prediction, or notebook walkthrough checks to run at bootstrap, and no evidence of those capabilities is claimed.
+`.github/workflows/ci.yml` uses `uv python install 3.12.14` on Ubuntu 24.04 and Windows 2025 because the GitHub `setup-python` manifest does not supply that security-release version on Windows. uv's managed distribution is available on both platforms. The Linux job runs locked install, lint/format, strict types, boundary checks, tests, package build, and fresh-kernel imports on every PR. The minimal Windows job runs locked install, tests, and the same kernel/import/path checks. Both use pinned action revisions, a ten-minute timeout, and read-only repository permissions; routine PR checks use fixtures and no production credentials. SOURCE-001 adds source cutoff/leakage tests; Postgres integration and actual walkthrough notebook tests enter with their first implementing issues. Live CDN probes run only through an explicit manual dispatch opt-in or the dedicated manual source workflow. The [source report](docs/source-verification.md) documents commands, retained evidence, failed/unverified gates, and local-machine prerequisites. No database, prediction, or production scheduler capability is claimed.
 
 The boundary checker scans every Python file under `src/hoop/platform/`, including new nested modules and initializers. It rejects absolute/relative NBA imports, imports under `TYPE_CHECKING`, and wildcard imports from `hoop.domains`; permitted shared and synthetic-domain imports are fixture-tested. This is static import enforcement, not proof against arbitrary runtime import construction or proof that future shared contracts are domain-independent. Do not add dynamic plugin discovery. A forbidden import reports the file, line, and direction rule with exit code 1. An automated subprocess regression exercises the CI command against a new nested module: it verifies rejection and the diagnostic, then verifies success after the NBA dependency is moved into domain code and the platform uses shared imports. Temporary negative controls also demonstrated that Ruff rejects an unused import, mypy rejects a string assigned to an integer, and pytest rejects a failed assertion; those failures were removed and the required suite passed afterward.
 

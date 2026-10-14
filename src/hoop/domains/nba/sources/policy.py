@@ -1,5 +1,6 @@
 """Sequential requests, bounded retries, raw retention, and truthful failures."""
 
+import math
 import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
@@ -199,6 +200,13 @@ class ProbeRunner:
                     raw_path=path,
                     raw_complete=response.complete,
                 )
+                if self.remaining() < 0:
+                    return self.save(
+                        request,
+                        **fields,
+                        outcome="failed",
+                        reason="response_arrived_after_run_budget",
+                    )
                 stripped = response.body.lstrip().lower()
                 denied = response.status in {401, 403} or stripped.startswith(
                     (b"<!doctype html", b"<html")
@@ -237,11 +245,15 @@ class ProbeRunner:
                 try:
                     value = response.headers["retry-after"]
                     try:
-                        delay = max(delay, float(value))
+                        numeric_delay = float(value)
                     except ValueError:
                         delay = max(
                             delay, (parsedate_to_datetime(value) - self.clock.now()).total_seconds()
                         )
+                    else:
+                        if not math.isfinite(numeric_delay) or numeric_delay < 0:
+                            raise ValueError("Retry-After must be finite and nonnegative")
+                        delay = max(delay, numeric_delay)
                 except (ValueError, TypeError, OverflowError):
                     retry = False
                     failure = "invalid_retry_after; stopping_without_retry"

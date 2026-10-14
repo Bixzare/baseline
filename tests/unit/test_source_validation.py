@@ -98,6 +98,8 @@ def test_explicit_dnp_and_missing_participation_are_distinct() -> None:
     assert result["players"][0]["participation"] == "unknown"
     assert result["players"][0]["points"] is None
     player["notPlayingReason"] = "DNP - Coach's Decision"
+    payload["game"]["homeTeam"]["score"] = 0
+    payload["game"]["homeTeam"]["statistics"]["points"] = 0
     player["statistics"] = {
         "points": 0,
         "reboundsTotal": 0,
@@ -142,6 +144,7 @@ def test_missing_player_is_not_invented_as_zero_outcome() -> None:
         "not_final",
         "negative_target",
         "bool_target",
+        "team_total_mismatch",
     ],
 )
 def test_final_contract_rejects_broken_schema(mutation: str) -> None:
@@ -162,6 +165,9 @@ def test_final_contract_rejects_broken_schema(mutation: str) -> None:
         game["gameStatus"] = 2
     elif mutation == "negative_target":
         player["statistics"]["points"] = -1
+    elif mutation == "team_total_mismatch":
+        game["homeTeam"]["score"] = 2
+        game["homeTeam"]["statistics"]["points"] = 2
     else:
         player["statistics"]["points"] = True
     with pytest.raises((ValueError, KeyError)):
@@ -169,7 +175,15 @@ def test_final_contract_rejects_broken_schema(mutation: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "mutation", ["wrong_season", "duplicate", "no_opening", "naive_time", "missing_status"]
+    "mutation",
+    [
+        "wrong_season",
+        "duplicate",
+        "no_opening",
+        "naive_time",
+        "missing_status",
+        "wrong_event_season",
+    ],
 )
 def test_schedule_contract_rejects_incomplete_or_conflicting_data(mutation: str) -> None:
     payload = fixture("schedule")
@@ -183,6 +197,8 @@ def test_schedule_contract_rejects_incomplete_or_conflicting_data(mutation: str)
         game["gameDateTimeUTC"] = "2026-10-23T00:30:00Z"
     elif mutation == "naive_time":
         game["gameDateTimeUTC"] = "2026-10-21T00:30:00"
+    elif mutation == "wrong_event_season":
+        game["gameDateTimeUTC"] = "2028-10-21T00:30:00Z"
     else:
         del game["gameStatus"]
     with pytest.raises((ValueError, KeyError)):
@@ -268,6 +284,7 @@ def test_joins_need_independent_samples_and_allow_rookies_without_history() -> N
 def test_pinned_nba_api_interfaces_generate_local_only_sample_requests() -> None:
     root = Path(__file__).resolve().parents[2]
     config = json.loads((root / "configs/sources/local.json").read_text())
+    config["team_ids"] = [1610612738, 1610612752]  # Synthetic independently verified sample.
     requests = local_requests(config)
     assert len(requests) == 4
     assert all(r.environment == "local" for r in requests)

@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from hoop.domains.nba.sources.policy import Policy, ProbeRequest, ProbeRunner, Response
+from hoop.domains.nba.sources.probe import assessment, run_pass
 from hoop.domains.nba.sources.validate import validate
 from hoop.platform.provenance import Archive
 
@@ -109,8 +110,9 @@ def test_retry_after_exceeds_budget_stops_without_sleep(tmp_path: Path) -> None:
     assert probe.clock.monotonic() == 0
 
 
-def test_malformed_retry_after_cannot_trigger_unbounded_sleep(tmp_path: Path) -> None:
-    probe = runner(tmp_path, [Response(429, b"{}", {"retry-after": "later"})])
+@pytest.mark.parametrize("header", ["later", "NaN", "inf", "-1"])
+def test_malformed_retry_after_cannot_trigger_unbounded_sleep(tmp_path: Path, header: str) -> None:
+    probe = runner(tmp_path, [Response(429, b"{}", {"retry-after": header})])
     assert (
         probe.fetch(request(), validate)["reason"] == "invalid_retry_after; stopping_without_retry"
     )
@@ -207,3 +209,61 @@ def test_unsafe_requests_are_rejected(url: str) -> None:
 def test_policy_cannot_exceed_contract(values: dict[str, int]) -> None:
     with pytest.raises(ValueError):
         Policy(**values)
+
+
+def test_shared_probe_operation_repeats_without_mutating_saved_summaries(tmp_path: Path) -> None:
+    bodies = [
+        (FIXTURES / f"{name}.json").read_bytes() for name in ["schedule", "scoreboard", "boxscore"]
+    ]
+    probe = runner(tmp_path, [Response(200, body, {}) for body in bodies * 2])
+    config = {
+        "season": "2026-27",
+        "opening_date": "2026-10-20",
+        "schedule_url": "https://cdn.nba.com/schedule.json",
+    }
+    run_pass(probe, config, "github-actions")
+    run_pass(probe, config, "github-actions", repeat=True)
+    assert probe.requests == 6
+    assert probe.archive.verify() == 6
+    for row in probe.observations:
+        saved = json.loads(
+            (tmp_path / "observations" / f"{row['observation_id']}.json").read_text()
+        )
+        assert saved == row
+    report = assessment(probe, "github-actions")
+    for capability in ["schedule", "status", "final"]:
+        assert report["capabilities"][capability]["outcome"] == "verified_sample"
+        assert report["capabilities"][capability]["successful_observations"] == 2
+    assert report["capabilities"]["roster"]["outcome"] == "unverified"
+
+
+def test_probe_will_not_guess_a_final_game_id(tmp_path: Path) -> None:
+    probe = runner(tmp_path, [Response(200, b"{}", {}), valid_response()])
+    config = {
+        "season": "2026-27",
+        "opening_date": "2026-10-20",
+        "schedule_url": "https://cdn.nba.com/schedule.json",
+    }
+    run_pass(probe, config, "github-actions")
+    assert probe.requests == 2
+    report = assessment(probe, "github-actions")
+    assert report["capabilities"]["final"]["outcome"] == "unverified"
+    assert report["capabilities"]["final"]["reasons"] == [
+        "no_completed_game_id_in_retained_validated_sources"
+    ]
+
+
+def test_late_response_is_retained_but_fails_run_budget(tmp_path: Path) -> None:
+    probe = runner(tmp_path, [], max_seconds=2)
+
+    class SlowTransport:
+        def get(self, url: str, timeout: float) -> Response:
+            probe.clock.sleep(3)
+            return valid_response()
+
+    probe.transport = SlowTransport()
+    result = probe.fetch(request(), validate)
+    assert result["outcome"] == "failed"
+    assert result["reason"] == "response_arrived_after_run_budget"
+    assert result["validated_at"] is None
+    assert probe.archive.verify() == 1
