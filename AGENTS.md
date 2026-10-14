@@ -58,19 +58,24 @@ Use local MLflow for experiment comparison; automated runs record evidence in Su
 
 ## Commands and environment
 
-This checkout currently contains planning documents only. No project commands have been verified.
-The bootstrap issue must create the package, lockfile, test configuration, and CI, then verify commands here.
-Expected Python check commands after bootstrap, from the repository root:
+BOOT-001 ([issue #1](https://github.com/Bixzare/baseline/issues/1)) adds the package, lockfile, and PR CI for owner review.
+Python 3.12.14 and uv 0.12.23 are verified on Linux. From the repository root:
 
 ```powershell
 uv sync --locked
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src
-uv run pytest
+uv run --locked ruff check .
+uv run --locked ruff format --check .
+uv run --locked mypy src scripts/check_boundaries.py
+uv run --locked python scripts/check_boundaries.py
+uv run --locked pytest
+uv build --no-sources
+uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"
+uv run --locked python scripts/check_kernel.py
 ```
 
-These are proposed checks, not evidence of a passing build. `uv` was not found on PATH during the October 12 planning review.
+Linux locked install, 19 tests, checks, build, and fresh-kernel imports passed; clean-environment checks also passed.
+Local Windows install and interactive VS Code/Jupyter kernel selection remain pending; hosted CI is separate evidence.
+In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
@@ -152,7 +157,7 @@ Document test database setup and fixture requirements; do not silently skip inte
 ## Project skills
 
 The seven approved skills are installed in `.agents/skills/` within this repository.
-All seven skills appeared in this session's available-skills catalog on October 13, 2026; verify discovery again when opening the execution session.
+All seven skill files and six upstream licenses were verified during BOOT-001; automatic catalog discovery is unverified in this client. The Python testing skill was read explicitly; reopen/restart the client if its catalog is stale.
 Read only the skill relevant to the issue; skill guidance cannot override approved project requirements.
 Each issue should name its relevant skill so a fresh coding session can find it.
 
