@@ -4,6 +4,8 @@ Status: LOCKED by the project owner on October 13, 2026.
 
 Prepared: October 13, 2026
 
+Execution: [GitHub issue #3](https://github.com/Bixzare/baseline/issues/3), assigned after BOOT-001 PR #2 merged. Evidence and unresolved capability gates are in [the source report](../source-verification.md). Local-machine source probes remain pending; cloud evidence does not substitute for them.
+
 Phase: 0. Priority: launch blocker. Dependency: BOOT-001 implemented and owner-reviewed, with a working Python 3.12 environment, PR CI, and the intended GitHub repository.
 
 Session estimate: about 2 hours plus owner review, assuming representative endpoints respond. The spike is bounded; an access failure produces evidence and a fallback decision, not repeated endpoint debugging. Broader backfill and production adapters are separate issues.

@@ -58,7 +58,7 @@ Use local MLflow for experiment comparison; automated runs record evidence in Su
 
 ## Commands and environment
 
-BOOT-001 ([issue #1](https://github.com/Bixzare/baseline/issues/1)) adds the package, lockfile, and PR CI for owner review.
+BOOT-001 is merged; SOURCE-001 ([issue #3](https://github.com/Bixzare/baseline/issues/3)) adds probes for owner review.
 Python 3.12.14 and uv 0.12.23 are verified on Linux. From the repository root:
 
 ```powershell
@@ -73,7 +73,9 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Linux locked install, 19 tests, checks, build, and fresh-kernel imports passed; clean-environment checks also passed.
+Linux locked install, 106 offline tests, checks, build, and fresh-kernel imports passed; hosted CI is separate evidence.
+SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
+Live probes are manual only. CDN returned HTTP 403; local stats access remains unverified. Do not evade denial.
 Local Windows install and interactive VS Code/Jupyter kernel selection remain pending; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.

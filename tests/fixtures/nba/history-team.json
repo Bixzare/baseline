@@ -1,0 +1,31 @@
+{
+  "resultSets": [
+    {
+      "name": "LeagueGameLog",
+      "headers": [
+        "SEASON_ID",
+        "TEAM_ID",
+        "GAME_ID",
+        "GAME_DATE",
+        "MIN",
+        "PTS",
+        "REB",
+        "AST",
+        "FG3M"
+      ],
+      "rowSet": [
+        [
+          "22025",
+          1610612738,
+          "0022501001",
+          "2026-04-10",
+          240,
+          3,
+          2,
+          1,
+          1
+        ]
+      ]
+    }
+  ]
+}

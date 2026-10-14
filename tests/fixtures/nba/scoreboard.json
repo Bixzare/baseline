@@ -1,0 +1,21 @@
+{
+  "scoreboard": {
+    "leagueId": "00",
+    "gameDate": "2026-10-14",
+    "games": [
+      {
+        "gameId": "0012600002",
+        "gameStatus": 1,
+        "gameStatusText": "Scheduled",
+        "gameTimeUTC": "2026-10-15T00:00:00Z",
+        "gameDateTimeUTC": "2026-10-15T00:00:00Z",
+        "homeTeam": {
+          "teamId": 1610612738
+        },
+        "awayTeam": {
+          "teamId": 1610612752
+        }
+      }
+    ]
+  }
+}

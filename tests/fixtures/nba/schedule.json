@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "time": "2026-10-14 15:00:00"
+  },
+  "leagueSchedule": {
+    "leagueId": "00",
+    "seasonYear": "2026-27",
+    "gameDates": [
+      {
+        "gameDate": "10/20/2026",
+        "games": [
+          {
+            "gameId": "0022600001",
+            "gameStatus": 1,
+            "gameStatusText": "Scheduled",
+            "gameTimeUTC": "2026-10-21T00:30:00Z",
+            "gameDateTimeUTC": "2026-10-21T00:30:00Z",
+            "homeTeam": {
+              "teamId": 1610612738
+            },
+            "awayTeam": {
+              "teamId": 1610612752
+            }
+          }
+        ]
+      },
+      {
+        "gameDate": "10/13/2026",
+        "games": [
+          {
+            "gameId": "0012600001",
+            "gameStatus": 3,
+            "gameStatusText": "Final",
+            "gameTimeUTC": "2026-10-14T00:30:00Z",
+            "gameDateTimeUTC": "2026-10-14T00:30:00Z",
+            "homeTeam": {
+              "teamId": 1610612738
+            },
+            "awayTeam": {
+              "teamId": 1610612752
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
