@@ -136,7 +136,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-13: Reuse outside NBA is designed but not yet demonstrated
 
-- **Evidence:** The platform/domain boundary is specified; Clash Royale is a later deployment.
+- **Evidence:** [BOOT-001](https://github.com/Bixzare/baseline/issues/1) enforces static platform imports recursively, with permitted shared/synthetic imports and rejected NBA imports in temporary fixtures. Shared prediction/outcome/evaluation contracts do not exist yet; Clash Royale is a later deployment.
 - **Impact:** NBA-specific assumptions may remain undiscovered until a real second domain is integrated.
 - **Current mitigation:** Prevent platform imports from NBA modules and exercise shared contracts with a small synthetic non-NBA fixture.
 - **Improvement / timing:** Test the boundary with the separately approved Clash Royale deployment, after the NBA platform is stable.

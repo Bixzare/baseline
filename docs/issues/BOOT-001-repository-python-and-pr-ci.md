@@ -4,6 +4,8 @@ Status: LOCKED by the project owner on October 13, 2026.
 
 Prepared: October 13, 2026
 
+Execution assigned October 14, 2026: [GitHub issue #1](https://github.com/Bixzare/baseline/issues/1). The existing public repository and planning seed `cf6bcda14d0432dfbb49e8f48e19fb18836f16ec` were verified; repository creation and seed publication in the historical sequence below are already complete. Local Windows installation and VS Code project-kernel selection remain pending until performed on the owner's machine.
+
 Phase: 0. Priority: launch blocker. Dependencies: none of the other implementation issues.
 
 Session estimate: 1.5 to 2 hours plus owner review, assuming GitHub authentication and Python installation work. This is a planning estimate, not measured execution time. Access or installation failures must be reported promptly so source verification is not delayed silently.

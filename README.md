@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: launch planning complete. The public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) is initialized. Sixteen local issue specifications are finalized; application implementation, service provisioning, source verification, and launch readiness remain outstanding.
+Status: [BOOT-001, issue #1](https://github.com/Bixzare/baseline/issues/1) implements the Python package bootstrap and PR checks for owner review. Linux installation and kernel checks pass locally; hosted CI status belongs to the linked PR. Local Windows installation and VS Code kernel selection remain pending. Forecasting, service provisioning, source verification, and launch readiness remain outstanding.
 
 ## Brand
 
@@ -50,7 +50,7 @@ Approved dashboard hosting plan: GitHub Pages for initial testing, then Vercel f
 | [Coding agent guide](AGENTS.md) | Locked; 184 lines. |
 | [Project skills and provenance](skills/README.md) | Locked; seven skills installed in `.agents/skills/` and discovered in this session on October 13. |
 | [Known weaknesses and improvements](Weaknesses.md) | Locked v1.0; living register maintained through owner review. |
-| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | Locked specification; not yet implemented or published to GitHub. |
+| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1); bootstrap implemented on a review branch. Local Windows verification remains pending. |
 | [SOURCE-001: NBA source capability verification](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md) | Locked specification; observed access and source acceptance remain execution gates. |
 | [DATA-001: Local backfill and first notebook](docs/issues/DATA-001-local-seed-backfill-and-source-notebook.md) | Locked specification; requires accepted local historical source evidence during execution. |
 | [DB-001: Migrations, roles, and connectivity](docs/issues/DB-001-migrations-roles-and-supabase-connectivity.md) | Locked specification; dedicated Supabase Free project setup remains an execution gate. |
@@ -71,7 +71,7 @@ All twelve ADRs, the agent guide, seven skills, and sixteen launch issue specifi
 
 ## Execution order and handoff
 
-The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. IDs below are planning IDs, not published GitHub issue numbers. The repository and local Git checkout are initialized; BOOT-001 still publishes the first issue and establishes the implementation branch and PR. Subsequent assigned tasks publish/reuse their actual issue before the linked PR. When publishing, convert document links to the actual repository/default-branch URLs and map dependencies to real issue numbers without changing approved contracts. No issue has been published yet.
+The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. IDs below are planning IDs; BOOT-001 maps to [GitHub issue #1](https://github.com/Bixzare/baseline/issues/1). Subsequent assigned tasks publish/reuse their actual issue before the linked PR. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
 
 | Order | Planning ID | Required implemented dependencies / gate |
 | --- | --- | --- |
@@ -98,7 +98,7 @@ The revised [critical path](docs/critical-path.md#updated-execution-plan-october
 
 ### First execution assignment
 
-Start a fresh coding session and assign only [BOOT-001](docs/issues/BOOT-001-repository-python-and-pr-ci.md): read AGENTS.md and that issue, implement its scope, create/reuse the real linked GitHub issue and reviewable PR as specified, run its required checks, and return exact evidence plus a short explanation of the decisions. Do not merge or begin SOURCE-001 until the owner reviews the bootstrap diff. This planning chat has not validated application commands; update AGENTS.md only after commands work.
+The owner assigned only [BOOT-001](docs/issues/BOOT-001-repository-python-and-pr-ci.md). Its bootstrap is prepared for review against [issue #1](https://github.com/Bixzare/baseline/issues/1). Do not merge, deploy, or begin SOURCE-001 during this assignment. A later issue requires a separate assignment after owner review.
 
 ### Setup inputs and stop conditions
 
@@ -119,8 +119,36 @@ The owner confirmed TypeScript, Tailwind CSS v4, and shadcn/ui for core componen
 
 ## Setup
 
-No application setup commands have been validated. The bootstrap issue will establish Python 3.12 with uv, dependency locking, lint/type/test configuration, and CI. Dashboard commands follow when its React/Vite package exists. Proposed checks in `AGENTS.md` must not be read as a passing build.
+Use Python **3.12.14** and uv **0.12.23**. `.python-version` pins the interpreter; `pyproject.toml` pins the bootstrap tools and `uv.lock` records the full resolution and artifact hashes, including Windows dependencies. The installed distribution is `baseline-hoop`; imports remain `hoop`. No runtime dependencies are needed yet. Source, dataframe/Parquet, database, and model dependencies enter with their assigned features.
 
-Repository destination confirmed October 13, 2026: a new public `baseline` repository under the owner's personal account. On October 14, the authenticated GitHub account was verified as `Bixzare`, repository name availability was checked, local Git was initialized on `main`, and the public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) was created. The initial publication contains approved planning documents, repository skills with licenses, and original logos. Application implementation remains outstanding and belongs on a separate branch and PR under BOOT-001.
+From the repository root, Linux commands verified on October 14, 2026:
+
+```bash
+# In this cloud environment, the default home cache is read-only.
+export UV_CACHE_DIR=/workspace/.cache/uv
+uv sync --locked
+uv run --locked ruff check .
+uv run --locked ruff format --check .
+uv run --locked mypy src scripts/check_boundaries.py
+uv run --locked python scripts/check_boundaries.py
+uv run --locked pytest
+uv build --no-sources
+uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"
+uv run --locked python scripts/check_kernel.py
+```
+
+The checks passed in `.venv` and in a second clean environment installed from the lockfile: 18 tests passed, none skipped. The build produced an sdist and wheel. The kernel check launches a fresh registered `baseline` kernel, verifies its interpreter matches the active project environment, and imports the package and both subpackages from the expected checkout path. It does not claim interactive VS Code kernel selection has been verified.
+
+In local VS Code, select the repository's `.venv` interpreter as the notebook kernel explicitly. The registration above writes into the project environment instead of global/user Jupyter settings; rerun it after recreating or moving the environment. On Windows, install the pinned Python/uv versions, run `uv sync --locked` from the repository root, and use the same `uv run` check and kernel commands in PowerShell. The Linux `export` line is specific to this cloud runner; a normal local Windows cache does not need that override. **Local Windows locked installation, imports, paths, and interactive Jupyter/VS Code kernel selection remain pending until performed on the owner's machine.** Hosted Windows CI is separate evidence.
+
+`.github/workflows/ci.yml` runs Linux locked install, lint/format, strict types, boundary checks, tests, package build, and fresh-kernel imports on every PR. A minimal Windows job runs locked install, tests, and the same kernel/import/path checks. Both use pinned action revisions, a ten-minute timeout, and read-only repository permissions; neither uses live NBA services, production Supabase, or secrets. Postgres integration and actual walkthrough notebook tests enter with the first implementing issues. There are no database, leakage, prediction, or notebook walkthrough checks to run at bootstrap, and no evidence of those capabilities is claimed.
+
+The boundary checker scans every Python file under `src/hoop/platform/`, including new nested modules and initializers. It rejects absolute/relative NBA imports, imports under `TYPE_CHECKING`, and wildcard imports from `hoop.domains`; permitted shared and synthetic-domain imports are fixture-tested. This is static import enforcement, not proof against arbitrary runtime import construction or proof that future shared contracts are domain-independent. Do not add dynamic plugin discovery. A forbidden import reports the file, line, and direction rule with exit code 1. Temporary negative controls also demonstrated that Ruff rejects an unused import, mypy rejects a string assigned to an integer, and pytest rejects a failed assertion; those failures were removed and the required suite passed afterward.
+
+All seven project skill files and six retained upstream licenses were checked against the planning seed. Automatic skill discovery is **unverified in this client**; the assigned Python testing skill was read explicitly. If a fresh client's catalog omits them, reopen the repository/restart the client and verify its catalog; no client restart was performed here.
+
+Ignore rules exclude virtual environments, secrets, data, models, artifacts, caches, notebook checkpoints, and build outputs. Review the staged file list before publication. The reviewed planning documents, skills, and logos remain in Git.
+
+Repository destination confirmed October 13, 2026: a new public `baseline` repository under the owner's personal account. On October 14, the authenticated GitHub account was verified as `Bixzare`, repository name availability was checked, local Git was initialized on `main`, and the public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) was created. BOOT-001 reverified the authenticated owner, public repository, and unchanged main planning seed `cf6bcda14d0432dfbb49e8f48e19fb18836f16ec`; it uses the separate `boot-001-python-ci` branch and preserves existing history.
 
 Database destination confirmed October 13, 2026: a new dedicated Supabase Free project named baseline, subject to account allowance. No project has been provisioned; connectivity, roles, actual limits, and backup/restore remain verification gates. No paid plan or add-on is approved.

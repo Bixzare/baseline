@@ -1,0 +1,41 @@
+# Python environments and generated files
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+.jupyter/
+
+# Secrets and local-only settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Data, models, and generated artifacts
+/data/
+/artifacts/
+/models/
+*.parquet
+*.pkl
+*.joblib
+
+# Future dashboard dependencies and build outputs
+node_modules/
+/dashboard/dist/
+
+# Editor and OS local files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

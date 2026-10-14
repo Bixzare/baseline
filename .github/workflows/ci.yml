@@ -1,0 +1,62 @@
+name: Bootstrap CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bootstrap-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux lint, types, tests, and kernel
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version-file: .python-version
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.12.23"
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv run --locked mypy src scripts/check_boundaries.py
+      - run: uv run --locked python scripts/check_boundaries.py
+      - run: uv run --locked pytest
+      - run: uv build --no-sources
+      - name: Register project kernel
+        run: uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"
+      - run: uv run --locked python scripts/check_kernel.py
+      - name: Verify tracked files were not changed
+        run: git diff --exit-code
+
+  windows:
+    name: Windows imports, paths, and kernel
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version-file: .python-version
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.12.23"
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run --locked pytest
+      - name: Register project kernel
+        run: uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"
+      - run: uv run --locked python scripts/check_kernel.py
+      - name: Verify tracked files were not changed
+        run: git diff --exit-code

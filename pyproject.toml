@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "baseline-hoop"
+version = "0.1.0"
+description = "Baseline NBA analytics platform"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ipykernel==7.4.0",
+    "jupyter-client==8.10.0",
+    "mypy==2.4.0",
+    "pytest==9.1.1",
+    "ruff==0.17.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hoop"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--strict-config --strict-markers -ra"
