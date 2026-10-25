@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      source_probe:
+        description: "Run bounded live CDN probes and retain evidence (manual only)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -14,6 +19,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  manual-source-probe:
+    if: github.event_name == 'workflow_dispatch' && inputs.source_probe
+    uses: ./.github/workflows/source-probe.yml
+
   linux:
     name: Linux lint, types, tests, and kernel
     runs-on: ubuntu-24.04

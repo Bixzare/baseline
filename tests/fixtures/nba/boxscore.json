@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "time": "2026-10-14 03:00:00"
+  },
+  "game": {
+    "gameId": "0012600001",
+    "gameStatus": 3,
+    "gameStatusText": "Final",
+    "gameTimeUTC": "2026-10-14T00:30:00Z",
+    "gameDateTimeUTC": "2026-10-14T00:30:00Z",
+    "homeTeam": {
+      "teamId": 1610612738,
+      "score": 3,
+      "statistics": {
+        "points": 3,
+        "minutes": "PT240M00.00S"
+      },
+      "players": [
+        {
+          "personId": 10,
+          "played": "1",
+          "status": "ACTIVE",
+          "statistics": {
+            "points": 3,
+            "reboundsTotal": 2,
+            "assists": 1,
+            "threePointersMade": 1,
+            "minutes": "PT12M34.50S"
+          }
+        }
+      ]
+    },
+    "awayTeam": {
+      "teamId": 1610612752,
+      "score": 3,
+      "statistics": {
+        "points": 3,
+        "minutes": "PT240M00.00S"
+      },
+      "players": [
+        {
+          "personId": 20,
+          "played": "1",
+          "status": "ACTIVE",
+          "statistics": {
+            "points": 3,
+            "reboundsTotal": 2,
+            "assists": 1,
+            "threePointersMade": 1,
+            "minutes": "PT12M34.50S"
+          }
+        }
+      ]
+    }
+  }
+}

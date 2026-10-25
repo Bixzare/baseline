@@ -2,11 +2,29 @@
 
 Status: Locked by the project owner on October 12, 2026; delivery-calendar revision approved under the owner's batch planning authorization on October 14, 2026.
 
-Version: 1.1
+Version: 1.2
 
 This document records the approved plan. It does not claim that implementation, source verification, or deployment has been completed. Changes to the locked scope require an explicit owner decision.
 
-## Objective and deadline
+## Active execution amendment, October 25
+
+The owner authorized the [historical-data and recovery strategy](PRD-data-source-amendment.md)
+and resumed sequential execution. The October 20 target has passed; the older
+daily calendar below is historical context, not an active promise. No official
+forecast may be backfilled. Choose the first future slate only after readiness.
+
+| Next gate | Work | Evidence before dependent execution |
+| --- | --- | --- |
+| SOURCE-001, in progress | Finish reusable pinned-snapshot assessment, quarantine/repair report, and operational capability matrix. | Passing offline checks, measured real-file assessment, owner review; missing operational routes remain explicit. |
+| DATA-001, backlog | Import candidate 2025-26 files through reviewed source contracts; normalize/version Parquet and checkpoint repairs. | Exact expected-game cross-check, validated IDs/units/time/DNP mapping, immutable base/patch lineage, truthful seed coverage. |
+| DB-001 onward, backlog | Follow README dependency order one issue and one PR at a time. | Implemented/reviewed interfaces and each issue's runtime gates. |
+| Release gate, backlog | Fresh sources, publication receipts, outcomes, backup/recovery, and an unattended rehearsal. | Owner readiness approval for future games; unknown availability remains visible. |
+
+Keep earlier-season repair, broad historical comparisons, injury reconstruction,
+awards, and live tracking deferred. Do not invent a replacement date before the
+source and database prerequisites are measured.
+
+## Original objective and deadline
 
 Deliver Phases 0 and 1 before the first regular-season game on Tuesday, October 20, 2026, at 19:00 UTC (21:00 Africa/Johannesburg, 3:00 p.m. ET).
 
@@ -17,7 +35,7 @@ The destination remains an autonomous NBA ML service with a separately deployabl
 ## Approved launch scope
 
 - Verify NBA live data access from GitHub Actions and historical access locally.
-- Backfill the 2025-26 regular season locally through nba_api. Retain raw inputs.
+- Seed 2025-26 from pinned, validated bulk files with bounded local nba_api repairs where accepted. Retain immutable raw inputs and patch provenance.
 - Verify a current roster source and preserve the time each roster snapshot was collected.
 - Accept a reliable injury source or explicitly defer injury ingestion. Unknown availability must remain explicit.
 - Publish five player targets: minutes, points, rebounds, assists, and three-pointers made.

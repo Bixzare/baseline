@@ -1,0 +1,12 @@
+{
+  "source_id": "eoinamoore/historical-nba-data-and-player-box-scores",
+  "dataset_version": 525,
+  "collected_at": "2026-10-24T12:00:00+00:00",
+  "evidence_kind": "synthetic_fixture",
+  "files": {
+    "Games.csv": "a85014253bc318cad0ec6bb5f1fce8fd24a96a628f82b7e39a5ce4eddb816f3c",
+    "TeamStatistics.csv": "91d6b0fedaf87a04cf4201b09f6764811defbfc5ff30f84af2bbc6a7eab024e2",
+    "PlayerStatistics.csv": "37c8c7a7228e57ad26133bd48969b457f642e00312120f67cdd78cc64b2ff14d",
+    "Players.csv": "1cad52b9c78d8901a93121a1aec8920f5deb221107eb4aabac19379d0f7fd749"
+  }
+}

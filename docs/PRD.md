@@ -2,7 +2,7 @@
 
 Status: LOCKED by the project owner on October 12, 2026. This approves the requirements; implementation remains assigned to a separate coding agent.
 
-Version: 1.1
+Version: 1.2
 
 Prepared: October 12, 2026
 
@@ -13,6 +13,10 @@ Owner: Bixzare
 Sources of intent: [Project proposal](../Initial-project-description.md), [locked critical path](critical-path.md), and the owner's subsequent confirmed planning decisions. Confirmed decisions supersede conflicting proposal language. The clarifications in Section 15 were accepted when this document was locked. Changes to these requirements require an explicit owner decision.
 
 Version 1.1 incorporates the [locked notebook amendment](PRD-notebook-amendment.md) and [locked awards eligibility and validation amendment](PRD-awards-eligibility-amendment.md), approved October 12, 2026. The [locked technical design](design.md) supplies implementation contracts and verification gates. Document version 1.1 does not change the product's v1 and v1.5 delivery boundaries.
+
+The owner authorized the [historical-data and recovery amendment](PRD-data-source-amendment.md)
+on October 25, 2026. It supersedes the original nba_api-only seed and expired
+opening-night calendar. Source/seed acceptance and PR review remain gates.
 
 ## 1. Purpose and users
 
@@ -27,7 +31,7 @@ The owner must understand the purpose, data flow, major choices, and failure mod
 | Delivery | Required behavior | Release gate |
 | --- | --- | --- |
 | Phase 0 | Verify cloud live sources, a working local historical backfill, current roster access, and an injury source or explicit deferral. | Recorded evidence from the actual execution environments; reliable fallback selected. |
-| Phase 1 | Automated collection, five player baseline targets, immutable ledger, result reconciliation, basic accuracy and coverage, source health, and recovery. | Live predictions before opening tip-off on October 20, 2026 at 19:00 UTC; publication target 17:00 UTC. |
+| Phase 1 | Automated collection, five player baseline targets, immutable ledger, result reconciliation, basic accuracy and coverage, source health, and recovery. | Original October 20 target is past. Begin with a future slate only after readiness passes; preserve the original pregame publication safeguards. |
 | Team baseline increment | Win probability, margin, and total with target-specific baselines. | Same publication, ledger, and outcome correctness gates as player predictions; follows launch immediately. |
 | Remaining v1 | Trained player and team models, evaluation harness, model monitoring, retraining and promotion, explanations, and six public dashboard views. | Requirements in this document pass; no deadline is invented for this scope. |
 | v1.5 | Weekly awards ladders and insights; richer explanations of changes. | Historical awards validation, eligibility tests, and verified permitted source access. |
@@ -41,7 +45,7 @@ No betting features, odds, wagering advice, access-control evasion, user account
 
 ### DATA-01: Source verification and provenance
 
-Use nba_api for supported NBA interfaces. Historical stats.nba.com collection runs locally. Cloud collection uses verified cdn.nba.com sources; access is not assumed to work. The package documents both stats and live interfaces, but its live scoreboard example concerns today's games, not a complete future schedule. [nba_api documentation](https://github.com/swar/nba_api) and [scoreboard documentation](https://github.com/swar/nba_api/blob/master/docs/nba_api/live/endpoints/scoreboard.md).
+Prefer pinned Eoin basic historical files with explicit quarantine and versioned repairs for the candidate 2025-26 seed. Use nba_api locally only for identified evidence gaps under accepted access policy. Follow the historical-data amendment for coverage, participation, and provenance. Historical stats.nba.com collection runs locally. Cloud collection uses verified cdn.nba.com sources; access is not assumed to work. The package documents both stats and live interfaces, but its live scoreboard example concerns today's games, not a complete future schedule. [nba_api documentation](https://github.com/swar/nba_api) and [scoreboard documentation](https://github.com/swar/nba_api/blob/master/docs/nba_api/live/endpoints/scoreboard.md).
 
 Phase 0 must separately verify historical player and team records, future schedules, game status, final box scores, and current rosters. A source capability is accepted only when required fields and coverage are demonstrated. A successful HTTP response is insufficient.
 

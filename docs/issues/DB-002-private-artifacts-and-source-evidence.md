@@ -8,6 +8,19 @@ Phase: 0. Priority: launch blocker. Dependencies: DB-001 and SOURCE-001 implemen
 
 Session estimate: about 3 to 4 focused hours plus owner review and hosted checks, assuming project access is ready. Authentication and managed-policy restrictions are verification gates. Report a blocker rather than extending this into a new server, paid resource, or full collector implementation.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 Give collection and prediction jobs a tested way to retain private evidence, reference verified bytes, and record successful or failed source attempts. Implement four platform evidence tables and the restricted artifact access approved in ADR 0012. Keep NBA parsing in domain code.

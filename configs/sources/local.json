@@ -1,0 +1,23 @@
+{
+  "version": "source-config-v2-local",
+  "season": "2026-27",
+  "opening_date": "2026-10-20",
+  "history_season": "2025-26",
+  "history_date_from": "2026-04-10",
+  "history_date_to": "2026-04-12",
+  "team_ids": [],
+  "policy": {
+    "min_gap": 3,
+    "timeout": 30,
+    "retries": 2,
+    "max_requests": 16,
+    "max_seconds": 180
+  },
+  "limitations": [
+    "Candidate sources, not owner-accepted configuration",
+    "Run only on an actual local machine",
+    "Roster sample is derived from the first two verified opening-night team IDs; no guessing",
+    "History date sample only, no backfill"
+  ],
+  "schedule_source": "nba_api.ScheduleLeagueV2 (local stats interface)"
+}

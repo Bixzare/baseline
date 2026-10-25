@@ -8,6 +8,19 @@ Phase: 0. Priority: launch blocker. Dependency: BOOT-001 implemented and owner-r
 
 Session estimate: about 2.5 hours plus owner review, assuming the Supabase account has a free project slot and credentials can be configured. Account, network, or managed-role restrictions are explicit setup gates. Do not spend the session debugging an unavailable paid feature or installing a new VM environment.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 Give Baseline a reproducible application database foundation: ordered SQL migrations, restricted runtime credentials, private platform/NBA schemas, and tested cloud/local connectivity. The owner confirmed a new dedicated Supabase Free project named baseline, subject to account allowance. No existing project may be reused or replaced silently.

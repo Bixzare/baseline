@@ -8,6 +8,19 @@ Phase: 1. Priority: launch blocker. Dependencies: DB-003 and its DATA-001/DB-002
 
 Session estimate: about 3 focused hours plus owner review and a bounded real-input rehearsal. Scope is player feature selection, deterministic baseline preparation, saved input/output artifacts, and the first part of the baseline notebook. Ledger schema/publication, orchestration, and outcome scoring are separate issues.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 For a verified upcoming game roster, prepare minutes, points, rebounds, assists, and threes made for every player, or a reasoned target abstention. Save the exact cohort and history used so later publication and evaluation cannot silently change inputs. This produces prepared forecasts, not official ledger entries.
