@@ -29,7 +29,7 @@ remain in ignored `artifacts/seed-2025-26/`. The manifest records exact parser,
 dependency, lock and input identities. Each candidate remains immutable;
 the convenience pointer always says `source_accepted: false`.
 
-Current candidate unit:
+Observed October 25 candidate unit:
 `18382472ce93cf99480403e1c9881da7e2253451bbd2f4bd40765a4c26004df6`.
 A repeat of the full-data command verified hashes and reused this completed
 candidate in 6.1 seconds. Exit status 1 is intentional for an incomplete seed;

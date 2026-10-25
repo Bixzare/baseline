@@ -28,7 +28,12 @@ def database() -> Iterator[str]:
     with psycopg.connect(configured, autocommit=True) as admin:
         admin.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(name)))
         try:
-            yield make_conninfo(configured, dbname=name)
+            dsn = make_conninfo(configured, dbname=name)
+            with psycopg.connect(dsn, autocommit=True) as scaffolding:
+                scaffolding.execute(
+                    (ROOT / "tests/fixtures/postgres/provider.sql").read_text(), prepare=False
+                )
+            yield dsn
         finally:
             admin.execute(sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(name)))
 
