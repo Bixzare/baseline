@@ -185,3 +185,18 @@ Ignore rules exclude virtual environments, secrets, data, models, artifacts, cac
 Repository destination confirmed October 13, 2026: a new public `baseline` repository under the owner's personal account. On October 14, the authenticated GitHub account was verified as `Bixzare`, repository name availability was checked, local Git was initialized on `main`, and the public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) was created. BOOT-001 reverified the authenticated owner, public repository, and unchanged main planning seed `cf6bcda14d0432dfbb49e8f48e19fb18836f16ec`; it uses the separate `boot-001-python-ci` branch and preserves existing history.
 
 Database destination confirmed October 13, 2026: a new dedicated Supabase Free project named baseline, subject to account allowance. No project has been provisioned; connectivity, roles, actual limits, and backup/restore remain verification gates. No paid plan or add-on is approved.
+
+### Database rehearsal
+
+DB-001 adds [database setup and gates](docs/database-setup.md), ordered migrations,
+restricted runtime provisioning and a manual hosted connection workflow. The
+Supabase project is not created yet. Local Postgres 17.11 passed migration and
+role tests plus an isolated foundation export/restore. Postgres 17 in CI is
+provisional until the project's actual version is verified.
+
+`uv run --locked pytest` now requires `BASELINE_TEST_DSN` for a disposable local
+Postgres service. Missing setup fails required integration checks. The Windows
+compatibility job explicitly uses `pytest -m "not postgres"`; Linux runs the
+complete suite against real Postgres. Migration commands are
+`uv run --locked python -m hoop.platform.database inspect` and `apply`.
+Configure migration/runtime credentials separately, outside tracked files.

@@ -1,7 +1,7 @@
 # Baseline execution status
 
 Updated October 25, 2026. Issue publication and implementation are separate.
-The owner authorized sequential execution and board synchronization. Only
+The owner authorized sequential execution and board synchronization;
 the DATA-001, DB-001 and DB-002 batch is authorized for sequential implementation.
 DB-002 is prepared on DB-001 for review; hosted activation remains separate.
 
@@ -10,7 +10,7 @@ DB-002 is prepared on DB-001 for review; hosted activation remains separate.
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
 | SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4 at bdadf7d; historical interface reviewed. Source gates remain. |
 | DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | In progress | Candidate archive and fixture notebook; incomplete seed report awaits review. |
-| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | Backlog | Dedicated project/connection and role checks. |
+| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Real local migrations/roles and export/restore tested; project creation and hosted verification pending. |
 | DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | Backlog | DB-001 and reviewed source evidence contracts. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | Backlog | Accepted DATA-001 seed and private artifacts. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | Backlog | Reviewed compact history interfaces. |

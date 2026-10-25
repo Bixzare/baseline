@@ -158,6 +158,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 
+## W-16: Hosted persistence has not been provisioned or verified
+
+- **Evidence:** On October 25 the owner confirmed that the dedicated Supabase project is not created. DB-001's real Postgres 17.11 fixture tests and isolated export/restore passed locally. Hosted major version, plan/region/limits, direct/session access, actual API roles and TLS remain unverified.
+- **Impact:** Local success cannot establish production database or private-artifact readiness.
+- **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, required real Postgres CI, explicit hosted review/check gates. No administrative credential enters ordinary jobs.
+- **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
+- **Closure evidence:** Owner-reviewed hosted migrations, Windows and Actions restricted/TLS checks, real permission denials and an isolated supported recovery test. This remains a release gate.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.
