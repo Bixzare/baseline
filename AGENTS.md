@@ -73,7 +73,7 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Prior Linux CI passed 106 tests; current Windows checks are recorded in README. Do not imply hosted CI ran new changes.
+Linux and Windows CI passed 153 tests and fresh-kernel checks on SOURCE-001 commit 594bada; future commits need their own CI evidence.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
 Live probes are manual only. Local stock-client samples passed; production policy, coverage, and cloud CDN access remain gated. Do not evade denial.
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.

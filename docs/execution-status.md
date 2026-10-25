@@ -28,10 +28,17 @@ PR and closed issue. Passing local checks alone does not move a task to Finished
 Blocked prerequisites stay visible in the issue while its current column remains
 Backlog or In progress. Preserve the board's actual column names when mapping.
 
-GitHub board synchronization is pending Projects authorization. The connector
-supports repository issues but exposes no Projects operations in this session.
-The local CLI is authenticated as Bixzare but lacks Projects scope. No board
-membership or column update is claimed until it can be performed and read back.
+The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
+is linked to Bixzare/baseline. It was created after confirming there was no
+existing open, closed, or repository-linked project. All sixteen issue memberships
+and Status values were read back: one Finished, one In progress, fourteen Backlog.
+The board view groups columns by Status. The repository connector supplied issue
+operations; the owner's authorized GitHub CLI/Projects API supplied board operations.
+
+SOURCE-001 commit `594bada` is pushed to PR #4. Its Linux and Windows CI jobs each
+passed all 153 tests and fresh-kernel checks. Linux also passed lint, formatting,
+types, boundaries, and package build. No merge, deployment, or source acceptance
+is implied. The later issue still waits for owner review of the historical interface.
 
 The original October 20 release date is past. The next milestone is readiness
 for a future slate, with no backdated official forecasts. Later model, dashboard,
