@@ -4,6 +4,19 @@ Status: LOCKED under the owner's batch planning approval on October 14, 2026.
 
 Phase: 1. Priority: launch blocker. Dependencies: COLLECT-001, LEDGER-002, and DB-003 implemented and owner-reviewed, with an accepted final-box-score adapter from SOURCE-001. Session estimate: about 3 agent hours plus actual final-source rehearsal and owner review.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and scope
 
 Append validated final player/team facts and outcome versions for saved game occurrences without editing forecasts. Supply reusable reconciliation commands and the final portion of the launch baseline notebook. No accuracy report, training, or scheduler here. Deadline: October 20, 2026 at 19:00 UTC; final outcomes will accumulate after games.

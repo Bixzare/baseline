@@ -4,7 +4,7 @@ Status: LOCKED by the project owner on October 13, 2026.
 
 Prepared: October 13, 2026
 
-Execution: [GitHub issue #3](https://github.com/Bixzare/baseline/issues/3), assigned after BOOT-001 PR #2 merged. Evidence and unresolved capability gates are in [the source report](../source-verification.md). Local-machine source probes remain pending; cloud evidence does not substitute for them.
+Execution: [GitHub issue #3](https://github.com/Bixzare/baseline/issues/3), assigned after BOOT-001 PR #2 merged. Evidence and unresolved capability gates are in [the source report](../source-verification.md). Local stock-client history samples passed, while cloud schedule access and other operational gates remain unresolved. The October 25 assignment resumes this issue; it does not mark Phase 0 complete.
 
 Phase: 0. Priority: launch blocker. Dependency: BOOT-001 implemented and owner-reviewed, with a working Python 3.12 environment, PR CI, and the intended GitHub repository.
 
@@ -14,9 +14,34 @@ Session estimate: about 2 hours plus owner review, assuming representative endpo
 
 Determine whether Baseline can obtain historical player/team statistics, future schedules, current status, final box scores, and current rosters using the planned cloud and local paths. Produce reusable probe operations, reviewed fixtures, and a capability report with observed evidence. Do not assume a successful HTTP response or an installed package establishes usable data.
 
-Baseline must publish player minutes, points, rebounds, assists, and threes made before October 20, 2026 at 19:00 UTC, targeting publication by 17:00 UTC. Team forecasting, ML training, the dashboard, and awards follow later. Source verification is the immediate priority after bootstrap.
+The original October 20 target is past. Baseline will publish player minutes, points, rebounds, assists, and threes made for a future slate after readiness passes. Team forecasting, ML training, the dashboard, and awards follow later. Source verification is the immediate priority after bootstrap; missed forecasts must never be backdated.
 
 Required guidance: AGENTS.md and `.agents/skills/hoop-data-quality/SKILL.md`; use `.agents/skills/hoop-python-testing/SKILL.md` for failure fixtures. This issue restates the source contract so it can be implemented without prior chat. Locked reference: [ADR 0001](../decisions/0001-verify-nba-sources-by-environment.md).
+
+## October 25 execution amendment
+
+Add a reusable offline assessment of the pinned Eoin version 525 snapshot using
+the [historical-data amendment](../PRD-data-source-amendment.md). Check downloaded
+hashes, required player/team/game/identity fields, canonical IDs, counting stats,
+minutes/nonparticipation distinctions, duplicate/conflicting keys, joins, and
+player/team score consistency. Preserve excluded-row counts and a repair list
+with source file/line/game/subject/reason. No repairs overwrite raw inputs.
+
+Expected-game coverage remains unknown without a separately collected inventory;
+matching aggregate counts or synthetic fixtures cannot accept the seed. Record
+collection time and version identity without claiming historical availability.
+The assessment must run on fixtures in the existing fresh-kernel notebook, make
+no network calls, and store an exclusive report when explicitly invoked.
+Test bad hashes/schema/IDs/targets, DNP versus null/zero, inventory gaps,
+duplicates, revision timing, and inability to overwrite earlier reports.
+
+Run the assessor against retained real files and report outstanding mappings,
+coverage, and source acceptance. Full normalization/Parquet/checkpoints belong
+to DATA-001. Do not broaden the diagnostic-only stock-header exception or retry
+denied endpoints. Injury ingestion is deferred for the first release; unknown
+availability and operational schedule/roster/final gates remain visible.
+The original October 20 deadline is historical; readiness gates apply to the
+next future slate. No retrospective official prediction is permitted.
 
 ## Capability contract
 
@@ -24,7 +49,7 @@ Candidates below come from the approved design, not from measured endpoint succe
 
 | Capability | Candidate and intended environment | Evidence required |
 | --- | --- | --- |
-| Historical player and team logs | nba_api LeagueGameLog for the 2025-26 regular season, locally only. | Stable game/player/team IDs, competition and season, minutes precision, five target fields, team scoring, null meanings, and sample identity joins. Report season coverage without claiming full backfill validation. |
+| Historical player and team logs | Pinned Eoin basic files as candidate; local nba_api for identified repairs under accepted access policy. | Stable game/player/team IDs, competition and season, minutes precision, five target fields, team scoring, null meanings, and sample identity joins. Report season coverage without claiming full backfill validation. |
 | Future schedule | Permitted NBA/CDN schedule resource or supported schedule interface; test cloud and local execution separately. | 2026-27 season coverage, opening-night games, UTC start times, home/away identities, game status, and unknown or unscheduled slots. Today's scoreboard cannot substitute for this evidence. |
 | Current scoreboard/status | nba_api live ScoreBoard, from the actual GitHub Actions runner and locally. | Source day interpretation, IDs, starts and status, genuine no-game behavior, and empty/failure distinction. |
 | Final box scores | nba_api live BoxScore using an observed stored game ID, from cloud and locally. | Final status, player participation versus absence, precise minutes, counting stats, team totals, and supplied source timestamps. If only preseason evidence is available, label it rehearsal and retain the unverified regular-season limitation. |

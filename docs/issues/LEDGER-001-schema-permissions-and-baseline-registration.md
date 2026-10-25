@@ -8,6 +8,19 @@ Phase: 1. Priority: launch blocker. Dependencies: DB-003 and MODEL-001 implement
 
 Session estimate: about 3 to 4 focused hours plus owner review and controlled hosted migration/bootstrap. Scope is nine tables, database integrity/access tests, and initial baseline registration. Guarded publication and receipt confirmation are the next issue; scheduling and outcomes remain separate.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 Give prepared player baselines immutable model/bundle identities and a protected destination for complete game batches, predictions, abstentions, reservations, receipts, and lifecycle events. Keep ordinary runtime access read-only for these records until protected operations exist. This issue cannot publish an official forecast.

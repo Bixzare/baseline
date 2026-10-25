@@ -1,8 +1,21 @@
-# LAUNCH-001: Verify integration and supervise opening-night publication
+# LAUNCH-001: Verify integration and supervise first live publication
 
 Status: LOCKED under the owner's batch planning approval on October 14, 2026.
 
 Phase: 1. Priority: final launch gate. Dependencies: BOOT-001, SOURCE-001, DATA-001, DB-001/002/003, MODEL-001, LEDGER-001/002, COLLECT-001, OUTCOME-001, EVAL-001, OPS-001/002, and BACKUP-001 implemented and owner-reviewed. Session estimate: 2 to 3 agent hours of verification/report work, plus at least one actual unattended nightly/dispatcher cycle and opening-night supervision. This is not a promise that earlier setup gates will fit the calendar.
+
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
 
 ## Goal and scope
 

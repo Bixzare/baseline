@@ -10,7 +10,7 @@ Baseline is an autonomous NBA prediction platform and public analytics dashboard
 Use Baseline in public names and copy; the owner's original logo assets are in `logos/`.
 Existing `hoop` package paths and skill identifiers remain internal planning names.
 It must demonstrate reliable data, honest evaluation, model operations, and understandable decisions.
-Launch deadline: October 20, 2026, 19:00 UTC. Target opening forecasts by 17:00 UTC.
+Original October 20 deadline is past. Release for a future slate only after readiness; never backfill forecasts.
 Phase 0 verifies sources and local backfill. Phase 1 delivers collection, player baselines, ledger, outcomes, and health checks.
 Team forecasts follow launch. Trained models, dashboard, retraining, and monitoring follow after that.
 Weekly awards ladders are v1.5. Era comparisons, in-game tracking, and Clash Royale are later scope.
@@ -21,7 +21,7 @@ No later feature may delay Phases 0 and 1. Default operating cost is $0; paid ch
 - Follow the owner's current instructions, the assigned issue, and approved project requirements.
 - [PRD](docs/PRD.md), [critical path](docs/critical-path.md), and [weaknesses register](Weaknesses.md) are locked.
 - [Design](docs/design.md), [notebook amendment](docs/PRD-notebook-amendment.md), and [awards amendment](docs/PRD-awards-eligibility-amendment.md) are locked; amendments are incorporated into PRD v1.1.
-- Design v1.5 and ADRs 0001 through 0012 are locked. The assigned issue must identify its relevant contracts and skill.
+- Follow PRD v1.2/design v1.6 and the owner-authorized October 25 data-source amendment; ADR 0013 is a draft record. ADRs 0001-0012 remain locked except where that amendment supersedes them.
 - Sixteen launch issues are finalized under the owner's October 14 batch approval; use README's execution order. This does not start implementation or waive owner diff review.
 - Follow the locked contracts and phase-specific verification gates; unresolved gated choices need evidence and review before dependent implementation.
 - Work on one issue and one small PR at a time. The owner reviews every diff.
@@ -73,10 +73,10 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Linux locked install, 106 offline tests, checks, build, and fresh-kernel imports passed; hosted CI is separate evidence.
+Prior Linux CI passed 106 tests; current Windows checks are recorded in README. Do not imply hosted CI ran new changes.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
-Live probes are manual only. CDN returned HTTP 403; local stats access remains unverified. Do not evade denial.
-Local Windows install and interactive VS Code/Jupyter kernel selection remain pending; hosted CI is separate evidence.
+Live probes are manual only. Local stock-client samples passed; production policy, coverage, and cloud CDN access remain gated. Do not evade denial.
+Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
@@ -85,14 +85,14 @@ Document test database setup and fixture requirements; do not silently skip inte
 
 ## Data and prediction rules
 
-- Historical `stats.nba.com` backfill runs locally through `nba_api`. Never evade bot protection or access controls.
+- Prefer pinned Eoin history with quarantine and immutable repair lineage; see docs/PRD-data-source-amendment.md. Local nba_api repairs need accepted policy. Never bypass access controls.
 - Verify each required CDN capability from the actual cloud runner. HTTP 200 alone is not proof of usable data.
 - Every source needs saved fixtures, schema checks, freshness checks, bounded retries, and health reporting.
 - Store immutable raw inputs with collection time, checksum, parser version, request identity, and run ID.
 - Distinguish event time, source publication time, collection time, feature cutoff, and publication time; store UTC.
 - Inputs must have been available by the forecast cutoff. Later revisions cannot change earlier feature snapshots.
 - Never use target outcomes, eventual lineups, final box-score membership, future injuries, or final-season totals as features.
-- Historical backtests disclose availability assumptions and stay separate from live ledger evidence.
+- Historical backtests disclose missing pregame evidence; collect cohorts prospectively. Injury ingestion is deferred for the first release. Never infer DNP from null/zero alone.
 - Forecast the verified current roster. Unknown availability stays unknown. Stale essential sources block affected publication.
 - At publication, essential schedule/status evidence must be at most 30 minutes old and roster evidence at most 24 hours old. Phase 0 accepts an availability source or explicitly defers it.
 - Player launch targets: minutes, points, rebounds, assists, and threes made.

@@ -2,13 +2,17 @@
 
 Status: LOCKED by the project owner on October 12, 2026, with approved amendments through October 14, 2026. This approves the design; implementation and runtime verification remain outstanding.
 
-Version: 1.5
+Version: 1.6
 
 Prepared: October 12, 2026
 
 Requirements: [locked PRD v1.1](PRD.md) and [locked critical path](critical-path.md). The [locked notebook amendment](PRD-notebook-amendment.md) and [locked awards eligibility and validation amendment](PRD-awards-eligibility-amendment.md) were incorporated into PRD v1.1 when this design was locked.
 
 This is a design, not an implementation or a claim of verified runtime access. No repository has been published, cloud resource provisioned, or NBA access probe executed as part of this planning work.
+
+October 25 execution amendment: use the authorized [historical-data strategy](PRD-data-source-amendment.md).
+ADR 0013 is a draft record for owner review. The historical candidate is not
+accepted by this document; runtime gates and every later dependency still apply.
 
 ## 1. Decisions and scope
 
@@ -103,7 +107,7 @@ Use pandas for ordinary tabular work and Parquet for durable analytical tables. 
 
 | Capability | Candidate | Verification required before activation |
 | --- | --- | --- |
-| Historical game logs | nba_api LeagueGameLog for player and team regular-season records, locally. | Season coverage, identifiers, minutes precision, totals, null handling, and resumability. |
+| Historical game logs | Pinned Eoin basic CSV snapshot; local nba_api for bounded, identified repairs only. | Season coverage, identifiers, minutes precision, totals, null handling, and resumability. |
 | Historical detailed box scores | A supported nba_api stats endpoint, locally, only where game logs lack required fields. | Exact fields, revision behavior, and request budget. Do not fetch a detailed endpoint for every game without a demonstrated need. |
 | Current scoreboard/status | nba_api live ScoreBoard. | Actual cloud and local access, timestamps, no-game behavior, and source day interpretation. |
 | Final live box scores | nba_api live BoxScore by stored game ID. | Final status, player participation, minute precision, team totals, and late correction behavior. |
@@ -113,6 +117,15 @@ Use pandas for ordinary tabular work and Parquet for durable analytical tables. 
 | Award labels and rules | NBA official releases/rule documents first; other proposed sources only after review. | Complete candidate and voting coverage, historical rules, source permission, and reproducible snapshots. |
 
 Candidate endpoints are not accepted sources until the spike passes. Package interfaces are documented in [nba_api](https://github.com/swar/nba_api), including [LeagueGameLog](https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/leaguegamelog.md), [ScoreBoard](https://github.com/swar/nba_api/blob/master/docs/nba_api/live/endpoints/scoreboard.md), and [BoxScore](https://github.com/swar/nba_api/blob/master/docs/nba_api/live/endpoints/boxscore.md).
+
+Historical source flow: immutable pinned files and download manifest -> offline
+assessment -> accepted records plus quarantine/repair list -> versioned normalized
+Parquet in DATA-001 -> compact operational import in DB-003. An expected-game
+inventory needs separate collection provenance. Patches preserve original hashes,
+repair evidence, collection times, and supersession; no raw record is overwritten.
+Do not reconstruct historical pregame cohorts from participants or DNP comments.
+Prospective snapshots supply later full-cohort evaluation. Injury ingestion is
+explicitly deferred for the first release; availability stays unknown.
 
 Initial request policy: sequential requests per source, a configurable three-second minimum gap, a 30-second timeout, and at most two retries for temporary network or server errors. These are conservative project settings, not a verified NBA allowance. Honor a longer Retry-After. Access-denied or bot-challenge responses stop that source's run and alert; do not loop, change identity, or evade protection. Lower the request volume if observed behavior requires it.
 

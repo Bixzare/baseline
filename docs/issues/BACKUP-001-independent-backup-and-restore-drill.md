@@ -4,6 +4,19 @@ Status: LOCKED under the owner's batch planning approval on October 14, 2026.
 
 Phase: 1. Priority: launch blocker. Dependencies: DB-001/DB-002, LEDGER-002, OUTCOME-001, EVAL-001, and OPS-002 implemented and owner-reviewed. Setup provides the chosen existing cloud-sync provider/folder, permitted unattended verification route, supported export connection, and an isolated restore target. These remain execution inputs, not assumed resources. Session estimate: about 3 to 4 agent hours plus real export/upload/restore and owner review.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and scope
 
 Create daily independent copies of application database state, required objects, and the historical archive, prove remote delivery, and restore a downloaded copy into an isolated target. No paid backup/PITR, public dump publication, or restore into production. Deadline: before official publication on October 20, 2026 at 19:00 UTC.

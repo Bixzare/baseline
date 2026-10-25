@@ -8,6 +8,19 @@ Phase: 1. Priority: launch blocker. Dependencies: LEDGER-001 and MODEL-001 imple
 
 Session estimate: about 4 focused hours plus owner review and database checks. Limit work to protected operations, the shared two-transaction client, and rehearsal notebook/tests. Live collection, scheduler activation, outcomes, evaluation reports, and public dashboard remain separate issues.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 Turn a prepared five-target player cohort into immutable ledger records with evidence that the original batch committed before the deadline. A stored batch is not valid official coverage until a timely separate-transaction receipt exists and no applicable invalidation exists. Retain failed/unverified attempts honestly.

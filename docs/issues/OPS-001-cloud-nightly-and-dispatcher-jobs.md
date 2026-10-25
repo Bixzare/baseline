@@ -4,6 +4,19 @@ Status: LOCKED under the owner's batch planning approval on October 14, 2026.
 
 Phase: 1. Priority: launch blocker. Dependencies: COLLECT-001, OUTCOME-001, EVAL-001, and LEDGER-002 implemented and owner-reviewed. SOURCE-001 must establish accepted cloud capabilities; missing local-only capabilities remain explicit dependencies on OPS-002. Session estimate: about 2.5 agent hours plus manual workflow rehearsal and owner review.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and scope
 
 Run shared collection/reconciliation/report/publication commands unattended on GitHub Actions, without embedding logic in workflow YAML. Configure workflows and exercise manual rehearsals; enable production schedules only at the final launch gate after local fallback/backup readiness. No ML training, dashboard deployment, new sources, or privileged database credential in jobs.

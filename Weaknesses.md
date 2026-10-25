@@ -96,7 +96,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-08: Collection and publication depend on fallible sources and runners
 
-- **Evidence:** [SOURCE-001's report](docs/source-verification.md) records HTTP 403 on the CDN schedule candidate from GitHub Actions and the cloud-development runner on October 14, 2026. Each stopped after one request; status/final/roster/history gates remain unverified, and actual local probes are pending. Local fallback requires an awake, connected machine and observed working access.
+- **Evidence:** [SOURCE-001's report](docs/source-verification.md) records HTTP 403 on the CDN schedule candidate from GitHub Actions and the cloud-development runner on October 14, 2026. Each stopped after one request. October 15 local history tests with Baseline's honest headers timed out. A later owner-approved stock-client notebook diagnostic returned HTTP 200 and validated 636 player rows and 60 team rows. This establishes sample access, not production source acceptance; ongoing header policy, full history coverage, and status/final/roster gates remain unresolved. Local fallback requires an awake, connected machine and observed working access.
 - **Impact:** Source or runner failures can leave missing forecasts and stale public data. Moving to another cloud does not establish source accessibility.
 - **Current mitigation:** Bounded probes retain immutable raw bytes/manifests and fail on denial or invalid content. Cloud evidence was downloaded and checksummed locally; synthetic fixture tests do not establish source access. Obtain local evidence or an owner-approved permitted-source decision before dependent collection; do not reroute the same failed request as if it were verified. Scheduling, fallback rehearsal, and public coverage remain later implementation gates.
 - **Improvement / timing:** After launch, use observed incidents to decide whether a permitted alternative source or more reliable runner is worth its cost.
@@ -149,6 +149,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Current mitigation:** Preserve every source/outcome/report version, show observation/revision times, provide explicit older-game reconciliation, and never alter forecasts when labels change.
 - **Improvement / timing:** After launch, measure actual correction timing and request cost before extending automated sweeps or adding another permitted source.
 - **Closure evidence:** Recorded correction coverage and a tested revised workload policy address the measured gap. Increasing a horizon without source evidence does not prove completeness.
+
+## W-15: Bulk historical data contains unresolved source gaps
+
+- **Evidence:** The [pinned comparison](docs/dataset-comparison.md) found Eoin 525 team ID 0 rows, blank player-team IDs, missing minutes/nonparticipation ambiguity, varying minute precision, and older-season coverage gaps. Internal row counts cannot prove exact game completeness. Wyatt 238 does not establish a recent player seed.
+- **Impact:** Silent filtering or guessed repairs could bias coverage, rates, historical evaluation, and later model promotion.
+- **Current mitigation:** The owner authorized pinned base files, explicit quarantine and repair lists, immutable patch lineage, a separately collected expected-game cross-check, and prospective cohort evidence. Source/seed acceptance remains gated; source assessment is in progress under SOURCE-001.
+- **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
+- **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 
 ## Adding a development finding
 

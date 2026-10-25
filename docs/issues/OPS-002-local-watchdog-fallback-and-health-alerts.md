@@ -4,6 +4,19 @@ Status: LOCKED under the owner's batch planning approval on October 14, 2026.
 
 Phase: 1. Priority: launch blocker. Dependencies: OPS-001, COLLECT-001, EVAL-001, and LEDGER-002 implemented and owner-reviewed. Required setup: the owner's awake Windows machine, intended login/session, local accepted adapters, secure environment credentials, and GitHub notification delivery. Session estimate: about 3 agent hours plus intended-session and failure drills.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and scope
 
 Independently detect missed cloud work and execute the same protected recovery commands locally. Monitor source freshness, reconciliation, publication, capacity, and backup evidence. No new always-on hosting, messaging provider, training trigger, or global Windows power/security changes. Deadline: October 20, 2026 at 19:00 UTC, target publication 17:00 UTC.

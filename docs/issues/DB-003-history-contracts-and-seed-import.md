@@ -8,6 +8,19 @@ Phase: 0. Priority: launch blocker. Dependencies: DATA-001, DB-001, and DB-002 i
 
 Session estimate: about 3 to 4 focused hours plus owner review and measured upload/import time. Limit this session to stored contracts, compact seed selection/import, and fixture checks. Broader history, baseline calculation, scheduling, and availability modeling remain separate work.
 
+
+## October 25 execution context
+
+The owner resumed sequential execution with the [historical-data amendment](../PRD-data-source-amendment.md).
+Use accepted pinned seed/repair artifacts, preserve quarantine and unknowns,
+and never infer historical pregame cohorts from outcomes. Injury ingestion is
+deferred for the first release. The original October 20 target is past;
+all timing/readiness gates now apply to the first approved future slate.
+This task is backlog until its implemented/reviewed dependencies pass.
+No runtime source acceptance, merge, deployment, or retrospective publication
+is established by this amendment. Required tests and contracts below remain.
+
+
 ## Goal and context
 
 Make verified recent history available to cloud/local jobs without requiring the owner's laptop archive. Preserve versioned facts, source timing, identities, and coverage so a later predictor can select prior appearances honestly. Add eight phase-specific tables and a repeatable seed import using existing platform evidence operations.

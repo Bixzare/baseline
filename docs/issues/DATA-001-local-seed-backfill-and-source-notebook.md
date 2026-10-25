@@ -16,10 +16,34 @@ Launch predicts minutes, points, rebounds, assists, and threes made using up to 
 
 Required guidance: AGENTS.md; `.agents/skills/hoop-data-quality/SKILL.md` and `.agents/skills/hoop-notebooks/SKILL.md`. Use `.agents/skills/hoop-python-testing/SKILL.md` for failure and leakage fixtures. Locked references: [source access](../decisions/0001-verify-nba-sources-by-environment.md), [storage](../decisions/0003-store-operational-records-and-versioned-artifacts.md), and [shared notebook operations](../decisions/0009-share-tested-operations-with-learning-notebooks.md).
 
+## October 25 amendment and required additional tests
+
+Apply [the historical-data strategy](../PRD-data-source-amendment.md). SOURCE-001
+supplies the offline pinned-snapshot assessor and report. Treat its result as
+candidate evidence, not an accepted full backfill. Test invalid team 0 records,
+blank player-team identity, ambiguous missing/zero minutes, supported outcome-only
+nonparticipation comments, canonical leading zeros, fractional/rounded minutes,
+and Cup-game classification. Unknown cases stay in coverage and quarantine.
+
+Version raw base plus repair overlays with source identity, evidence checksum,
+parent record/version, actual collection/validation times, reason, and resolution.
+Test unchanged replay, changed patches, interrupted repair/checkpoint writes,
+conflicting resolutions, and later repairs never altering earlier snapshots.
+Independently cross-check exact expected game IDs. Report gaps explicitly; a
+1,230-row count or the dataset's own game file is not independent completeness.
+Verify source timezone/DST semantics before normalizing any date to UTC.
+
+No historical pregame roster/injury reconstruction is added. Save prospective
+evidence in later collection issues and keep participant-only evaluation
+exploratory. Explicitly defer injury ingestion for the first release. The
+October 20 target is past; publish no backdated forecasts. This issue remains
+backlog until the SOURCE-001 historical interface and relevant source gates
+are owner-reviewed. The amendment authorizes the approach, not seed acceptance.
+
 ## Input and output contract
 
 - Inputs: the accepted local source configuration and parser mapping from SOURCE-001, explicit season `2025-26`, verified regular-season classification, source/request budgets, and a configurable local archive root outside tracked files. Keep personal paths and secrets out of committed configuration.
-- Use local nba_api historical requests only. Prefer the accepted player/team game-log interfaces. Request detailed box scores only for an identified required-field gap, with the request count explained; do not fetch every game's detail automatically.
+- Prefer accepted pinned Eoin basic files for the 2025-26 seed. Use local nba_api only for identified repairs under accepted policy. Verify every base hash, record quarantine and coverage, and retain patches as separate immutable source versions. Do not fetch every game or use floating latest downloads.
 - Retain raw bodies and fetch manifests with run/source identity, credential-free request parameters, collection/validation times, supplied publication times, content checksum, parser/schema/configuration/dependency/code versions, and failure evidence. Missing source times stay missing.
 - Player records preserve string game/player/team IDs, season/competition, source game date, actual start time only if supported, participation evidence, numeric minutes in seconds with original precision documented, points, rebounds, assists, and threes made. Preserve optional start-status evidence without inventing it. Values that are unknown stay null or explicitly invalid, not zero.
 - Team records preserve string game/team/opponent IDs, season/competition, source date, supported venue identity, points for and against including overtime, and provenance. Reconcile both team sides for each supported completed game. If an accepted source lacks a field, report the limitation and resolve the mapping before treating it as validated.

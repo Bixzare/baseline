@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: BOOT-001 is merged. [SOURCE-001, issue #3](https://github.com/Bixzare/baseline/issues/3) adds bounded capability probes and a truthful [source report](docs/source-verification.md) for owner review. The candidate schedule request returned HTTP 403 on GitHub Actions and the cloud-development runner; required source gates remain unresolved. Actual local-machine probes and interactive VS Code kernel selection remain pending. Forecasting, service provisioning, and launch readiness remain outstanding.
+Status: BOOT-001 is merged. [SOURCE-001, issue #3](https://github.com/Bixzare/baseline/issues/3) adds bounded capability probes and a truthful [source report](docs/source-verification.md) for owner review. The candidate schedule request returned HTTP 403 on GitHub Actions and the cloud-development runner; required source gates remain unresolved. October 15 local probes with Baseline's identity timed out. A later owner-approved stock-client notebook test returned HTTP 200 and validated 636 player rows and 60 team rows. Local historical sample access works; production source acceptance and full coverage remain pending. The focused [local access notebook](test.ipynb) tests history independently of schedules. Interactive VS Code kernel selection remains pending. Forecasting, service provisioning, and launch readiness remain outstanding.
 
 ## Brand
 
@@ -50,7 +50,7 @@ Approved dashboard hosting plan: GitHub Pages for initial testing, then Vercel f
 | [Coding agent guide](AGENTS.md) | Locked; 184 lines. |
 | [Project skills and provenance](skills/README.md) | Locked; seven skills installed in `.agents/skills/` and discovered in this session on October 13. |
 | [Known weaknesses and improvements](Weaknesses.md) | Locked v1.0; living register maintained through owner review. |
-| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1), merged [PR #2](https://github.com/Bixzare/baseline/pull/2). Local Windows verification remains pending. |
+| [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1), merged [PR #2](https://github.com/Bixzare/baseline/pull/2). Local Windows install and automated checks verified October 15; interactive kernel selection remains pending. |
 | [SOURCE-001: NBA source capability verification](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md) | [Issue #3](https://github.com/Bixzare/baseline/issues/3); probes and failure evidence prepared for review. Local sources and capability acceptance remain gates. |
 | [DATA-001: Local backfill and first notebook](docs/issues/DATA-001-local-seed-backfill-and-source-notebook.md) | Locked specification; requires accepted local historical source evidence during execution. |
 | [DB-001: Migrations, roles, and connectivity](docs/issues/DB-001-migrations-roles-and-supabase-connectivity.md) | Locked specification; dedicated Supabase Free project setup remains an execution gate. |
@@ -71,34 +71,36 @@ All twelve ADRs, the agent guide, seven skills, and sixteen launch issue specifi
 
 ## Execution order and handoff
 
-The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. IDs below are planning IDs; BOOT-001 maps to [GitHub issue #1](https://github.com/Bixzare/baseline/issues/1). Subsequent assigned tasks publish/reuse their actual issue before the linked PR. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
+The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. All sixteen launch tasks are published as GitHub issues; see the [execution status and issue map](docs/execution-status.md). BOOT-001 is finished, SOURCE-001 is in progress, and the other fourteen tasks are backlog. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
 
 | Order | Planning ID | Required implemented dependencies / gate |
 | --- | --- | --- |
-| 1 | BOOT-001 | No code prerequisite; verify owner-owned public repository destination and environment. |
-| 2 | SOURCE-001 | BOOT-001; actual source capability/routing acceptance. |
-| 3 | DATA-001 | BOOT-001, accepted SOURCE-001 historical adapter; report full-seed acceptance/gaps. |
-| 4 | DB-001 | BOOT-001; dedicated Free project, actual connection/role/allowance verification. |
-| 5 | DB-002 | DB-001, SOURCE-001; restricted private artifact authentication and evidence contracts. |
-| 6 | DB-003 | DATA-001, DB-002; accepted seed and verified artifact references. |
-| 7 | MODEL-001 | DB-003; fixture preparation may precede real fresh-input rehearsal. |
-| 8 | LEDGER-001 | DB-003, MODEL-001; actual baseline descriptor for registration. |
-| 9 | LEDGER-002 | LEDGER-001, MODEL-001; protected publication/receipt protocol. |
-| 10 | COLLECT-001 | SOURCE-001, DB-003, LEDGER-002; actual fresh capability routing. |
-| 11 | OUTCOME-001 | COLLECT-001, LEDGER-002, DB-003; accepted final-result adapter. |
-| 12 | EVAL-001 | OUTCOME-001, COLLECT-001, LEDGER-002. |
-| 13 | OPS-001 | COLLECT-001, OUTCOME-001, EVAL-001, LEDGER-002; production enable remains off. |
-| 14 | OPS-002 | OPS-001 and shared source/ledger/report operations; actual Windows/notification checks. |
-| 15 | BACKUP-001 | DB-001/002, LEDGER-002, OUTCOME-001, EVAL-001, OPS-002; provider/isolated target setup. |
-| 16 | LAUNCH-001 | Every prior issue implemented/reviewed and required runtime gates verified. |
+| 1 | [BOOT-001](https://github.com/Bixzare/baseline/issues/1) | No code prerequisite; verify owner-owned public repository destination and environment. |
+| 2 | [SOURCE-001](https://github.com/Bixzare/baseline/issues/3) | BOOT-001; actual source capability/routing acceptance. |
+| 3 | [DATA-001](https://github.com/Bixzare/baseline/issues/5) | BOOT-001, accepted SOURCE-001 historical adapter; report full-seed acceptance/gaps. |
+| 4 | [DB-001](https://github.com/Bixzare/baseline/issues/6) | BOOT-001; dedicated Free project, actual connection/role/allowance verification. |
+| 5 | [DB-002](https://github.com/Bixzare/baseline/issues/7) | DB-001, SOURCE-001; restricted private artifact authentication and evidence contracts. |
+| 6 | [DB-003](https://github.com/Bixzare/baseline/issues/8) | DATA-001, DB-002; accepted seed and verified artifact references. |
+| 7 | [MODEL-001](https://github.com/Bixzare/baseline/issues/9) | DB-003; fixture preparation may precede real fresh-input rehearsal. |
+| 8 | [LEDGER-001](https://github.com/Bixzare/baseline/issues/10) | DB-003, MODEL-001; actual baseline descriptor for registration. |
+| 9 | [LEDGER-002](https://github.com/Bixzare/baseline/issues/11) | LEDGER-001, MODEL-001; protected publication/receipt protocol. |
+| 10 | [COLLECT-001](https://github.com/Bixzare/baseline/issues/12) | SOURCE-001, DB-003, LEDGER-002; actual fresh capability routing. |
+| 11 | [OUTCOME-001](https://github.com/Bixzare/baseline/issues/13) | COLLECT-001, LEDGER-002, DB-003; accepted final-result adapter. |
+| 12 | [EVAL-001](https://github.com/Bixzare/baseline/issues/14) | OUTCOME-001, COLLECT-001, LEDGER-002. |
+| 13 | [OPS-001](https://github.com/Bixzare/baseline/issues/15) | COLLECT-001, OUTCOME-001, EVAL-001, LEDGER-002; production enable remains off. |
+| 14 | [OPS-002](https://github.com/Bixzare/baseline/issues/16) | OPS-001 and shared source/ledger/report operations; actual Windows/notification checks. |
+| 15 | [BACKUP-001](https://github.com/Bixzare/baseline/issues/17) | DB-001/002, LEDGER-002, OUTCOME-001, EVAL-001, OPS-002; provider/isolated target setup. |
+| 16 | [LAUNCH-001](https://github.com/Bixzare/baseline/issues/18) | Every prior issue implemented/reviewed and required runtime gates verified. |
 
 Dependencies mean implemented, tested, owner-reviewed interfaces, not that every later launch gate has already passed. An implementation PR may report a blocked real-input rehearsal honestly while delivering fixture-tested operations, if its issue allows that. COLLECT-001 then supplies fresh recurring inputs; LAUNCH-001 requires actual readiness before activation. OPS-002 can test/alert on an unverified backup before BACKUP-001 produces real evidence, so those tasks have no circular prerequisite.
 
 The revised [critical path](docs/critical-path.md#updated-execution-plan-october-14-20) estimates about 44-51 agent hours plus review/setup/drills, conditional on rapid source/database verification. The original 28-hour calendar is not a reliable guarantee. At source/database checkpoints, reassess real duration and deadline risk. No optional later module or document may delay launch.
 
-### First execution assignment
+### Current execution assignment
 
-BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). The owner then assigned only [SOURCE-001](docs/issues/SOURCE-001-verify-nba-capabilities-by-environment.md). Its probe implementation and failure report await review; source acceptance and any coverage revision require the owner. Do not merge, deploy, or start DATA-001 during this assignment.
+BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). On October 25 the owner authorized incorporating the [historical-data strategy](docs/PRD-data-source-amendment.md) and resuming sequential issue execution. SOURCE-001 remains in progress, with its existing PR and new offline dataset assessment awaiting review. DATA-001 follows reviewed historical interfaces; a dataset recommendation is not source acceptance. All remaining implementation tasks are backlog. No merge or deployment is authorized by resuming execution.
+
+Prefer pinned Eoin version 525 basic files with quarantine, exact coverage cross-checks, and versioned targeted repairs. Retain prospective roster/outcome evidence; defer injury ingestion, historical injury reconstruction, and all-time comparisons. The [dataset comparison](docs/dataset-comparison.md) records observed gaps. ADR 0013 is a draft decision record for owner review. The original October 20 date is past; activate only for future games after readiness.
 
 ### Setup inputs and stop conditions
 
@@ -137,11 +139,34 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Bootstrap installation was verified in `.venv` and a second clean environment. The SOURCE-001 suite now has 106 passing offline tests, including five cutoff/leakage tests and command-level boundary regression coverage. No tests are skipped. The build produced an sdist and wheel. The kernel check launches a fresh registered `baseline` kernel, verifies its interpreter matches the active project environment, and imports the package and both subpackages from the expected checkout path. It does not claim interactive VS Code kernel selection has been verified.
+Bootstrap installation was verified in `.venv` and a second clean environment. The SOURCE-001 suite now has 153 passing offline tests, including five cutoff/leakage tests, command-level boundary regression coverage, 15 local notebook checks, and ten native client checks. The notebook executes in a fresh kernel with external network access blocked. No tests are skipped. The build produced an sdist and wheel. The kernel check launches a fresh registered `baseline` kernel, verifies its interpreter matches the active project environment, and imports the package and both subpackages from the expected checkout path. It does not claim interactive VS Code kernel selection has been verified.
 
-In local VS Code, select the repository's `.venv` interpreter as the notebook kernel explicitly. The registration above writes into the project environment instead of global/user Jupyter settings; rerun it after recreating or moving the environment. On Windows, install the pinned Python/uv versions, run `uv sync --locked` from the repository root, and use the same `uv run` check and kernel commands in PowerShell. The Linux `export` line is specific to this cloud runner; a normal local Windows cache does not need that override. **Local Windows locked installation, imports, paths, and interactive Jupyter/VS Code kernel selection remain pending until performed on the owner's machine.** Hosted Windows CI is separate evidence.
+In local VS Code, select the repository's `.venv` interpreter as the notebook kernel explicitly. The registration above writes into the project environment instead of global/user Jupyter settings; rerun it after recreating or moving the environment. On Windows, install the pinned Python/uv versions, run `uv sync --locked` from the repository root, and use the same `uv run` check and kernel commands in PowerShell. The Linux `export` line is specific to this cloud runner; a normal local Windows cache does not need that override. Local Windows locked installation, the 106 existing tests, lint, formatting, types, boundaries, and fresh-kernel imports passed on October 15. Interactive VS Code kernel selection remains unverified. Hosted Windows CI is separate evidence.
 
-`.github/workflows/ci.yml` uses `uv python install 3.12.14` on Ubuntu 24.04 and Windows 2025 because the GitHub `setup-python` manifest does not supply that security-release version on Windows. uv's managed distribution is available on both platforms. The Linux job runs locked install, lint/format, strict types, boundary checks, tests, package build, and fresh-kernel imports on every PR. The minimal Windows job runs locked install, tests, and the same kernel/import/path checks. Both use pinned action revisions, a ten-minute timeout, and read-only repository permissions; routine PR checks use fixtures and no production credentials. SOURCE-001 adds source cutoff/leakage tests; Postgres integration and actual walkthrough notebook tests enter with their first implementing issues. Live CDN probes run only through an explicit manual dispatch opt-in or the dedicated manual source workflow. The [source report](docs/source-verification.md) documents commands, retained evidence, failed/unverified gates, and local-machine prerequisites. No database, prediction, or production scheduler capability is claimed.
+### Local environment and history access notebook
+
+The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. Board synchronization awaits Projects authorization.
+
+To activate the existing environment in a VS Code PowerShell terminal, from the repository root:
+
+```powershell
+# Only needed if PowerShell blocks Activate.ps1; affects this terminal process only.
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\.venv\Scripts\Activate.ps1
+python -c "import sys; print(sys.executable)"
+```
+
+The interpreter should end in `Hoop\.venv\Scripts\python.exe`. Run `deactivate` to leave the environment. Activation changes terminal command lookup; a notebook separately needs **Select Kernel > Python Environments > .venv**. Using `uv run --locked` does not require activation.
+
+Open [test.ipynb](test.ipynb) and select that project kernel. Run all cells with the defaults first: only synthetic fixtures are checked, with no NBA requests. To test real historical access on your own machine, set `RUN_LIVE = True` and `CONFIRM_LOCAL_MACHINE = True`, then restart the kernel and run all cells once. It checks a small 2025-26 player and team sample independently, with two requests at most, a 30 second timeout per request, and no retries. The revised notebook calls `nba_api.LeagueGameLog(...)` and `league_game_log.get_data_frame()` through the native client, as in the [maintainers' endpoint examples](https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/examples.md). Its documented `headers` option retains Baseline's identity instead of the package's browser identity. No API key or added proxy is used. A temporary session retains responses before native parsing and is restored afterward; this diagnostic is sequential and uses the package's normal response buffering, not a production download limiter.
+
+The notebook now also includes a separate **Stock client diagnostic** section, approved for one local diagnostic only. It uses unchanged nba_api 1.11.4 defaults, without header/proxy overrides, session replacement, hooks, or copied cookies. Both samples succeeded on October 15: 636 player rows and 60 team rows. Open the [executed result](artifacts/notebook-revisions/20261015T210943Z-stock-executed.ipynb) locally to inspect the outputs. Its decoded response text and verified hashes are under `artifacts/notebook-history-stock/ecb4ebeb757f4e459465e0d71c47d170/`. No rerun is needed. To deliberately repeat this diagnostic locally, leave `RUN_LIVE = False`, restart the kernel, and set `RUN_STOCK_DEFAULTS` and `STOCK_LOCAL_CONFIRMED` to `True`. It makes at most two endpoint calls with a 20 second connect/read timeout and stops on the first failure. Reset all live switches before committing. Ongoing collection with these defaults still needs owner review; this diagnostic does not change production policy.
+
+Inspect the separate results and retained evidence under `artifacts/notebook-history-native/<run-id>/`. Earlier urllib results stay under `artifacts/notebook-history/`, and the owner's executed notebook was preserved under `artifacts/notebook-revisions/` before revision. Both samples must validate before historical route acceptance can be reviewed. A successful fixture run does not verify access; a small live sample does not establish full-season completeness. This notebook does not test schedules, rosters, or cloud collection. Keep those gates separate, and clear outputs and reset both switches before committing.
+
+October 15 diagnosis narrowed the local failure: DNS, TCP, verified TLS, and a separate Python HTTPS control all pass. Standard Windows curl also receives no HTTP response for the history request over either IPv6 or IPv4. The [source report](docs/source-verification.md#layered-local-diagnosis-october-15) records timings, retained evidence, remaining hypotheses, and focused owner checks. No supported fix or accepted historical route has yet been established; dependencies and security settings were unchanged.
+
+`.github/workflows/ci.yml` uses `uv python install 3.12.14` on Ubuntu 24.04 and Windows 2025 because the GitHub `setup-python` manifest does not supply that security-release version on Windows. uv's managed distribution is available on both platforms. The Linux job runs locked install, lint/format, strict types, boundary checks, tests, package build, and fresh-kernel imports on every PR. The minimal Windows job runs locked install, tests, and the same kernel/import/path checks. Both use pinned action revisions, a ten-minute timeout, and read-only repository permissions; routine PR checks use fixtures and no production credentials. SOURCE-001 adds source cutoff/leakage tests and the offline access notebook execution; Postgres integration and later workflow notebooks enter with their implementing issues. Live CDN probes run only through an explicit manual dispatch opt-in or the dedicated manual source workflow. The [source report](docs/source-verification.md) documents commands, retained evidence, failed/unverified gates, and local-machine prerequisites. No database, prediction, or production scheduler capability is claimed.
 
 The boundary checker scans every Python file under `src/hoop/platform/`, including new nested modules and initializers. It rejects absolute/relative NBA imports, imports under `TYPE_CHECKING`, and wildcard imports from `hoop.domains`; permitted shared and synthetic-domain imports are fixture-tested. This is static import enforcement, not proof against arbitrary runtime import construction or proof that future shared contracts are domain-independent. Do not add dynamic plugin discovery. A forbidden import reports the file, line, and direction rule with exit code 1. An automated subprocess regression exercises the CI command against a new nested module: it verifies rejection and the diagnostic, then verifies success after the NBA dependency is moved into domain code and the platform uses shared imports. Temporary negative controls also demonstrated that Ruff rejects an unused import, mypy rejects a string assigned to an integer, and pytest rejects a failed assertion; those failures were removed and the required suite passed afterward.
 
