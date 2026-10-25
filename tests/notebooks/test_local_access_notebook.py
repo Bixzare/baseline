@@ -21,8 +21,8 @@ NOTEBOOK = ROOT / "test.ipynb"
 SOCKET_CONNECT = socket.socket.connect
 
 
-def code_cells() -> list[dict[str, Any]]:
-    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+def code_cells(path: Path = NOTEBOOK) -> list[dict[str, Any]]:
+    notebook = json.loads(path.read_text(encoding="utf-8"))
     return [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
 
 
@@ -71,8 +71,13 @@ def execute(client: BlockingKernelClient, source: str) -> None:
             return
 
 
+@pytest.mark.parametrize(
+    "notebook_path", [NOTEBOOK, ROOT / "notebooks/01_sources_and_backfill.ipynb"]
+)
 def test_fixture_run_in_fresh_kernel_cannot_access_network(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    notebook_path: Path,
 ) -> None:
     # Jupyter needs local IPC; Windows asyncio also creates a loopback socket pair.
     # Keep external connections forbidden in the parent as well as in the kernel.
@@ -123,8 +128,17 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
             "    raise AssertionError('Notebook fixture run attempted network access')\n"
             "socket.socket.connect = reject_network\n",
         )
-        for cell in code_cells():
+        for cell in code_cells(notebook_path):
+            assert cell["execution_count"] is None and not cell["outputs"]
             execute(client, "".join(cell["source"]))
+        if notebook_path != NOTEBOOK:
+            execute(
+                client,
+                "assert replay_report['reused']\n"
+                "assert not seed_report['source_accepted']\n"
+                "assert seed_report['row_counts'] == {'players': 2, 'teams': 2}",
+            )
+            return
         execute(
             client,
             "assert RUN_LIVE is False\n"

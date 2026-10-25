@@ -2,13 +2,14 @@
 
 Updated October 25, 2026. Issue publication and implementation are separate.
 The owner authorized sequential execution and board synchronization. Only
-SOURCE-001 is active; every later task needs its reviewed dependencies.
+the DATA-001, DB-001 and DB-002 batch is authorized for sequential implementation.
+DB-002 is prepared on DB-001 for review; hosted activation remains separate.
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
-| SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | In progress | PR #4 remains open; resumed dataset assessment and source policy review. |
-| DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Backlog | Reviewed historical source interface and seed acceptance gates. |
+| SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4 at bdadf7d; historical interface reviewed. Source gates remain. |
+| DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | In progress | Candidate archive and fixture notebook; incomplete seed report awaits review. |
 | DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | Backlog | Dedicated project/connection and role checks. |
 | DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | Backlog | DB-001 and reviewed source evidence contracts. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | Backlog | Accepted DATA-001 seed and private artifacts. |
@@ -31,14 +32,15 @@ Backlog or In progress. Preserve the board's actual column names when mapping.
 The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
 is linked to Bixzare/baseline. It was created after confirming there was no
 existing open, closed, or repository-linked project. All sixteen issue memberships
-and Status values were read back: one Finished, one In progress, fourteen Backlog.
+and Status values were read back after PR #4 merged: two Finished, one In progress,
+thirteen Backlog. Later batch status changes need their own readback.
 The board view groups columns by Status. The repository connector supplied issue
 operations; the owner's authorized GitHub CLI/Projects API supplied board operations.
 
-SOURCE-001 commit `594bada` is pushed to PR #4. Its Linux and Windows CI jobs each
+SOURCE-001 PR #4 was merged by the owner. Its Linux and Windows CI jobs each
 passed all 153 tests and fresh-kernel checks. Linux also passed lint, formatting,
 types, boundaries, and package build. No merge, deployment, or source acceptance
-is implied. The later issue still waits for owner review of the historical interface.
+is implied by CI alone. The merged historical interface enables candidate-seed work.
 
 The original October 20 release date is past. The next milestone is readiness
 for a future slate, with no backdated official forecasts. Later model, dashboard,

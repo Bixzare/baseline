@@ -154,7 +154,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 - **Evidence:** The [pinned comparison](docs/dataset-comparison.md) found Eoin 525 team ID 0 rows, blank player-team IDs, missing minutes/nonparticipation ambiguity, varying minute precision, and older-season coverage gaps. Internal row counts cannot prove exact game completeness. Wyatt 238 does not establish a recent player seed.
 - **Impact:** Silent filtering or guessed repairs could bias coverage, rates, historical evaluation, and later model promotion.
-- **Current mitigation:** The owner authorized pinned base files, explicit quarantine and repair lists, immutable patch lineage, a separately collected expected-game cross-check, and prospective cohort evidence. Source/seed acceptance remains gated; source assessment is in progress under SOURCE-001.
+- **Current mitigation:** SOURCE-001 is merged. DATA-001's local inventory matches all 1,230 game IDs; normalization retains 32,176 player and 2,460 team rows, quarantines 133 player and two team records, and preserves raw bytes. See the [seed report](docs/seed-backfill.md). Seed acceptance remains gated; no repairs or historical pregame cohorts are invented.
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 

@@ -58,7 +58,7 @@ Use local MLflow for experiment comparison; automated runs record evidence in Su
 
 ## Commands and environment
 
-BOOT-001 is merged; SOURCE-001 ([issue #3](https://github.com/Bixzare/baseline/issues/3)) adds probes for owner review.
+BOOT-001 and SOURCE-001 are merged. DATA-001 adds candidate-seed tooling for review.
 Python 3.12.14 and uv 0.12.23 are verified on Linux. From the repository root:
 
 ```powershell
@@ -75,7 +75,7 @@ uv run --locked python scripts/check_kernel.py
 
 Linux and Windows CI passed 153 tests and fresh-kernel checks on SOURCE-001 commit 594bada; future commits need their own CI evidence.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
-Live probes are manual only. Local stock-client samples passed; production policy, coverage, and cloud CDN access remain gated. Do not evade denial.
+Live probes are manual only. Released defaults are approved for bounded local inventory/repairs; stop on denial. Exact 2025-26 game IDs match, but seed quarantine and cloud CDN gates remain.
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
@@ -86,6 +86,7 @@ Document test database setup and fixture requirements; do not silently skip inte
 ## Data and prediction rules
 
 - Prefer pinned Eoin history with quarantine and immutable repair lineage; see docs/PRD-data-source-amendment.md. Local nba_api repairs need accepted policy. Never bypass access controls.
+- Seed commands and evidence: [local workflow](docs/seed-backfill.md). `uv run --locked python -m hoop.cli seed --help` is the tested entry point. Candidate creation does not accept or import a seed.
 - Verify each required CDN capability from the actual cloud runner. HTTP 200 alone is not proof of usable data.
 - Every source needs saved fixtures, schema checks, freshness checks, bounded retries, and health reporting.
 - Store immutable raw inputs with collection time, checksum, parser version, request identity, and run ID.

@@ -145,6 +145,14 @@ In local VS Code, select the repository's `.venv` interpreter as the notebook ke
 
 ### Local environment and history access notebook
 
+DATA-001 adds the [local seed workflow](docs/seed-backfill.md) and
+`notebooks/01_sources_and_backfill.ipynb`, which defaults to offline fixtures.
+Run `uv run --locked python -m hoop.cli seed --help` for the shared CLI.
+The real 2025-26 run matched 1,230 game IDs against a separate local NBA inventory,
+retained 32,176 player and 2,460 team rows, and quarantined 135 records. It remains
+incomplete and unaccepted. Repair support does not automatically repair or accept
+those records. Backup and production collection remain separate gates.
+
 The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains one Finished, one In progress, and fourteen Backlog items, verified October 25.
 
 To activate the existing environment in a VS Code PowerShell terminal, from the repository root:
