@@ -120,7 +120,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-11: Ledger immutability does not protect against the database owner
 
-- **Evidence:** The approved approach restricts runtime roles, while privileged migration/administrative access remains necessary. Design Section 7 states this boundary.
+- **Evidence:** LEDGER-001 tests real runtime/anonymous write denials and a nonlogin insert-only publication owner. Deferred foreign keys enforce one matching child per official slot under concurrent writers. Privileged migration/administrative access still exists; design Section 7 states this boundary. Actual deadline/visibility publication functions arrive in LEDGER-002.
 - **Impact:** The system can demonstrate protected application behavior but cannot claim independent, tamper-proof proof against its own administrator.
 - **Current mitigation:** Separate credentials, test runtime mutation denial, preserve publication receipts, version migrations, and keep independent backups.
 - **Improvement / timing:** If independent public auditability becomes a requirement, evaluate externally stored attestations or immutable exports under a separate design.
@@ -136,7 +136,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-13: Reuse outside NBA is designed but not yet demonstrated
 
-- **Evidence:** [BOOT-001](https://github.com/Bixzare/baseline/issues/1) enforces static platform imports recursively, with permitted shared/synthetic imports and rejected NBA imports in temporary fixtures. Shared prediction/outcome/evaluation contracts do not exist yet; Clash Royale is a later deployment.
+- **Evidence:** BOOT-001 enforces static platform imports. DB-003 tests generic second-domain events; MODEL-001 tests generic prepared entries; LEDGER-001 commits a synthetic card-game signed target through the same model/bundle/slot tables. A real second-domain deployment and shared outcome/evaluation lifecycle remain unimplemented.
 - **Impact:** NBA-specific assumptions may remain undiscovered until a real second domain is integrated.
 - **Current mitigation:** Prevent platform imports from NBA modules and exercise shared contracts with a small synthetic non-NBA fixture.
 - **Improvement / timing:** Test the boundary with the separately approved Clash Royale deployment, after the NBA platform is stable.

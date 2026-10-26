@@ -82,7 +82,12 @@ kernel with network and database calls blocked. Its fixture acceptance is not an
 owner acceptance record. Hosted import, cloud reference resolution, measured
 season capacity and independent backup/recovery remain unverified.
 
-The local suite passed 259 tests before the final missing-status regression was
-added; that regression is run separately before publication. Ruff lint/format,
-mypy, platform boundaries and wheel/sdist build passed. Hosted CI is recorded on
-the PR separately. A source date still does not supply a historical tip-off time.
+DB-003's initial checks and the final missing-status regression passed, followed
+by 326 tests on the complete three-issue stack. Ruff lint/format, mypy, platform
+boundaries, build and fresh-kernel checks passed. Hosted CI is separate evidence.
+
+An additional offline October 26 comparison found all 1,230 source game dates
+equal to `GAME_DATE` in the separately saved NBA inventory, with zero mismatches.
+`.cache/calendar-comparison.json` retains the local summary. This supports the
+date-only mapping review; it does not establish UTC tip-off times, DST semantics
+or an owner acceptance record. Those flags were not automatically changed.
