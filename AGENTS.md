@@ -82,6 +82,7 @@ Use the project environment, not global Python or an unrelated Conda environment
 DB-001 commands: `uv run --locked python -m hoop.platform.database inspect`, `apply`, `provision-runtime`, `check`; see [setup](docs/database-setup.md) for separate env credentials and hosted gates.
 DB-002: `uv run --locked python -m hoop.platform.artifacts setup` is controlled admin setup; `verify` uses only runtime/test identities. See [artifact gates](docs/artifact-storage.md). Hosted behavior is unverified; never deploy provider test scaffolding.
 Full pytest requires a disposable local `BASELINE_TEST_DSN`; missing setup fails integration checks. Windows compatibility uses `pytest -m "not postgres"`. CI Postgres 17 is provisional until the dedicated project exists.
+DB-003: `uv run --locked python -m hoop.domains.nba.history --help`; default `plan` is local. See [import gates](docs/seed-import.md); real seed import is blocked, and fixture acceptance never authorizes production.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.

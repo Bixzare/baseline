@@ -166,6 +166,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
 - **Closure evidence:** Owner-reviewed hosted migrations, Windows and Actions restricted/TLS checks, real permission denials and an isolated supported recovery test. This remains a release gate.
 
+## W-17: Full raw provenance exceeds the verified upload path
+
+- **Evidence:** DB-003's October 26 dry plan retains 438,321,084 original raw bytes, including player/team CSVs larger than the client's 16 MiB object bound. The plan selects 5,447 player rows and supporting results for 849 games; reducing normalized rows does not shrink their original source bodies.
+- **Impact:** Cloud jobs cannot yet resolve all required seed provenance without the laptop. Real seed import is blocked.
+- **Current mitigation:** Refuse apply before upload; retain original checksummed local files and never invent a smaller original response. Calendar verification, quarantine and seed acceptance also remain explicit blockers.
+- **Improvement / timing:** Review a supported raw archival/upload design, with exact-byte reconstruction and capacity evidence, before hosted seed import. No raw segmentation or increased provider allowance is assumed here.
+- **Closure evidence:** Owner-reviewed design plus upload/retrieval/hash verification from the actual cloud runner within verified free limits. This is a release gate.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

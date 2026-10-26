@@ -126,7 +126,9 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
             "import socket\n"
             "def reject_network(*args, **kwargs):\n"
             "    raise AssertionError('Notebook fixture run attempted network access')\n"
-            "socket.socket.connect = reject_network\n",
+            "socket.socket.connect = reject_network\n"
+            "import psycopg\n"
+            "psycopg.connect = reject_network\n",
         )
         for cell in code_cells(notebook_path):
             assert cell["execution_count"] is None and not cell["outputs"]
@@ -136,7 +138,8 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
                 client,
                 "assert replay_report['reused']\n"
                 "assert not seed_report['source_accepted']\n"
-                "assert seed_report['row_counts'] == {'players': 2, 'teams': 2}",
+                "assert seed_report['row_counts'] == {'players': 2, 'teams': 2}\n"
+                "assert not import_plan['blockers'] and not import_plan['hosted_ready']",
             )
             return
         execute(

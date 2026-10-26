@@ -207,3 +207,9 @@ probe bridge and a manual permission rehearsal. The shared platform supports a
 synthetic second domain. Real Postgres checks use isolated provider fixtures;
 mocked HTTP success does not establish hosted Supabase behavior. No project,
 identity, bucket or production forecast is activated by this implementation.
+
+DB-003 adds [compact history planning/import](docs/seed-import.md), eight history
+tables and cutoff-aware revision reads. `uv run --locked python -m
+hoop.domains.nba.history --help` documents the plan/apply entry point. The notebook
+defaults to a fixture-only plan. The real seed remains blocked by quarantine,
+source-date verification, acceptance and the original raw upload size.
