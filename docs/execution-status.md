@@ -14,7 +14,7 @@ No hosted activation is implied.
 | DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | PR #20: initial independent commit passed 166 tests and CI; review stack requires fresh CI. Hosted checks pending. |
 | DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | PR #21: local combined suite passed 236 tests; owner review and hosted API checks remain gates. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
-| MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | Backlog | Reviewed compact history interfaces. |
+| MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | Backlog | DB-003 and baseline descriptors. |
 | LEDGER-002 | [#11](https://github.com/Bixzare/baseline/issues/11) | Backlog | Protected ledger and baseline operations. |
 | COLLECT-001 | [#12](https://github.com/Bixzare/baseline/issues/12) | Backlog | Fresh accepted sources, DB-003, LEDGER-002. |

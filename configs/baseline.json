@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "domain": "nba",
+  "family": "player_recent_appearance_mean",
+  "version": "1.0.0",
+  "window": 10,
+  "calendar_timezone": "America/New_York",
+  "schedule_max_age_seconds": 1800,
+  "roster_max_age_seconds": 86400,
+  "targets": {
+    "minutes": "minutes",
+    "points": "points",
+    "rebounds": "rebounds",
+    "assists": "assists",
+    "threes_made": "threes made"
+  }
+}
