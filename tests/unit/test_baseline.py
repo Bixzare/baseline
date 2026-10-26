@@ -252,3 +252,24 @@ def test_unknown_schedule_time_is_a_blocked_game(inputs: dict[str, Any]) -> None
     inputs["schedule"]["scheduled_start"] = None
     with pytest.raises(EvidenceError):
         prepared(inputs)
+
+
+@pytest.mark.parametrize("container", ["details", "source_summary"])
+def test_stale_source_generation_blocks_even_with_recent_collection(
+    inputs: dict[str, Any], container: str
+) -> None:
+    inputs["schedule"][container] = {"source_generated_at": "2026-10-25T00:00:00Z"}
+    with pytest.raises(EvidenceError):
+        prepared(inputs)
+
+
+def test_equivalent_revision_json_ties_are_not_marked_conflicting(inputs: dict[str, Any]) -> None:
+    from hoop.domains.nba.history.readers import eligible_latest
+
+    source = inputs["history"][0]
+    first = {**source, "details": {"a": 1, "b": 2}}
+    other = {**source, "source_check_id": str(uuid4()), "details": {"b": 2, "a": 1}}
+    result = eligible_latest(
+        [first, other], parse_time(inputs["feature_cutoff"]), ("event_id",), ("details",)
+    )
+    assert len(result) == 1 and not result[0]["ambiguous_revision"]

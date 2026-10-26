@@ -37,9 +37,12 @@ def eligible_latest(
             for row in candidates
             if (parse_time(str(row["observed_at"])), parse_time(str(row["validated_at"]))) == best
         ]
-        signatures = {str(tuple(row.get(field) for field in value_fields)) for row in tied}
+        first = tuple(tied[0].get(field) for field in value_fields)
+        ambiguous = any(
+            tuple(row.get(field) for field in value_fields) != first for row in tied[1:]
+        )
         chosen = min(tied, key=lambda row: str(row["source_check_id"]))
-        result.append({**chosen, "ambiguous_revision": len(signatures) > 1})
+        result.append({**chosen, "ambiguous_revision": ambiguous})
     return result
 
 
