@@ -99,9 +99,16 @@ receipts. Runtime readback matched all five components. Bundle ID was
 `.cache/ledger-001-rehearsal.json` retains the local report and migration hashes.
 This mock-Storage/real-Postgres result does not establish hosted registration.
 
-The final combined stack passed 326 local tests, Ruff lint/format, strict mypy,
+The final combined stack passed 327 local tests, Ruff lint/format, strict mypy,
 platform boundaries, wheel/sdist build and fresh-kernel imports. Linux/Windows
 PR checks are recorded independently. No required local Postgres test was skipped.
+
+The first ledger CI run passed Linux and the Windows tests, but Windows failed
+when the standalone kernel probe removed a still-open IPython history database.
+Disposable kernels now disable persistent history and shut down gracefully with
+the kernel manager's bounded termination fallback. A real-kernel regression
+checks interpreter/import identity, disabled history and runtime cleanup without
+ignoring cleanup errors.
 
 Hosted registration and restricted readback remain pending; no production schema
 or pointer was changed in this batch. A reviewed real bootstrap must leave
