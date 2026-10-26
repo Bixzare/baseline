@@ -96,7 +96,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-08: Collection and publication depend on fallible sources and runners
 
-- **Evidence:** [SOURCE-001's report](docs/source-verification.md) records HTTP 403 on the CDN schedule candidate from GitHub Actions and the cloud-development runner on October 14, 2026. Each stopped after one request. October 15 local history tests with Baseline's honest headers timed out. A later owner-approved stock-client notebook diagnostic returned HTTP 200 and validated 636 player rows and 60 team rows. This establishes sample access, not production source acceptance; ongoing header policy, full history coverage, and status/final/roster gates remain unresolved. Local fallback requires an awake, connected machine and observed working access.
+- **Evidence:** [SOURCE-001's report](docs/source-verification.md) records HTTP 403 on the CDN schedule candidate from GitHub Actions and the cloud-development runner on October 14, 2026. Each stopped after one request. October 15 local history tests with Baseline's honest headers timed out. A later owner-approved stock-client notebook diagnostic returned HTTP 200 and validated 636 player rows and 60 team rows. This establishes sample access, not production source acceptance; the owner approved bounded unchanged defaults for local inventory/repairs on October 25. Exact 2025-26 game IDs matched a separate NBA inventory, but 135 records remain quarantined. Seed acceptance and status/final/roster gates remain unresolved. Local fallback requires an awake, connected machine and observed working access.
 - **Impact:** Source or runner failures can leave missing forecasts and stale public data. Moving to another cloud does not establish source accessibility.
 - **Current mitigation:** Bounded probes retain immutable raw bytes/manifests and fail on denial or invalid content. Cloud evidence was downloaded and checksummed locally; synthetic fixture tests do not establish source access. Obtain local evidence or an owner-approved permitted-source decision before dependent collection; do not reroute the same failed request as if it were verified. Scheduling, fallback rehearsal, and public coverage remain later implementation gates.
 - **Improvement / timing:** After launch, use observed incidents to decide whether a permitted alternative source or more reliable runner is worth its cost.
@@ -157,6 +157,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Current mitigation:** SOURCE-001 is merged. DATA-001's local inventory matches all 1,230 game IDs; normalization retains 32,176 player and 2,460 team rows, quarantines 133 player and two team records, and preserves raw bytes. See the [seed report](docs/seed-backfill.md). Seed acceptance remains gated; no repairs or historical pregame cohorts are invented.
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
+
+## W-16: Hosted persistence has not been provisioned or verified
+
+- **Evidence:** On October 25 the owner confirmed that the dedicated Supabase project is not created. DB-001's real Postgres 17.11 fixture tests and isolated export/restore passed locally. Hosted major version, plan/region/limits, direct/session access, actual API roles and TLS remain unverified.
+- **Impact:** Local success cannot establish production database or private-artifact readiness.
+- **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, real Postgres CI and explicit hosted gates. DB-002 tests actual policies against provider relation/claim fixtures and mocks HTTP faults; this does not verify real Auth/Storage APIs. No administrative credential enters ordinary jobs. See [artifact verification](docs/artifact-storage.md).
+- **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
+- **Closure evidence:** Owner-reviewed hosted migrations, Windows and Actions restricted/TLS checks, real permission denials and an isolated supported recovery test. This remains a release gate.
 
 ## Adding a development finding
 

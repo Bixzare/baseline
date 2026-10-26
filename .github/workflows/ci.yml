@@ -27,6 +27,19 @@ jobs:
     name: Linux lint, types, tests, and kernel
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17@sha256:b8faeff7712663c2773a190181e1246e37e364b887611c04658c28b44e2408fe
+        env:
+          POSTGRES_PASSWORD: baseline_fixture_only
+          POSTGRES_DB: baseline_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d baseline_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      BASELINE_TEST_DSN: postgresql://postgres:baseline_fixture_only@127.0.0.1:5432/baseline_test
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
@@ -59,7 +72,7 @@ jobs:
           enable-cache: true
       - run: uv python install 3.12.14
       - run: uv sync --locked
-      - run: uv run --locked pytest
+      - run: uv run --locked pytest -m "not postgres"
       - name: Register project kernel
         run: uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"
       - run: uv run --locked python scripts/check_kernel.py

@@ -79,6 +79,9 @@ Live probes are manual only. Released defaults are approved for bounded local in
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
+DB-001 commands: `uv run --locked python -m hoop.platform.database inspect`, `apply`, `provision-runtime`, `check`; see [setup](docs/database-setup.md) for separate env credentials and hosted gates.
+DB-002: `uv run --locked python -m hoop.platform.artifacts setup` is controlled admin setup; `verify` uses only runtime/test identities. See [artifact gates](docs/artifact-storage.md). Hosted behavior is unverified; never deploy provider test scaffolding.
+Full pytest requires a disposable local `BASELINE_TEST_DSN`; missing setup fails integration checks. Windows compatibility uses `pytest -m "not postgres"`. CI Postgres 17 is provisional until the dedicated project exists.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.
