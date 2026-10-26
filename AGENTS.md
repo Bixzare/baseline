@@ -58,7 +58,7 @@ Use local MLflow for experiment comparison; automated runs record evidence in Su
 
 ## Commands and environment
 
-BOOT-001 is merged; SOURCE-001 ([issue #3](https://github.com/Bixzare/baseline/issues/3)) adds probes for owner review.
+BOOT-001 and SOURCE-001 are merged. DATA-001 adds candidate-seed tooling for review.
 Python 3.12.14 and uv 0.12.23 are verified on Linux. From the repository root:
 
 ```powershell
@@ -75,10 +75,13 @@ uv run --locked python scripts/check_kernel.py
 
 Linux and Windows CI passed 153 tests and fresh-kernel checks on SOURCE-001 commit 594bada; future commits need their own CI evidence.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
-Live probes are manual only. Local stock-client samples passed; production policy, coverage, and cloud CDN access remain gated. Do not evade denial.
+Live probes are manual only. Released defaults are approved for bounded local inventory/repairs; stop on denial. Exact 2025-26 game IDs match, but seed quarantine and cloud CDN gates remain.
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.
+DB-001 commands: `uv run --locked python -m hoop.platform.database inspect`, `apply`, `provision-runtime`, `check`; see [setup](docs/database-setup.md) for separate env credentials and hosted gates.
+DB-002: `uv run --locked python -m hoop.platform.artifacts setup` is controlled admin setup; `verify` uses only runtime/test identities. See [artifact gates](docs/artifact-storage.md). Hosted behavior is unverified; never deploy provider test scaffolding.
+Full pytest requires a disposable local `BASELINE_TEST_DSN`; missing setup fails integration checks. Windows compatibility uses `pytest -m "not postgres"`. CI Postgres 17 is provisional until the dedicated project exists.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.
@@ -86,6 +89,7 @@ Document test database setup and fixture requirements; do not silently skip inte
 ## Data and prediction rules
 
 - Prefer pinned Eoin history with quarantine and immutable repair lineage; see docs/PRD-data-source-amendment.md. Local nba_api repairs need accepted policy. Never bypass access controls.
+- Seed commands and evidence: [local workflow](docs/seed-backfill.md). `uv run --locked python -m hoop.cli seed --help` is the tested entry point. Candidate creation does not accept or import a seed.
 - Verify each required CDN capability from the actual cloud runner. HTTP 200 alone is not proof of usable data.
 - Every source needs saved fixtures, schema checks, freshness checks, bounded retries, and health reporting.
 - Store immutable raw inputs with collection time, checksum, parser version, request identity, and run ID.

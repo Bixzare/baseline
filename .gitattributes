@@ -1,2 +1,4 @@
 # Use stable fixture bytes on Windows and Linux for the pinned SHA-256 manifest.
 tests/fixtures/nba/eoin-history/*.csv text eol=lf
+tests/fixtures/nba/seed/*.csv text eol=lf
+*.sql text eol=lf

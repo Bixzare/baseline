@@ -20,6 +20,12 @@ collected game-inventory cross-check, and local nba_api only for identified
 repairs under accepted access policy. Preserve immutable base/patch provenance
 and later observation times. Routine reads use validated artifacts.
 
+On October 25 the owner approved unchanged released nba_api defaults for bounded
+local inventory and targeted repairs, extending the diagnostic-only permission.
+Copied cookies, custom browser identity, TLS impersonation, proxy rotation and
+retries following denial remain excluded. One independent team inventory request
+succeeded. Seed acceptance remains separate.
+
 Keep unknown participation and availability explicit. Collect pregame evidence
 prospectively instead of reconstructing unsupported historical cohorts. Defer
 injury ingestion for the first release and retain the existing promotion gates.

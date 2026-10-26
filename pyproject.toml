@@ -10,6 +10,9 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "nba-api==1.11.4",
+    "pandas==3.0.6",
+    "pyarrow==26.0.0",
+    "psycopg[binary]==3.3.6",
 ]
 
 [dependency-groups]
@@ -39,7 +42,12 @@ strict = true
 module = ["nba_api.*"]
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = ["pyarrow.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "--strict-config --strict-markers -ra"
+markers = ["postgres: requires an explicitly configured disposable real Postgres service"]

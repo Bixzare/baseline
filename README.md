@@ -98,7 +98,7 @@ The revised [critical path](docs/critical-path.md#updated-execution-plan-october
 
 ### Current execution assignment
 
-BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). On October 25 the owner authorized incorporating the [historical-data strategy](docs/PRD-data-source-amendment.md) and resuming sequential issue execution. SOURCE-001 remains in progress, with its existing PR and new offline dataset assessment awaiting review. DATA-001 follows reviewed historical interfaces; a dataset recommendation is not source acceptance. All remaining implementation tasks are backlog. No merge or deployment is authorized by resuming execution.
+BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). On October 25 the owner authorized incorporating the [historical-data strategy](docs/PRD-data-source-amendment.md) and resuming sequential issue execution. SOURCE-001 is merged in PR #4. The next batch has review PRs #19 (DATA-001), #20 (DB-001), and #21 (DB-002), stacked in that order with shared dependency changes resolved. All 236 combined tests passed locally. The candidate seed remains incomplete and the dedicated Supabase project is not created. These three tasks remain In progress; eleven later tasks remain Backlog. No merge or deployment is authorized by resuming execution.
 
 Prefer pinned Eoin version 525 basic files with quarantine, exact coverage cross-checks, and versioned targeted repairs. Retain prospective roster/outcome evidence; defer injury ingestion, historical injury reconstruction, and all-time comparisons. The [dataset comparison](docs/dataset-comparison.md) records observed gaps. ADR 0013 is a draft decision record for owner review. The original October 20 date is past; activate only for future games after readiness.
 
@@ -145,7 +145,15 @@ In local VS Code, select the repository's `.venv` interpreter as the notebook ke
 
 ### Local environment and history access notebook
 
-The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains one Finished, one In progress, and fourteen Backlog items, verified October 25.
+DATA-001 adds the [local seed workflow](docs/seed-backfill.md) and
+`notebooks/01_sources_and_backfill.ipynb`, which defaults to offline fixtures.
+Run `uv run --locked python -m hoop.cli seed --help` for the shared CLI.
+The real 2025-26 run matched 1,230 game IDs against a separate local NBA inventory,
+retained 32,176 player and 2,460 team rows, and quarantined 135 records. It remains
+incomplete and unaccepted. Repair support does not automatically repair or accept
+those records. Backup and production collection remain separate gates.
+
+The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains two Finished, three In progress, and eleven Backlog items, read back October 25. Required hosted gates keep the database issues open even if local implementation PRs merge first.
 
 To activate the existing environment in a VS Code PowerShell terminal, from the repository root:
 
@@ -177,3 +185,25 @@ Ignore rules exclude virtual environments, secrets, data, models, artifacts, cac
 Repository destination confirmed October 13, 2026: a new public `baseline` repository under the owner's personal account. On October 14, the authenticated GitHub account was verified as `Bixzare`, repository name availability was checked, local Git was initialized on `main`, and the public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) was created. BOOT-001 reverified the authenticated owner, public repository, and unchanged main planning seed `cf6bcda14d0432dfbb49e8f48e19fb18836f16ec`; it uses the separate `boot-001-python-ci` branch and preserves existing history.
 
 Database destination confirmed October 13, 2026: a new dedicated Supabase Free project named baseline, subject to account allowance. No project has been provisioned; connectivity, roles, actual limits, and backup/restore remain verification gates. No paid plan or add-on is approved.
+
+### Database rehearsal
+
+DB-001 adds [database setup and gates](docs/database-setup.md), ordered migrations,
+restricted runtime provisioning and a manual hosted connection workflow. The
+Supabase project is not created yet. Local Postgres 17.11 passed migration and
+role tests plus an isolated foundation export/restore. Postgres 17 in CI is
+provisional until the project's actual version is verified.
+
+`uv run --locked pytest` now requires `BASELINE_TEST_DSN` for a disposable local
+Postgres service. Missing setup fails required integration checks. The Windows
+compatibility job explicitly uses `pytest -m "not postgres"`; Linux runs the
+complete suite against real Postgres. Migration commands are
+`uv run --locked python -m hoop.platform.database inspect` and `apply`.
+Configure migration/runtime credentials separately, outside tracked files.
+
+DB-002 adds [private artifacts and evidence](docs/artifact-storage.md): immutable
+run/source records, verified uploads, independent in-memory Auth sessions, a saved
+probe bridge and a manual permission rehearsal. The shared platform supports a
+synthetic second domain. Real Postgres checks use isolated provider fixtures;
+mocked HTTP success does not establish hosted Supabase behavior. No project,
+identity, bucket or production forecast is activated by this implementation.
