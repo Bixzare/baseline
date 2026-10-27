@@ -174,6 +174,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Review a supported raw archival/upload design, with exact-byte reconstruction and capacity evidence, before hosted seed import. No raw segmentation or increased provider allowance is assumed here.
 - **Closure evidence:** Owner-reviewed design plus upload/retrieval/hash verification from the actual cloud runner within verified free limits. This is a release gate.
 
+## W-18: Production publication has not been rehearsed against hosted inputs
+
+- **Evidence:** LEDGER-002 uses real Postgres with fixture sources and mock Storage; the two-transaction protocol and guarded roles are tested. Supabase credentials and accepted live input routing remain absent.
+- **Impact:** This does not prove a real complete roster fits the payload/transaction limits or that hosted roles/functions behave identically. No production forecasts exist from this rehearsal.
+- **Current mitigation:** Refuse readiness claims; keep explicit source/hosted/backup gates, bounded payloads, exact-byte hashes, immutable reservations and separate receipts.
+- **Improvement / timing:** Verify the actual project major, source generations, cohort size, latency, permission denials and operational recovery before activation.
+- **Closure evidence:** Reviewed hosted readback/denials and a later approved future-slate run with a timely receipt. This is a release gate.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

@@ -50,6 +50,7 @@ def main() -> int:
         saved = save_local(result, args.output)
         if retained is not None:
             atomic_json(args.output / "registration-descriptor.json", retained["descriptor"])
+            atomic_json(args.output / "retained.json", retained)
         print(json.dumps({**saved, "coverage": result["coverage"], "retained": retained}))
         return 0
     except (EvidenceError, ArtifactError, DatabaseError, KeyError, ValueError, OSError):
