@@ -21,6 +21,49 @@ NOTEBOOK = ROOT / "test.ipynb"
 SOCKET_CONNECT = socket.socket.connect
 
 
+def test_kernel_probe_closes_its_runtime_without_persistent_history(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import importlib.util
+    from tempfile import TemporaryDirectory
+
+    spec_dir = tmp_path / "kernels/baseline"
+    spec_dir.mkdir(parents=True)
+    (spec_dir / "kernel.json").write_text(
+        json.dumps(
+            {
+                "argv": [sys.executable, "-m", "ipykernel_launcher", "-f", "{connection_file}"],
+                "display_name": "Isolated kernel cleanup test",
+                "language": "python",
+            }
+        )
+    )
+    specs = KernelSpecManager(kernel_dirs=[str(spec_dir.parent)])
+    spec = importlib.util.spec_from_file_location(
+        "baseline_kernel_cleanup_probe", ROOT / "scripts/check_kernel.py"
+    )
+    assert spec is not None and spec.loader is not None
+    checker = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(checker)
+    created = []
+
+    def runtime(**kwargs: Any) -> Any:
+        context = TemporaryDirectory(**kwargs)
+        created.append(Path(context.name))
+        return context
+
+    def local_connection(sock: socket.socket, address: Any) -> Any:
+        assert isinstance(address, tuple) and ip_address(address[0]).is_loopback
+        return SOCKET_CONNECT(sock, address)
+
+    monkeypatch.setattr(socket.socket, "connect", local_connection)
+    monkeypatch.setattr(checker, "KernelSpecManager", lambda **kwargs: specs)
+    monkeypatch.setattr(checker, "TemporaryDirectory", runtime)
+    checker.main()
+    assert len(created) == 1 and not created[0].exists()
+
+
 def code_cells(path: Path = NOTEBOOK) -> list[dict[str, Any]]:
     notebook = json.loads(path.read_text(encoding="utf-8"))
     return [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
@@ -72,7 +115,12 @@ def execute(client: BlockingKernelClient, source: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "notebook_path", [NOTEBOOK, ROOT / "notebooks/01_sources_and_backfill.ipynb"]
+    "notebook_path",
+    [
+        NOTEBOOK,
+        ROOT / "notebooks/01_sources_and_backfill.ipynb",
+        ROOT / "notebooks/02_baseline_and_ledger.ipynb",
+    ],
 )
 def test_fixture_run_in_fresh_kernel_cannot_access_network(
     tmp_path: Path,
@@ -117,6 +165,7 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
         manager.start_kernel(
             cwd=str(ROOT),
             env={**os.environ, "IPYTHONDIR": str(tmp_path), "JUPYTER_RUNTIME_DIR": str(tmp_path)},
+            extra_arguments=["--HistoryManager.enabled=False"],
         )
         client = manager.blocking_client()
         client.start_channels()
@@ -133,6 +182,13 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
         for cell in code_cells(notebook_path):
             assert cell["execution_count"] is None and not cell["outputs"]
             execute(client, "".join(cell["source"]))
+        if notebook_path.name == "02_baseline_and_ledger.ipynb":
+            execute(
+                client,
+                "assert result['coverage'] == {'players':3,'entries':15,'numeric_entries':10}\n"
+                "assert not result['official_publication'] and replay['reused']",
+            )
+            return
         if notebook_path != NOTEBOOK:
             execute(
                 client,
@@ -164,7 +220,7 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
         if client is not None:
             client.stop_channels()
         if manager.has_kernel:
-            manager.shutdown_kernel(now=True)
+            manager.shutdown_kernel(now=False)
 
 
 def test_live_probe_requires_local_confirmation() -> None:
