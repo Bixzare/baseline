@@ -1,6 +1,6 @@
 RESET ROLE;
-GRANT USAGE ON SCHEMA auth TO baseline_owner;
-GRANT EXECUTE ON FUNCTION auth.uid() TO baseline_owner;
+-- Hosted postgres cannot grant access to managed auth. Read the same trusted
+-- request claims without granting provider role memberships to the owner.
 SET LOCAL ROLE baseline_owner;
 CREATE TABLE platform.artifact_storage_bindings (
  binding_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -11,7 +11,10 @@ CREATE TABLE platform.artifact_storage_bindings (
 -- No binding means no runtime object access. Setup appends reviewed settings.
 CREATE FUNCTION platform.artifact_identity_allowed(bucket text) RETURNS boolean
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog AS $$
- SELECT coalesce((SELECT backend_user_id=auth.uid() AND bucket_id=bucket
+ SELECT coalesce((SELECT backend_user_id=coalesce(
+     nullif(current_setting('request.jwt.claim.sub',true),''),
+     nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub'
+   )::uuid AND bucket_id=bucket
    FROM platform.artifact_storage_bindings ORDER BY binding_id DESC LIMIT 1),false)
 $$;
 GRANT USAGE ON SCHEMA platform TO authenticated;

@@ -239,3 +239,5 @@ Use `uv run --locked python -m scripts.rehearse_publication --reports` with disp
 Default-off nightly/dispatcher stages, rehearsal and activation controls: [cloud operations](docs/cloud-operations.md).
 
 Independent Windows health, disabled task definitions, offline behavior and actual rehearsal evidence: [local recovery](docs/local-recovery.md). Owner notification delivery, accepted sources, hosted setup and backup remain gates.
+
+Actual Supabase project, migration progress and remaining setup gates: [hosted setup evidence](docs/supabase-setup-status.md). The managed Auth correction is a draft decision and remains unapplied.

@@ -2,16 +2,15 @@
 
 Updated October 27, 2026. The owner merged integration #25 and issues #26-#28
 into main at `fa8c251`. The current review batch is EVAL-001 (PR #29), OPS-001 (PR #30) and OPS-002. Review in that order; none is merged by this execution.
-Supabase MCP setup is requested; connection is pending. No hosted setup,
-production activation or real source acceptance is implied by merged code.
+Supabase MCP is connected. The dedicated Free project is created, and 0001/0002 are applied. Migration 0003 rolled back on managed Auth permissions; its proposed correction awaits review. See [hosted setup evidence](supabase-setup-status.md). Production remains disabled.
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
 | SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4; operational source gates remain. |
 | DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Finished | Owner merged PR #19, including #20/#21, into main on October 26; seed acceptance is separate. |
-| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Code in main and owner-approved; dedicated project and actual restricted/TLS checks pending. |
-| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | Code in main and owner-approved; actual Auth/Storage permission checks remain gates. |
+| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Dedicated Free project created on Postgres 17.11; 0001/0002 applied. Managed Auth migration correction and restricted/TLS checks pending. |
+| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | Hosted 0003 rolled back on Auth permissions; reviewed correction and actual Auth/Storage permission checks remain gates. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | In progress | Schema/role/bootstrap and concurrent-slot tests on real Postgres; hosted registration and actual publication remain gated. |
