@@ -17,7 +17,7 @@ in that order. No hosted activation or real source acceptance is implied.
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | In progress | Schema/role/bootstrap and concurrent-slot tests on real Postgres; hosted registration and actual publication remain gated. |
 | LEDGER-002 | [#11](https://github.com/Bixzare/baseline/issues/11) | In progress | Protected SQL/client and disposable rehearsal implemented; hosted and operational gates remain. |
-| COLLECT-001 | [#12](https://github.com/Bixzare/baseline/issues/12) | Backlog | Fresh accepted sources, DB-003, LEDGER-002. |
+| COLLECT-001 | [#12](https://github.com/Bixzare/baseline/issues/12) | In progress | Fixture-tested shared collector, work lists and occurrence recovery; actual source routing remains blocked. |
 | OUTCOME-001 | [#13](https://github.com/Bixzare/baseline/issues/13) | Backlog | Collection and protected ledger interfaces. |
 | EVAL-001 | [#14](https://github.com/Bixzare/baseline/issues/14) | Backlog | Reconciled outcomes and coverage contracts. |
 | OPS-001 | [#15](https://github.com/Bixzare/baseline/issues/15) | Backlog | Collection, publication, outcomes, evaluation. |
@@ -35,7 +35,7 @@ Backlog or In progress. Preserve the board's actual column names when mapping.
 The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
 is linked to Bixzare/baseline. It was created after confirming there was no
 existing open, closed, or repository-linked project. All sixteen issue memberships
-and Status values are three Finished, six In progress and seven Backlog, read
+and Status values are three Finished, seven In progress and six Backlog, read
 back October 27. Finished still requires owner review; hosted gates
 cannot be waived by moving a board card.
 The board view groups columns by Status. The repository connector supplied issue

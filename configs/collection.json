@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "parser_version": "nba-collection-v1",
+  "upcoming_days": 7,
+  "policy": {"min_gap": 3, "timeout": 30, "retries": 2, "max_requests": 16, "max_seconds": 180},
+  "routes": []
+}
