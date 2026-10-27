@@ -92,11 +92,12 @@ Nightly measured 1.276 seconds and 188,686,336 bytes peak RSS; dispatcher measur
 1.558 seconds and 181,161,984 bytes. Each used one fixture request. The
 [failure drill](https://github.com/Bixzare/baseline/actions/runs/40498186657)
 failed the dispatcher as intended; normal Linux/Windows CI and nightly passed.
-Notification delivery still needs owner confirmation. See the
+The owner confirmed receipt of the GitHub failure notification. See the
 [Windows health and recovery runbook](local-recovery.md) for independent checks.
 
 GitHub cron can be delayed/dropped and schedules depend on default-branch/account
 state; see [GitHub schedule behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
-OPS-002 provides the independent checker. Actual owner failure-notification
-delivery and unattended behavior remain separate acceptance gates. A failing exit
+OPS-002 provides the independent checker. The Windows desktop notice was not
+visible to the owner, so its delivery gate failed. Unattended behavior remains
+unverified. A failing exit
 or registered workflow alone does not prove the owner received anything.

@@ -200,7 +200,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-21: Scheduled operations are not production reliability evidence
 
-- **Evidence:** OPS-001 cloud fixture run 40496627455 passed both jobs and failure drill 40498186657 failed the dispatcher as intended. OPS-002 ran an actual disposable Windows task with exit 0 and queued notice. Owner notification delivery, accepted local uploads and unattended production recovery remain unverified. See [local recovery](docs/local-recovery.md).
+- **Evidence:** OPS-001 cloud fixture run 40496627455 passed both jobs and failure drill 40498186657 failed the dispatcher as intended. The owner confirmed GitHub failure notification receipt. OPS-002 ran an actual disposable Windows task with exit 0 and queued notice, but the owner saw no desktop notification, so that delivery drill failed. Accepted local uploads and unattended production recovery remain unverified. See [local recovery](docs/local-recovery.md).
 - **Impact:** Merged YAML or cron timing cannot guarantee a timely forecast. GitHub can delay/drop work and an asleep local machine cannot recover it.
 - **Current mitigation:** Explicit activation/readiness gates, no false disabled heartbeat, per-stage/operation audit, stable alerts, offline logs, source denial stop, session coordination and protected ledger deadlines. Persistent Windows tasks and production remain disabled. Provider object usage and actual account limits stay visibly unverified; registered objects are only an estimate.
 - **Improvement / timing:** Observe manual/unattended runs, verify owner notification and independent Windows recovery, then backup readiness before activation.

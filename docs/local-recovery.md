@@ -93,8 +93,10 @@ On October 27 the actual current interactive Windows session ran disposable
 and exit 0; the matching invocation was
 `98af9ae4-4843-47a8-88a0-3ca1c5e7b263`. The fixture assessment detected simulated
 missing cloud work; notification queuing succeeded. The disposable task was
-removed. This run used no provider access or production forecasts. Owner
-confirmation of visible desktop delivery is still pending. Actual local source
+removed. This run used no provider access or production forecasts. The owner
+reported that no desktop notification was visible. Delivery therefore failed
+this drill despite successful queuing; diagnose intended-session Windows
+notification behavior and repeat the delivery check before acceptance. Actual local source
 upload and production recovery cannot pass until source and hosted gates pass.
 
 [Cloud fixture run](https://github.com/Bixzare/baseline/actions/runs/40496627455)
@@ -103,7 +105,8 @@ passed both adapters: nightly produced three reports in 1.276 seconds with
 seconds with 181,161,984 bytes peak RSS. Each used one HTTP fixture request.
 [Intentional failure drill](https://github.com/Bixzare/baseline/actions/runs/40498186657)
 failed its dispatcher job as expected while nightly and normal CI passed.
-Owner confirmation of GitHub notification delivery is still pending.
+The owner confirmed receipt of the GitHub failure notification. GitHub delivery
+passes this manual drill; Windows desktop delivery remains failed.
 
 These are manual fixture rehearsals. Unattended operation, actual notification
 delivery, accepted sources, real backup restoration and future-slate timely
