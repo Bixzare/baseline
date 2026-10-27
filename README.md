@@ -218,3 +218,8 @@ MODEL-001 adds [baseline preparation](docs/baseline-preparation.md) and
 `notebooks/02_baseline_and_ledger.ipynb`. The fixture CLI prepares five targets per
 roster member with explicit abstentions and verified snapshot reuse. The separate
 real-input operation remains gated; prepared values are not official forecasts.
+
+LEDGER-001 adds [ledger integrity and controlled registration](docs/ledger-registration.md).
+Runtime can inspect model/bundle identities but cannot insert forecasts or receipts.
+Database constraints protect one decision per occurrence/subject/target; actual
+publication, visibility confirmation and complete-cohort checks arrive next.

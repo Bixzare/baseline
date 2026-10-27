@@ -10,6 +10,7 @@ from hoop.domains.nba.baselines.model import prepare
 from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, Session, Settings
 from hoop.platform.database import DatabaseError, connection
 from hoop.platform.evidence import EvidenceError
+from hoop.platform.local_artifacts import atomic_json
 from hoop.platform.prepared import retain_prepared, save_local
 from hoop.platform.provenance import parse_time
 
@@ -47,6 +48,8 @@ def main() -> int:
                 result = prepare(inputs, generated_at=datetime.now(UTC))
                 retained = retain_prepared(conn, store, result)
         saved = save_local(result, args.output)
+        if retained is not None:
+            atomic_json(args.output / "registration-descriptor.json", retained["descriptor"])
         print(json.dumps({**saved, "coverage": result["coverage"], "retained": retained}))
         return 0
     except (EvidenceError, ArtifactError, DatabaseError, KeyError, ValueError, OSError):

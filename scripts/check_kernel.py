@@ -24,20 +24,26 @@ def main() -> None:
     spec = specs.get_kernel_spec("baseline")
     # Do not resolve symlinks here: two venvs may share the same base interpreter.
     assert Path(spec.argv[0]).absolute() == executable, spec.argv[0]
-    with TemporaryDirectory(prefix="baseline-kernel-") as runtime:
+    runtime_root = root / ".cache"
+    runtime_root.mkdir(exist_ok=True)
+    with TemporaryDirectory(prefix="baseline-kernel-", dir=runtime_root) as runtime:
+        assert Path(runtime).resolve().is_relative_to(runtime_root.resolve())
         manager = KernelManager(kernel_name="baseline", kernel_spec_manager=specs)
         client = None
         try:
             manager.start_kernel(
                 cwd=str(root),
                 env={**os.environ, "JUPYTER_RUNTIME_DIR": runtime, "IPYTHONDIR": runtime},
+                extra_arguments=["--HistoryManager.enabled=False"],
             )
             client = manager.blocking_client()
             client.start_channels()
             client.wait_for_ready(timeout=30)
             message_id = client.execute(
                 "import json, sys, hoop, hoop.platform, hoop.domains.nba; "
-                "print(json.dumps({'executable': sys.executable, 'package': hoop.__file__}))"
+                "from IPython import get_ipython; "
+                "print(json.dumps({'executable': sys.executable, 'package': hoop.__file__, "
+                "'history_enabled': get_ipython().history_manager.enabled}))"
             )
             output = ""
             deadline = monotonic() + 30
@@ -63,13 +69,15 @@ def main() -> None:
             identity = json.loads(output.strip())
             assert Path(identity["executable"]).absolute() == executable, identity
             assert Path(identity["package"]).resolve() == root / "src/hoop/__init__.py", identity
+            assert identity["history_enabled"] is False
+            assert not list(Path(runtime).rglob("history.sqlite*"))
             print(f"Baseline kernel: OK ({identity['executable']})")
             print(f"Package imports and paths: OK ({identity['package']})")
         finally:
             if client is not None:
                 client.stop_channels()
             if manager.has_kernel:
-                manager.shutdown_kernel(now=True)
+                manager.shutdown_kernel(now=False)
 
 
 if __name__ == "__main__":
