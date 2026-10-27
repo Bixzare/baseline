@@ -235,3 +235,5 @@ Use `uv run --locked python -m scripts.rehearse_publication --outcomes` only wit
 
 Per-target errors, coverage and immutable report reproduction: [evaluation](docs/evaluation.md).
 Use `uv run --locked python -m scripts.rehearse_publication --reports` with disposable local Postgres for the complete walkthrough.
+
+Default-off nightly/dispatcher stages, rehearsal and activation controls: [cloud operations](docs/cloud-operations.md).

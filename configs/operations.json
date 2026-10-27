@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "policy_version": "batch-operations-v1",
+  "domain": "nba",
+  "max_seconds": 600,
+  "max_requests": 16,
+  "target_minutes": 120,
+  "recovery_minutes": 90,
+  "stop_minutes": 15,
+  "readiness": {
+    "activation_approved": false, "hosted_verified": false,
+    "sources_verified": false, "seed_accepted": false,
+    "fallback_verified": false, "backup_verified": false
+  }
+}

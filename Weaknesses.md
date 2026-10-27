@@ -198,6 +198,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Accept real final-source identities, precision, participation and calendar semantics, then record regular-season completeness, cost and correction evidence before trusted reconciliation.
 - **Closure evidence:** Reviewed live-source rehearsal, verified role/artifact readback and honest outcome coverage. This is a release gate.
 
+## W-21: Scheduled operations are not production reliability evidence
+
+- **Evidence:** OPS-001 has coordinated stage adapters and default-off workflows. Local fixture dispatcher/nightly runs passed; source access, actual owner notification delivery and unattended behavior remain separate checks.
+- **Impact:** Merged YAML or cron timing cannot guarantee a timely forecast. GitHub can delay/drop work and an asleep local machine cannot recover it.
+- **Current mitigation:** Explicit activation/readiness gates, no false disabled heartbeat, per-stage/operation audit, session coordination and protected ledger deadlines.
+- **Improvement / timing:** Observe manual/unattended runs, verify owner notification and independent Windows recovery, then backup readiness before activation.
+- **Closure evidence:** Actual intended-environment failure/recovery traces and timely committed receipts on an approved future slate. This is a release gate.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

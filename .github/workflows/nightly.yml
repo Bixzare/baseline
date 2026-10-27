@@ -1,0 +1,48 @@
+name: Baseline nightly operations
+on:
+  schedule:
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+    inputs:
+      fixture_rehearsal:
+        type: boolean
+        default: true
+        description: Run isolated fixtures; never uses production credentials
+permissions:
+  contents: read
+concurrency:
+  group: baseline-nightly
+  cancel-in-progress: false
+jobs:
+  rehearsal:
+    if: github.event_name == 'workflow_dispatch' && inputs.fixture_rehearsal
+    uses: ./.github/workflows/operations-rehearsal.yml
+    with:
+      operation: nightly
+  production:
+    if: >-
+      vars.BASELINE_PRODUCTION_ENABLE == 'true' &&
+      github.ref == 'refs/heads/main' && !inputs.fixture_rehearsal
+    runs-on: ubuntu-24.04
+    environment: baseline-production
+    timeout-minutes: 15
+    env:
+      BASELINE_PRODUCTION_ENABLE: ${{ vars.BASELINE_PRODUCTION_ENABLE }}
+      BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
+      BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
+      BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}
+      BASELINE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.BASELINE_SUPABASE_PUBLISHABLE_KEY }}
+      BASELINE_ARTIFACT_EMAIL: ${{ secrets.BASELINE_ARTIFACT_EMAIL }}
+      BASELINE_ARTIFACT_PASSWORD: ${{ secrets.BASELINE_ARTIFACT_PASSWORD }}
+      BASELINE_ARTIFACT_USER_ID: ${{ vars.BASELINE_ARTIFACT_USER_ID }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.12.23"
+          enable-cache: true
+      - run: uv python install 3.12.14
+      - run: uv sync --locked
+      - run: uv run --locked python -m hoop.domains.nba.operations nightly --mode production --environment github-actions --output artifacts/operations
