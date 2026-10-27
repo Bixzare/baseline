@@ -10,6 +10,7 @@ from hoop.domains.nba.collection import accepted_request, persist_attempt
 from hoop.domains.nba.outcomes.parsing import PARSER, final_validator
 from hoop.domains.nba.outcomes.persistence import ingest_final, pending_work
 from hoop.domains.nba.sources.policy import ProbeRequest, ProbeRunner
+from hoop.domains.nba.sources.runtime import refuse_denied
 from hoop.platform.artifacts import ArtifactError, PrivateArtifacts
 from hoop.platform.evidence import EvidenceError, register
 from hoop.platform.prepared import encoded
@@ -70,8 +71,11 @@ def reconcile(
     routes = config.get("routes", [])
     if not routes or len(routes) > 100:
         raise EvidenceError("Accepted bounded final routes required")
-    for route in routes:
+    admitted = [
         accepted_request(route, environment, rehearsal=rehearsal, parser_version=PARSER)
+        for route in routes
+    ]
+    refuse_denied(conn, admitted, rehearsal=rehearsal)
     work = pending_work(
         conn, runner.clock.now(), event_ids=event_ids, date_from=date_from, date_to=date_to
     )

@@ -45,6 +45,8 @@ class SourceBudget:
         *,
         transport: Any = None,
         clock: Any = None,
+        conn: psycopg.Connection[Any] | None = None,
+        rehearsal: bool = False,
     ):
         self.root = root
         self.environment = environment
@@ -54,6 +56,8 @@ class SourceBudget:
         self.started = self.clock.monotonic()
         self.requests = 0
         self.previous: ProbeRunner | None = None
+        self.conn = conn
+        self.rehearsal = rehearsal
 
     def runner(self) -> ProbeRunner:
         if self.previous:
@@ -74,6 +78,18 @@ class SourceBudget:
         if self.previous:
             runner.last_end = self.previous.last_end
             runner.blocked = set(self.previous.blocked)
+        if self.conn is not None:
+            latest = self.conn.execute(
+                """SELECT max(s.recorded_at) FROM platform.source_checks s
+              JOIN platform.runs r USING(run_id) WHERE r.environment=%s""",
+                ("rehearsal" if self.rehearsal else "production",),
+            ).fetchone()
+            if latest and latest[0]:
+                seconds = max(0, (db_now(self.conn) - latest[0]).total_seconds())
+                candidate = self.clock.monotonic() - seconds
+                runner.last_end = (
+                    max(runner.last_end, candidate) if runner.last_end is not None else candidate
+                )
         self.previous = runner
         return runner
 
@@ -86,9 +102,15 @@ def dispatcher(
     finals: dict[str, Any],
     *,
     rehearsal: bool = False,
+    selected_event_ids: set[UUID] | None = None,
 ) -> dict[str, Any]:
     now = db_now(conn)
-    work = [r for r in work_list(conn, now) if due(now, r["scheduled_start"])]
+    work = [
+        r
+        for r in work_list(conn, now)
+        if due(now, r["scheduled_start"])
+        and (selected_event_ids is None or r["event_id"] in selected_event_ids)
+    ]
     failures = 0
     published = confirmed = 0
     for event in work:
@@ -197,6 +219,7 @@ def stages(
     rehearsal: bool = False,
     source_config: dict[str, Any] | None = None,
     final_config: dict[str, Any] | None = None,
+    selected_event_ids: set[UUID] | None = None,
 ) -> list[Any]:
     sources = source_config or json.loads((ROOT / "configs/collection.json").read_text())
     finals = final_config or json.loads((ROOT / "configs/outcomes.json").read_text())
@@ -252,7 +275,20 @@ def stages(
     def reports() -> dict[str, Any]:
         cutoff = db_now(conn)
         policy = json.loads(EVALUATION_POLICY.read_text())
-        for start, end in periods(cutoff, policy).values():
+        table = conn.execute("SELECT to_regclass('platform.alert_events')").fetchone()
+        paused = False
+        if table and table[0]:
+            pause_row = conn.execute("""SELECT EXISTS(SELECT FROM
+              (SELECT DISTINCT ON(alert_key) state,severity FROM platform.alert_events
+               WHERE alert_key IN('nba:capacity:database','nba:capacity:objects')
+               ORDER BY alert_key,recorded_at DESC,alert_event_id DESC)a
+              WHERE state IN('open','acknowledged') AND severity='critical')""").fetchone()
+            assert pause_row is not None
+            paused = bool(pause_row[0])
+        windows = periods(cutoff, policy)
+        for label, (start, end) in windows.items():
+            if label == "season" and paused:
+                continue
             persist(
                 conn,
                 store,
@@ -266,7 +302,13 @@ def stages(
                     policy=policy,
                 ),
             )
-        return {"state": "succeeded", "counts": {"reports": 3}}
+        return {
+            "state": "succeeded",
+            "counts": {"reports": 2 if paused else 3, "optional_reports_paused": int(paused)},
+        }
+
+    if operation == "local_sources":
+        return [("discover", discover), ("rosters", lambda: refresh("roster"))]
 
     if operation == "nightly":
         return [
@@ -284,7 +326,15 @@ def stages(
         ("discover", discover),
         (
             "due_games",
-            lambda: dispatcher(conn, store, budget, sources, finals, rehearsal=rehearsal),
+            lambda: dispatcher(
+                conn,
+                store,
+                budget,
+                sources,
+                finals,
+                rehearsal=rehearsal,
+                selected_event_ids=selected_event_ids,
+            ),
         ),
     ]
 
@@ -293,7 +343,7 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("operation", choices=["nightly", "dispatcher"])
+    parser.add_argument("operation", choices=["nightly", "dispatcher", "local_sources"])
     parser.add_argument("--mode", choices=["production", "read-only"], default="read-only")
     parser.add_argument("--environment", choices=["local", "github-actions"], required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -318,7 +368,9 @@ def main() -> int:
                     }
                 else:
                     store = PrivateArtifacts(Session(Settings.from_env()))
-                    budget = SourceBudget(args.output / "sources", args.environment, config)
+                    budget = SourceBudget(
+                        args.output / "sources", args.environment, config, conn=conn
+                    )
                     result = run_pipeline(
                         conn, args.operation, stages(conn, store, budget, args.operation), config
                     )

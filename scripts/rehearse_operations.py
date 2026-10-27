@@ -158,7 +158,12 @@ def run(operation: str, *, environment: str = "local", fail_stage: bool = False)
                 ) as conn:
                     config = json.loads((ROOT / "configs/operations.json").read_text())
                     budget = SourceBudget(
-                        Path(folder) / "sources", environment, config, transport=transport
+                        Path(folder) / "sources",
+                        environment,
+                        config,
+                        transport=transport,
+                        conn=conn,
+                        rehearsal=True,
                     )
                     callbacks = stages(
                         conn,

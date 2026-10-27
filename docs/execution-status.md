@@ -1,7 +1,7 @@
 # Baseline execution status
 
 Updated October 27, 2026. The owner merged integration #25 and issues #26-#28
-into main at `fa8c251`. The next assigned batch is EVAL-001, OPS-001 and OPS-002.
+into main at `fa8c251`. The current review batch is EVAL-001 (PR #29), OPS-001 (PR #30) and OPS-002. Review in that order; none is merged by this execution.
 Supabase MCP setup is requested; connection is pending. No hosted setup,
 production activation or real source acceptance is implied by merged code.
 
@@ -20,7 +20,7 @@ production activation or real source acceptance is implied by merged code.
 | OUTCOME-001 | [#13](https://github.com/Bixzare/baseline/issues/13) | In progress | Immutable partial/final outcome versions, DNP/unknown semantics and fixture reconciliation; actual final adapter remains gated. |
 | EVAL-001 | [#14](https://github.com/Bixzare/baseline/issues/14) | In progress | Per-target errors, coverage and immutable report manifests tested locally; actual live reporting remains gated. |
 | OPS-001 | [#15](https://github.com/Bixzare/baseline/issues/15) | In progress | Default-off workflows, coordinated stages and fixture operations; actual source/notification/activation gates remain. |
-| OPS-002 | [#16](https://github.com/Bixzare/baseline/issues/16) | Backlog | Scheduled operations and actual Windows recovery evidence. |
+| OPS-002 | [#16](https://github.com/Bixzare/baseline/issues/16) | In progress | Alert lifecycle, health snapshot and actual disposable Windows task tested; owner notification, source/upload and hosted recovery gates remain. |
 | BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | Backlog | Persisted records/artifacts and independent sync/restore verification. |
 | LAUNCH-001 | [#18](https://github.com/Bixzare/baseline/issues/18) | Backlog | All required prior tasks plus future-slate readiness. |
 
@@ -34,7 +34,7 @@ Backlog or In progress. Preserve the board's actual column names when mapping.
 The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
 is linked to Bixzare/baseline. It was created after confirming there was no
 existing open, closed, or repository-linked project. All sixteen issue memberships
-and Status values are three Finished, ten In progress and three Backlog, read
+and Status values are three Finished, eleven In progress and two Backlog, read
 back October 27. Finished still requires owner review; hosted gates
 cannot be waived by moving a board card.
 The board view groups columns by Status. The repository connector supplied issue

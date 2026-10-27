@@ -71,7 +71,7 @@ All twelve ADRs, the agent guide, seven skills, and sixteen launch issue specifi
 
 ## Execution order and handoff
 
-The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. All sixteen launch tasks are published as GitHub issues; see the [execution status and issue map](docs/execution-status.md). BOOT-001 is finished, SOURCE-001 is in progress, and the other fourteen tasks are backlog. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
+The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. All sixteen launch tasks are published as GitHub issues; see the [execution status and issue map](docs/execution-status.md). Current issue and board states are recorded in that execution status map; implementation, owner review and hosted readiness remain separate. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
 
 | Order | Planning ID | Required implemented dependencies / gate |
 | --- | --- | --- |
@@ -153,7 +153,7 @@ retained 32,176 player and 2,460 team rows, and quarantined 135 records. It rema
 incomplete and unaccepted. Repair support does not automatically repair or accept
 those records. Backup and production collection remain separate gates.
 
-The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains two Finished, three In progress, and eleven Backlog items, read back October 25. Required hosted gates keep the database issues open even if local implementation PRs merge first.
+The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains three Finished, eleven In progress, and two Backlog items, read back October 27. Required hosted gates keep the database issues open even if local implementation PRs merge first.
 
 To activate the existing environment in a VS Code PowerShell terminal, from the repository root:
 
@@ -237,3 +237,5 @@ Per-target errors, coverage and immutable report reproduction: [evaluation](docs
 Use `uv run --locked python -m scripts.rehearse_publication --reports` with disposable local Postgres for the complete walkthrough.
 
 Default-off nightly/dispatcher stages, rehearsal and activation controls: [cloud operations](docs/cloud-operations.md).
+
+Independent Windows health, disabled task definitions, offline behavior and actual rehearsal evidence: [local recovery](docs/local-recovery.md). Owner notification delivery, accepted sources, hosted setup and backup remain gates.

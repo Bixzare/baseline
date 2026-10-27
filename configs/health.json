@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "policy_version": "operational-health-v1",
+  "activation_at": null,
+  "local_fallback_enabled": false,
+  "database_limit_bytes": null,
+  "object_limit_bytes": null,
+  "account_limits_verified": false,
+  "desktop_notifications_enabled": false,
+  "cache_max_bytes": 1048576
+}

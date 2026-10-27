@@ -25,6 +25,9 @@ One bounded shared request/time budget carries the source denial stop and minimu
 gap across stages. Defaults are 16 requests and 600 operation seconds, with each
 source run capped at 180 seconds. A source failure can leave unaffected reporting
 available, but overall completion remains incomplete and the process fails.
+OPS-002 carries minimum request spacing between serialized invocations using
+database-recorded source check time. A recorded denial stops later automatic
+requests to that host until owner-reviewed re-verification records acceptance.
 
 A nonblocking Postgres session advisory lock coordinates cloud/Windows operations
 outside network transactions. Failure/disconnect releases it. Overlap is recorded
@@ -82,6 +85,15 @@ seconds with one HTTP fixture request; nightly saved three fixture reports in 3.
 seconds with one request. Memory is unavailable in this Windows measurement;
 Linux rehearsal reports measured peak RSS. These do not estimate real source or
 season workloads. Student credits and paid runners are not required.
+
+Actual GitHub fixture execution passed on October 27 in
+[run 40496627455](https://github.com/Bixzare/baseline/actions/runs/40496627455).
+Nightly measured 1.276 seconds and 188,686,336 bytes peak RSS; dispatcher measured
+1.558 seconds and 181,161,984 bytes. Each used one fixture request. The
+[failure drill](https://github.com/Bixzare/baseline/actions/runs/40498186657)
+failed the dispatcher as intended; normal Linux/Windows CI and nightly passed.
+Notification delivery still needs owner confirmation. See the
+[Windows health and recovery runbook](local-recovery.md) for independent checks.
 
 GitHub cron can be delayed/dropped and schedules depend on default-branch/account
 state; see [GitHub schedule behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).

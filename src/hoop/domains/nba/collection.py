@@ -11,6 +11,7 @@ from psycopg.rows import dict_row
 
 from hoop.domains.nba.history.rosters import save_roster
 from hoop.domains.nba.sources.policy import Policy, ProbeRequest, ProbeRunner
+from hoop.domains.nba.sources.runtime import refuse_denied
 from hoop.domains.nba.sources.validate import game_identity, validate
 from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, retain
 from hoop.platform.evidence import EvidenceError, register
@@ -386,6 +387,7 @@ def collect(
         raise EvidenceError("Collection supports schedule/status/roster only")
     if not requests:
         raise EvidenceError("No accepted routes; source gate remains blocked")
+    refuse_denied(conn, requests, rehearsal=rehearsal)
     run_id = runner.run_id
     register(
         conn,
