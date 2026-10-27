@@ -21,7 +21,9 @@ from hoop.platform.records import immutable_insert
 PARSER = "nba-collection-v1"
 
 
-def accepted_request(route: dict[str, Any], environment: str, *, rehearsal: bool) -> ProbeRequest:
+def accepted_request(
+    route: dict[str, Any], environment: str, *, rehearsal: bool, parser_version: str = PARSER
+) -> ProbeRequest:
     """Acceptance must bind the exact observed request/parser/environment identity."""
     evidence = route.get("evidence", {})
     request = ProbeRequest(route["capability"], route["url"], environment, route["context"])
@@ -32,7 +34,7 @@ def accepted_request(route: dict[str, Any], environment: str, *, rehearsal: bool
                 "context": request.context,
                 "capability": request.capability,
                 "environment": environment,
-                "parser_version": PARSER,
+                "parser_version": parser_version,
             }
         )
     )
@@ -44,7 +46,7 @@ def accepted_request(route: dict[str, Any], environment: str, *, rehearsal: bool
         or not evidence.get("observation_id")
         or evidence.get("request_hash") != identity
         or not route.get("owner_acceptance_id")
-        or route.get("parser_version") != PARSER
+        or route.get("parser_version") != parser_version
         or (evidence.get("kind") == "synthetic_fixture" and not rehearsal)
     ):
         raise EvidenceError("Exact owner-accepted capability/environment route required")
@@ -299,6 +301,75 @@ def teams_needing_rosters(conn: psycopg.Connection[Any], now: datetime) -> list[
     return result
 
 
+def persist_attempt(
+    conn: psycopg.Connection[Any],
+    store: PrivateArtifacts,
+    runner: ProbeRunner,
+    attempt: dict[str, Any],
+    *,
+    parser_version: str = PARSER,
+) -> dict[str, Any] | None:
+    if attempt.get("persisted") or attempt.get("requested_at") is None:
+        return attempt.get("persisted")
+    raw = None
+    storage_failed = False
+    if attempt.get("raw_path"):
+        body = (runner.archive.root / attempt["raw_path"]).read_bytes()
+        if digest(body) != attempt["raw_sha256"]:
+            raise EvidenceError("Raw checksum changed")
+        try:
+            raw = retain(conn, store, body, kind="raw", format="json", manifest={})
+        except ArtifactError:
+            storage_failed = True
+    good = attempt["outcome"] == "verified_sample" and not storage_failed
+    summary = {
+        "capability": attempt["capability"],
+        "observation_id": attempt["observation_id"],
+        "environment": attempt["environment"],
+        "parser_version": parser_version,
+        "request_url": attempt["request_url"],
+        "raw_complete": attempt.get("raw_complete"),
+        "reason_code": "accepted"
+        if good
+        else "storage_failure"
+        if storage_failed
+        else "access_denied"
+        if attempt.get("reason") == "access_denied_or_html_challenge"
+        else "source_validation_or_transport_failure",
+        "request_hash": digest(
+            encoded({"url": attempt["request_url"], "context": attempt["request_context"]})
+        ),
+        "source_generated_at": attempt.get("summary", {}).get("source_generated_at"),
+    }
+    if summary["source_generated_at"] is None:
+        summary.pop("source_generated_at")
+    check = register(
+        conn,
+        "source_checks",
+        {
+            "check_id": str(uuid5(NAMESPACE_URL, runner.run_id + attempt["observation_id"])),
+            "run_id": runner.run_id,
+            "source_id": attempt["source"],
+            "adapter_version": parser_version,
+            "requested_at": attempt["requested_at"],
+            "received_at": attempt.get("received_at"),
+            "validated_at": attempt.get("validated_at") if good else None,
+            "source_published_at": attempt.get("source_publication_time"),
+            "raw_artifact_id": raw["artifact_id"] if raw else None,
+            "http_status": attempt.get("http_status"),
+            "record_count": attempt.get("record_count"),
+            "state": "storage_failure"
+            if storage_failed
+            else "accepted"
+            if good
+            else ("invalid" if attempt.get("received_at") else "transport_failure"),
+            "validation_summary": summary,
+        },
+    )
+    attempt["persisted"] = check
+    return check
+
+
 def collect(
     conn: psycopg.Connection[Any],
     store: PrivateArtifacts,
@@ -362,52 +433,7 @@ def collect(
         report = runner.fetch(request, collection_validator)
         # Preserve all genuine attempts, not just the final retry result.
         for attempt in runner.observations:
-            if attempt.get("persisted") or attempt.get("requested_at") is None:
-                continue
-            raw = None
-            storage_failed = False
-            if attempt.get("raw_path"):
-                body = (runner.archive.root / attempt["raw_path"]).read_bytes()
-                if digest(body) != attempt["raw_sha256"]:
-                    raise EvidenceError("Raw checksum changed")
-                try:
-                    raw = retain(conn, store, body, kind="raw", format="json", manifest={})
-                except ArtifactError:
-                    storage_failed = True
-            good = attempt["outcome"] == "verified_sample" and not storage_failed
-            summary = {
-                "capability": attempt["capability"],
-                "request_hash": digest(
-                    encoded({"url": attempt["request_url"], "context": attempt["request_context"]})
-                ),
-                "source_generated_at": attempt.get("summary", {}).get("source_generated_at"),
-            }
-            if summary["source_generated_at"] is None:
-                summary.pop("source_generated_at")
-            check = register(
-                conn,
-                "source_checks",
-                {
-                    "check_id": str(uuid5(NAMESPACE_URL, run_id + attempt["observation_id"])),
-                    "run_id": run_id,
-                    "source_id": attempt["source"],
-                    "adapter_version": PARSER,
-                    "requested_at": attempt["requested_at"],
-                    "received_at": attempt.get("received_at"),
-                    "validated_at": attempt.get("validated_at") if good else None,
-                    "source_published_at": attempt.get("source_publication_time"),
-                    "raw_artifact_id": raw["artifact_id"] if raw else None,
-                    "http_status": attempt.get("http_status"),
-                    "record_count": attempt.get("record_count"),
-                    "state": "storage_failure"
-                    if storage_failed
-                    else "accepted"
-                    if good
-                    else ("invalid" if attempt.get("received_at") else "transport_failure"),
-                    "validation_summary": summary,
-                },
-            )
-            attempt["persisted"] = check
+            persist_attempt(conn, store, runner, attempt)
         current = report.get("persisted")
         if not current or current["state"] != "accepted":
             incomplete = True

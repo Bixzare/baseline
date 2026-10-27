@@ -79,6 +79,13 @@ def test_optional_postgres_walkthrough_uses_only_local_fixture_database(
             "publication_report['confirming_transaction_id']\n"
             "assert publication_report['production_ready'] is False\n",
         )
+        execute(
+            client,
+            "assert outcome_report['outcome_first']['unresolved'] == 5\n"
+            "assert outcome_report['outcome_corrected']['unresolved'] == 0\n"
+            "assert outcome_report['forecast_values_preserved'] is True\n"
+            "assert outcome_report['state'] == 'invalidated'\n",
+        )
     finally:
         if client is not None:
             client.stop_channels()

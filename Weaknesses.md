@@ -144,7 +144,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-14: Automatic final-result correction checks have a bounded horizon
 
-- **Evidence:** [OUTCOME-001](docs/issues/OUTCOME-001-final-results-and-versioned-reconciliation.md) initially rechecks seven days of completed games plus unresolved IDs under a measured request budget. This is an approved workload policy, not observed NBA correction behavior or an implemented collector.
+- **Evidence:** [OUTCOME-001](docs/issues/OUTCOME-001-final-results-and-versioned-reconciliation.md) initially rechecks seven days of completed games plus unresolved IDs under a measured request budget. The fixture-tested reconciliation implements this workload policy; actual NBA correction behavior and coverage remain unverified.
 - **Impact:** Corrections to older resolved games may remain undiscovered until an explicit ID/range reconciliation run. Displayed actuals and errors reflect the saved source revision, not a guarantee that no later correction exists.
 - **Current mitigation:** Preserve every source/outcome/report version, show observation/revision times, provide explicit older-game reconciliation, and never alter forecasts when labels change.
 - **Improvement / timing:** After launch, measure actual correction timing and request cost before extending automated sweeps or adding another permitted source.
@@ -189,6 +189,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Current mitigation:** Empty routing fails closed, no cloud stats requests, exact request/parser/environment identities, source health and bounded work. Suspended/unsupported states remain pending.
 - **Improvement / timing:** Accept actual permitted schedule, status, roster and final capabilities with generation semantics, coverage and request/runtime evidence before operations activation.
 - **Closure evidence:** Actual accepted cloud/local rehearsals, fresh complete roster readback and measured budgets. This is a release gate.
+
+## W-20: Final participation semantics and correction coverage need live verification
+
+- **Evidence:** OUTCOME-001 tests source-confirmed DNP, missing rows, partial targets, repeated/corrected facts and parser/config revisions on fixtures. No final adapter is enabled or rehearsed against an accepted real source.
+- **Impact:** Actual player/DNP completeness and later correction timing remain unknown; no fixture result can support a season accuracy claim.
+- **Current mitigation:** Unknown outcomes stay unscored, original cohorts/forecasts persist, source bytes and semantic versions remain linked, and default routes refuse execution. Recheck seven days plus unresolved live IDs; use explicit IDs/ranges for older corrections.
+- **Improvement / timing:** Accept real final-source identities, precision, participation and calendar semantics, then record regular-season completeness, cost and correction evidence before trusted reconciliation.
+- **Closure evidence:** Reviewed live-source rehearsal, verified role/artifact readback and honest outcome coverage. This is a release gate.
 
 ## Adding a development finding
 

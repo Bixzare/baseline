@@ -85,7 +85,7 @@ Full pytest requires a disposable local `BASELINE_TEST_DSN`; missing setup fails
 DB-003: `uv run --locked python -m hoop.domains.nba.history --help`; default `plan` is local. See [import gates](docs/seed-import.md); real seed import is blocked, and fixture acceptance never authorizes production.
 MODEL-001: `uv run --locked python -m hoop.domains.nba.baselines --help`; fixture preparation is local, real `prepare` needs verified gates. See [preparation](docs/baseline-preparation.md). Prepared snapshots carry no official publication receipt.
 LEDGER-001/002: [registration](docs/ledger-registration.md) and [publication](docs/publication.md) document guarded operations. `uv run --locked python -m scripts.rehearse_publication` uses disposable local fixtures only; never grant direct runtime ledger writes or infer readiness from rehearsal.
-COLLECT-001: `uv run --locked python -m hoop.domains.nba.collection --help`; see [collection](docs/collection.md). Default routes are empty; verified source/environment acceptance is required before live requests.
+COLLECT/OUTCOME: `uv run --locked python -m hoop.domains.nba.collection --help` and `-m hoop.domains.nba.outcomes --help`; see [collection](docs/collection.md) and [outcomes](docs/outcomes.md). Default routes are empty; actual source/environment acceptance is required before live requests.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.
 
