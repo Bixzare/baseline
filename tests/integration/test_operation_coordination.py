@@ -1,4 +1,5 @@
 from pathlib import Path
+from time import monotonic, sleep
 from typing import Any
 
 import psycopg
@@ -26,7 +27,16 @@ def test_independent_session_lock_releases_after_failure_and_disconnect(migrated
         disconnected.execute(
             "SELECT pg_advisory_lock(hashtextextended('baseline:shared-operations:nba',617))"
         )
+        backend_pid = disconnected.info.backend_pid
         disconnected.close()
+        # Closing a client socket does not synchronously finish server cleanup.
+        deadline = monotonic() + 2
+        while second.execute(
+            "SELECT 1 FROM pg_stat_activity WHERE pid=%s", (backend_pid,)
+        ).fetchone():
+            if monotonic() >= deadline:
+                pytest.fail("Fixture backend did not finish disconnect cleanup")
+            sleep(0.005)
         with operation_lock(second, "nba") as acquired:
             assert acquired
 

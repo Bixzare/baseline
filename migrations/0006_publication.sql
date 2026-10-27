@@ -259,7 +259,10 @@ GRANT SELECT ON platform.batch_status TO baseline_runtime;
 
 -- The schema owner creates functions, then a controlled migration identity
 -- transfers only these function identities. Runtime never gains owner membership.
+-- Managed postgres has ADMIN without SET on newly created custom roles.
+-- Only the privileged migrator assumes publisher for ownership transfer.
 RESET ROLE;
+GRANT baseline_publisher TO CURRENT_USER WITH SET TRUE, INHERIT FALSE;
 GRANT CREATE ON SCHEMA platform,nba TO baseline_publisher;
 ALTER FUNCTION platform.bound_json(uuid,bytea,text) OWNER TO baseline_publisher;
 ALTER FUNCTION platform.source_fresh(uuid,timestamptz,interval) OWNER TO baseline_publisher;
@@ -269,6 +272,7 @@ ALTER FUNCTION nba.publish_player(uuid,bytea,uuid,bytea,uuid,bytea,jsonb,uuid) O
 ALTER FUNCTION platform.confirm_batch(uuid) OWNER TO baseline_publisher;
 ALTER FUNCTION platform.append_lifecycle(uuid,uuid) OWNER TO baseline_publisher;
 REVOKE CREATE ON SCHEMA platform,nba FROM baseline_publisher;
+SET LOCAL ROLE baseline_publisher;
 REVOKE ALL ON FUNCTION platform.bound_json(uuid,bytea,text),platform.source_fresh(uuid,timestamptz,interval),
  platform.eligible_occurrence(uuid),platform.store_batch(jsonb,uuid,uuid,uuid,uuid,uuid,timestamptz,text),
  nba.publish_player(uuid,bytea,uuid,bytea,uuid,bytea,jsonb,uuid),platform.confirm_batch(uuid),
