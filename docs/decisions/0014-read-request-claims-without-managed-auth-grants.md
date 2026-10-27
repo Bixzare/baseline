@@ -1,6 +1,6 @@
 # ADR 0014: Read request identity without managed Auth grants
 
-Status: DRAFT for owner review, October 27, 2026.
+Status: LOCKED by the owner on October 27, 2026.
 
 ## Evidence
 
@@ -8,13 +8,13 @@ The new Free project `lkwfzdfaqempnwffocmm` is healthy in eu-west-1 on
 Postgres 17.11. Repository migrations 0001 and 0002 applied with exact hashes.
 Migration 0003 rolled back: its grant on the managed Auth schema did not take
 effect. The hosted `postgres` role has Auth usage without grant option.
-Only 0001 and 0002 remain in application migration history.
+Only 0001 and 0002 remained after that failed attempt.
 
 Supabase documents this exact behavior and supports reading the request user ID
 from the request settings instead:
 [managed Auth permission guidance](https://supabase.com/kb/troubleshooting/permission-errors-when-granting-custom-roles-access-to-the-auth-schema).
 
-## Proposed decision
+## Decision
 
 Correct migration 0003 before its first hosted deployment. Remove the ineffective
 Auth grants. Inside the existing private identity gate, read the legacy request
@@ -30,10 +30,10 @@ this change does not turn caller-supplied SQL settings into authentication.
 
 ## Migration boundary and tradeoff
 
-This is a proposed exception for a reviewed migration that has not reached any
+This is an owner-approved exception for a reviewed migration that has not reached any
 Baseline hosted database. Its original SHA-256 is
 `739ca9b03d75e1dcf46b8ff82af09c163185f0ea5ec1f4bbae74997e54d4071c`.
-The only persistent Baseline project is currently at 0002. Never rewrite a
+At owner review, the only persistent Baseline project was at 0002. Never rewrite a
 stored migration checksum or bypass drift checks. Disposable development/test
 databases that applied the old 0003 must be recreated. If a persistent deployment
 with that hash is discovered, stop and prepare a separate additive upgrade path.
@@ -52,5 +52,6 @@ Auth schema access false and provider-role membership false. The transaction was
 rolled back; it did not deploy 0003. Actual Auth sign-in and Storage API permission
 verification remain separate gates.
 
-Apply the correction only after owner review/lock, then continue the reviewed
-migration sequence and verify hashes, private schemas and denied roles.
+The owner approved and locked this correction. It was applied successfully,
+followed by 0004 and 0005, with exact hash readback. Runtime/Auth/Storage and
+connection checks remain separate gates.

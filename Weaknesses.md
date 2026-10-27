@@ -160,7 +160,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-16: Hosted persistence has not been provisioned or verified
 
-- **Evidence:** On October 27 the dedicated Free project was created in eu-west-1 and verified on Postgres 17.11. Migrations 0001/0002 applied; 0003 rolled back because managed Auth usage cannot be granted by postgres. A proposed claims-based fix passed a rollback-only hosted dry run. Actual runtime TLS, Auth/Storage roles and allowances remain unverified. See [setup evidence](docs/supabase-setup-status.md).
+- **Evidence:** On October 27 the dedicated Free project was created in eu-west-1 and verified on Postgres 17.11. Migrations 0001 through 0005 applied after the owner approved the claims-based Auth correction. Migration 0006 rolled back on explicit publisher SET-role permissions; a correction passed a rollback-only hosted test. Actual runtime TLS, Auth/Storage roles and allowances remain unverified. See [setup evidence](docs/supabase-setup-status.md).
 - **Impact:** Local success cannot establish production database or private-artifact readiness.
 - **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, real Postgres CI and explicit hosted gates. DB-002 tests actual policies against provider relation/claim fixtures and mocks HTTP faults; this does not verify real Auth/Storage APIs. No administrative credential enters ordinary jobs. See [artifact verification](docs/artifact-storage.md).
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.

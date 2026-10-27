@@ -9,9 +9,10 @@ local Postgres fixtures and production readiness.
 | Project | `baseline`, `lkwfzdfaqempnwffocmm`, eu-west-1; ACTIVE_HEALTHY. |
 | Creation cost | Provider quoted $0 monthly, matching the owner's Free-only choice. |
 | Database | Actual SQL and project metadata report Postgres 17.11. |
-| Application schema | Migrations 0001 and 0002 committed with repository byte hashes. |
-| Migration 0003 | Failed and rolled back because managed Auth usage cannot be granted by postgres. |
-| Proposed correction | [ADR 0014](decisions/0014-read-request-claims-without-managed-auth-grants.md), draft; rollback-only hosted dry run passed. |
+| Application schema | Migrations 0001 through 0005 committed with repository byte hashes. |
+| Migration 0003 | Initial attempt rolled back; owner-approved claims correction applied successfully. |
+| Approved correction | [ADR 0014](decisions/0014-read-request-claims-without-managed-auth-grants.md), locked by the owner; both local tests and hosted dry run passed before deployment. |
+| Migration 0006 | Rolled back on publisher ownership-transfer permissions. A further correction is being prepared for review. |
 | Security advisor | No findings after foundation/evidence setup; not a replacement for role/API tests. |
 | Runtime login / TLS | Unverified; no local runtime or migration credentials configured. |
 | Auth / private Storage | Not provisioned. No backend identity or bucket has been created. |
@@ -24,7 +25,7 @@ transaction. RESET ROLE precedes the provider's migration bookkeeping. Both the
 provider history and application history must be read back. The direct CLI path
 still needs a verified TLS setup and runtime role test from Windows and Actions.
 
-Next: owner review of the undeployed 0003 correction, then migration continuation,
+Next: review the undeployed 0006 ownership-transfer correction, then migration continuation,
 privately configured setup/runtime credentials, supported Auth/Storage setup and
 permission verification. Credentials belong in the environment or ignored local
 configuration loaded into it. Never paste database passwords, service keys or
