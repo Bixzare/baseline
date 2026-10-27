@@ -182,6 +182,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Verify the actual project major, source generations, cohort size, latency, permission denials and operational recovery before activation.
 - **Closure evidence:** Reviewed hosted readback/denials and a later approved future-slate run with a timely receipt. This is a release gate.
 
+## W-19: Ongoing source routing is not yet accepted
+
+- **Evidence:** COLLECT-001 has no accepted default routes. Fixture tests prove policy, validation, persistence and transitions; they do not resolve the prior CDN denial or establish current roster coverage.
+- **Impact:** Nightly collection and real publication cannot run until capability/environment routes are reviewed and measured. Local-only routes require an awake machine and fresh uploaded evidence.
+- **Current mitigation:** Empty routing fails closed, no cloud stats requests, exact request/parser/environment identities, source health and bounded work. Suspended/unsupported states remain pending.
+- **Improvement / timing:** Accept actual permitted schedule, status, roster and final capabilities with generation semantics, coverage and request/runtime evidence before operations activation.
+- **Closure evidence:** Actual accepted cloud/local rehearsals, fresh complete roster readback and measured budgets. This is a release gate.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

@@ -226,3 +226,6 @@ publication, visibility confirmation and complete-cohort checks arrive next.
 
 Protected publication and disposable rehearsal: [LEDGER-002 operations](docs/publication.md).
 The command uses actual restricted SQL roles with fixture sources and mock Storage; production gates remain open.
+
+Schedule/status/current roster commands and source gates: [collection](docs/collection.md).
+No source is enabled by the default configuration.
