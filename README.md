@@ -229,3 +229,6 @@ The command uses actual restricted SQL roles with fixture sources and mock Stora
 
 Schedule/status/current roster commands and source gates: [collection](docs/collection.md).
 No source is enabled by the default configuration.
+
+Versioned finals, DNP/unknown handling, correction work and rehearsal: [outcomes](docs/outcomes.md).
+Use `uv run --locked python -m scripts.rehearse_publication --outcomes` only with disposable local Postgres.

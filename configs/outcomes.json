@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "parser_version": "nba-outcomes-v1",
+  "automatic_recheck_days": 7,
+  "dnp_semantics": "unknown_until_accepted",
+  "policy": {"min_gap": 3, "timeout": 30, "retries": 2, "max_requests": 16, "max_seconds": 180},
+  "routes": []
+}
