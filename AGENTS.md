@@ -84,7 +84,7 @@ DB-002: `uv run --locked python -m hoop.platform.artifacts setup` is controlled 
 Full pytest requires a disposable local `BASELINE_TEST_DSN`; missing setup fails integration checks. Windows compatibility uses `pytest -m "not postgres"`. CI Postgres 17 is provisional until the dedicated project exists.
 DB-003: `uv run --locked python -m hoop.domains.nba.history --help`; default `plan` is local. See [import gates](docs/seed-import.md); real seed import is blocked, and fixture acceptance never authorizes production.
 MODEL-001: `uv run --locked python -m hoop.domains.nba.baselines --help`; fixture preparation is local, real `prepare` needs verified gates. See [preparation](docs/baseline-preparation.md). Prepared snapshots carry no official publication receipt.
-LEDGER-001: `uv run --locked python -m hoop.platform.ledger --help`; controlled `bootstrap` and runtime `inspect` are documented in [registration](docs/ledger-registration.md). Publication functions do not exist yet; never grant direct runtime ledger writes.
+LEDGER-001/002: [registration](docs/ledger-registration.md) and [publication](docs/publication.md) document guarded operations. `uv run --locked python -m scripts.rehearse_publication` uses disposable local fixtures only; never grant direct runtime ledger writes or infer readiness from rehearsal.
 Add exact CLI, notebook, migration, and dashboard commands only after their entry points exist and are tested.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.

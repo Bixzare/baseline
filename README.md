@@ -223,3 +223,6 @@ LEDGER-001 adds [ledger integrity and controlled registration](docs/ledger-regis
 Runtime can inspect model/bundle identities but cannot insert forecasts or receipts.
 Database constraints protect one decision per occurrence/subject/target; actual
 publication, visibility confirmation and complete-cohort checks arrive next.
+
+Protected publication and disposable rehearsal: [LEDGER-002 operations](docs/publication.md).
+The command uses actual restricted SQL roles with fixture sources and mock Storage; production gates remain open.
