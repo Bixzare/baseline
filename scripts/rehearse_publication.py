@@ -11,6 +11,7 @@ import psycopg
 from psycopg import sql
 from psycopg.conninfo import conninfo_to_dict, make_conninfo
 
+from hoop.domains.nba.evaluation import capture, persist, reproduce
 from hoop.domains.nba.outcomes import ingest_final, normalize_final
 from hoop.domains.nba.publication import publish_player
 from hoop.platform.database import apply, provision_runtime
@@ -19,7 +20,7 @@ from tests.fixtures.finals import final_context, final_payload
 from tests.fixtures.publication import publication_fixture
 
 
-def run(*, include_outcomes: bool = False) -> dict[str, object]:
+def run(*, include_outcomes: bool = False, include_reports: bool = False) -> dict[str, object]:
     root = Path(__file__).resolve().parents[1]
     dsn = os.environ.get("BASELINE_TEST_DSN", "")
     if conninfo_to_dict(dsn).get("host") not in {"localhost", "127.0.0.1", "::1", "postgres"}:
@@ -61,7 +62,7 @@ def run(*, include_outcomes: bool = False) -> dict[str, object]:
                             "evidence": "synthetic_fixture",
                             "production_ready": False,
                         }
-                        if include_outcomes:
+                        if include_outcomes or include_reports:
                             before = conn.execute(
                                 "SELECT prediction_id,value FROM platform.predictions ORDER BY "
                                 "prediction_id"
@@ -108,6 +109,24 @@ def run(*, include_outcomes: bool = False) -> dict[str, object]:
                                 forecast_values_preserved=True,
                                 timing_scenario="synthetic_earlier_start_correction",
                             )
+                        if include_reports:
+                            cutoff = conn.execute("SELECT clock_timestamp()").fetchone()[0]
+                            frozen = capture(
+                                conn,
+                                p["store"],
+                                p["now"] - timedelta(days=1),
+                                cutoff,
+                                cutoff,
+                                kind="rehearsal",
+                            )
+                            saved = persist(conn, p["store"], frozen)
+                            reproduced = reproduce(conn, p["store"], UUID(saved["report_id"]))
+                            report.update(
+                                evaluation_report_id=saved["report_id"],
+                                evaluation_bytes=saved["artifact_bytes"],
+                                evaluation_reproduced=reproduced["reproduced"],
+                                evaluation=frozen["report"],
+                            )
                         return report
         finally:
             assert name.startswith("baseline_test_rehearsal_") and len(name) == 56
@@ -119,5 +138,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--outcomes", action="store_true")
+    parser.add_argument("--reports", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(run(include_outcomes=args.outcomes), default=str, sort_keys=True))
+    print(
+        json.dumps(
+            run(include_outcomes=args.outcomes, include_reports=args.reports),
+            default=str,
+            sort_keys=True,
+        )
+    )

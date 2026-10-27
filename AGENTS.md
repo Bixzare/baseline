@@ -86,6 +86,7 @@ DB-003: `uv run --locked python -m hoop.domains.nba.history --help`; default `pl
 MODEL-001: `uv run --locked python -m hoop.domains.nba.baselines --help`; fixture preparation is local, real `prepare` needs verified gates. See [preparation](docs/baseline-preparation.md). Prepared snapshots carry no official publication receipt.
 LEDGER-001/002: [registration](docs/ledger-registration.md) and [publication](docs/publication.md) document guarded operations. `uv run --locked python -m scripts.rehearse_publication` uses disposable local fixtures only; never grant direct runtime ledger writes or infer readiness from rehearsal.
 COLLECT/OUTCOME: `uv run --locked python -m hoop.domains.nba.collection --help` and `-m hoop.domains.nba.outcomes --help`; see [collection](docs/collection.md) and [outcomes](docs/outcomes.md). Default routes are empty; actual source/environment acceptance is required before live requests.
+EVAL-001: `uv run --locked python -m hoop.domains.nba.evaluation --help`; [reporting](docs/evaluation.md) documents immutable cutoffs, coverage and reproduction. Fixtures never establish live accuracy.
 Inspect `dashboard/package.json` before invoking scripts. On Windows use `npm.cmd` if PowerShell blocks `npm`.
 Document test database setup and fixture requirements; do not silently skip integration tests.
 
