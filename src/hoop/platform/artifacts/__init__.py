@@ -200,6 +200,27 @@ class PrivateArtifacts:
     def __init__(self, session: Session) -> None:
         self.session = session
 
+    def read(self, descriptor: dict[str, Any]) -> bytes:
+        sha = descriptor["sha256"]
+        kind = descriptor["kind"]
+        size = descriptor["byte_count"]
+        if (
+            kind not in KINDS
+            or not re.fullmatch(r"[0-9a-f]{64}", sha)
+            or type(size) is not int
+            or not 0 <= size <= MAX_BYTES
+        ):
+            raise ArtifactError("invalid_artifact_descriptor")
+        project = str(urlsplit(self.session.settings.url).hostname).split(".")[0]
+        bucket = self.session.settings.bucket
+        key = f"{kind}/{sha[:2]}/{sha}"
+        if descriptor["storage_uri"] != f"supabase://{project}/{bucket}/{key}":
+            raise ArtifactError("artifact_location_mismatch")
+        response = self.session.request("GET", f"/storage/v1/object/authenticated/{bucket}/{key}")
+        if response.status != 200 or len(response.body) != size or digest(response.body) != sha:
+            raise ArtifactError("artifact_readback_mismatch")
+        return response.body
+
     def put(
         self, body: bytes, *, kind: str, format: str, schema_version: int = 1
     ) -> dict[str, Any]:

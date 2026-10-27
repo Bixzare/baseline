@@ -10,10 +10,10 @@ No hosted activation is implied.
 | --- | --- | --- | --- |
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
 | SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4; operational source gates remain. |
-| DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | In progress | PR #19: 170 tests and Linux/Windows CI passed; 135 quarantined records, seed acceptance pending. |
+| DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Finished | Owner merged PR #19, including #20/#21, into main on October 26; seed acceptance is separate. |
 | DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | PR #20: initial independent commit passed 166 tests and CI; review stack requires fresh CI. Hosted checks pending. |
 | DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | PR #21: local combined suite passed 236 tests; owner review and hosted API checks remain gates. |
-| DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | Backlog | Accepted DATA-001 seed and private artifacts. |
+| DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | Backlog | Reviewed compact history interfaces. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | Backlog | DB-003 and baseline descriptors. |
 | LEDGER-002 | [#11](https://github.com/Bixzare/baseline/issues/11) | Backlog | Protected ledger and baseline operations. |

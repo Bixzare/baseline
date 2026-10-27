@@ -22,7 +22,7 @@ def persist_observation(
     failure_directory: Path,
 ) -> dict[str, Any]:
     observation = str(report["observation_id"])
-    check_id = str(uuid5(NAMESPACE_URL, "baseline:source-check:" + run_id + ":" + observation))
+    check_id = str(uuid5(NAMESPACE_URL, "baseline:source-check:v2:" + run_id + ":" + observation))
     if report.get("requested_at") is None:
         raise EvidenceError("No request was made; record an incomplete run event instead")
     parsed = urlsplit(report["request_url"])
@@ -49,6 +49,8 @@ def persist_observation(
             "request_url": report["request_url"],
             "request_context": report["request_context"],
             "parser_version": report["parser_version"],
+            "bridge_version": "nba-source-persist-v2",
+            "capability": report["capability"],
             "policy": report["policy"],
             "original_outcome": report["outcome"],
             "provenance": "archived_observation_rehearsal",
