@@ -72,7 +72,12 @@ def execute(client: BlockingKernelClient, source: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "notebook_path", [NOTEBOOK, ROOT / "notebooks/01_sources_and_backfill.ipynb"]
+    "notebook_path",
+    [
+        NOTEBOOK,
+        ROOT / "notebooks/01_sources_and_backfill.ipynb",
+        ROOT / "notebooks/02_baseline_and_ledger.ipynb",
+    ],
 )
 def test_fixture_run_in_fresh_kernel_cannot_access_network(
     tmp_path: Path,
@@ -133,6 +138,13 @@ def test_fixture_run_in_fresh_kernel_cannot_access_network(
         for cell in code_cells(notebook_path):
             assert cell["execution_count"] is None and not cell["outputs"]
             execute(client, "".join(cell["source"]))
+        if notebook_path.name == "02_baseline_and_ledger.ipynb":
+            execute(
+                client,
+                "assert result['coverage'] == {'players':3,'entries':15,'numeric_entries':10}\n"
+                "assert not result['official_publication'] and replay['reused']",
+            )
+            return
         if notebook_path != NOTEBOOK:
             execute(
                 client,

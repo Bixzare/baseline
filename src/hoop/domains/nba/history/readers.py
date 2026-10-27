@@ -1,5 +1,6 @@
 """Consistent database reads; eligibility precedes latest-revision selection."""
 
+from contextlib import nullcontext
 from datetime import datetime
 from typing import Any
 
@@ -36,9 +37,12 @@ def eligible_latest(
             for row in candidates
             if (parse_time(str(row["observed_at"])), parse_time(str(row["validated_at"]))) == best
         ]
-        signatures = {str(tuple(row.get(field) for field in value_fields)) for row in tied}
+        first = tuple(tied[0].get(field) for field in value_fields)
+        ambiguous = any(
+            tuple(row.get(field) for field in value_fields) != first for row in tied[1:]
+        )
         chosen = min(tied, key=lambda row: str(row["source_check_id"]))
-        result.append({**chosen, "ambiguous_revision": len(signatures) > 1})
+        result.append({**chosen, "ambiguous_revision": ambiguous})
     return result
 
 
@@ -48,13 +52,28 @@ def player_history(
     cutoff: datetime,
     *,
     environment: str = "rehearsal",
+    in_snapshot: bool = False,
 ) -> list[dict[str, Any]]:
     if cutoff.tzinfo is None or environment not in {"rehearsal", "production"}:
         raise EvidenceError("Explicit cutoff and environment required")
     if len(player_ids) > 1000:
         raise EvidenceError("Bounded player history request exceeded")
-    with conn.transaction(), conn.cursor(row_factory=dict_row) as cursor:
-        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+    with (
+        nullcontext() if in_snapshot else conn.transaction(),
+        conn.cursor(row_factory=dict_row) as cursor,
+    ):
+        if in_snapshot:
+            isolation = cursor.execute("SHOW transaction_isolation").fetchone()
+            read_only = cursor.execute("SHOW transaction_read_only").fetchone()
+            if (
+                isolation is None
+                or read_only is None
+                or isolation["transaction_isolation"] != "repeatable read"
+                or read_only["transaction_read_only"] != "on"
+            ):
+                raise EvidenceError("Existing snapshot must be repeatable-read and read-only")
+        else:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
         cursor.execute(
             """SELECT p.*,e.source_event_id,e.competition,e.season,
              s.requested_at,s.received_at,s.validated_at,s.source_published_at,s.state
