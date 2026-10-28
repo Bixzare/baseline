@@ -49,14 +49,20 @@ The owner locked ADR 0017, and explicit local staging/guarded import now use its
 verified archive protocol. A successful
 audit or fixture preparation cannot authorize registration or publication.
 
-## Calendar interpretation awaiting owner review
+## Calendar interpretation approved for this seed
 
-A repeat comparison on October 28 verified all 1,230 source calendar dates against
-the separately retained NBA GAME_DATE values. The proposal is to use these dates
-for ordering this pinned season only, without claiming UTC starts or DST semantics.
-Same-date ambiguity still blocks affected histories. The comparison is in the
-sanitized readiness report; owner acceptance is pending and no acceptance file
-is manufactured by this proposal.
+On October 28, the owner approved calendar ordering for this pinned 2025-26 seed
+only. All 1,230 source dates match the retained NBA GAME_DATE evidence.
+The [approval record](approvals/2026-10-28-seed-calendar.json) binds that decision
+to the exact seed manifest, parser and comparison inputs. It does not establish
+UTC tip-off times or DST semantics; same-date ambiguity still blocks history.
+
+For planning, pass this record using
+`--acceptance docs/approvals/2026-10-28-seed-calendar.json`. Its kind is
+`owner_calendar_review`, deliberately distinct from full `owner_review` seed
+acceptance. It clears only the calendar gate. Quarantine and seed acceptance
+still block apply. The cloud archive check will use already allowed `main`
+after the owner reviews and merges PR #41; no feature-branch secrets rule is added.
 
 ## Explicit raw staging for v2
 
@@ -78,9 +84,8 @@ physical part and root has its own real hash in the artifact registry. CSV recor
 counting is streamed from verified local files; the importer does not load all
 438 MB into memory. Ordinary small direct CSV inputs remain compatible.
 
-The actual staged plan retains its other three blockers. Owner review of the
-calendar evidence and eventual seed acceptance are still missing. The 135
-quarantined rows remain unresolved. No source timestamp or UTC start is invented.
+With the separate date-only approval supplied, the staged plan retains two
+blockers: seed acceptance and the 135 unresolved quarantined rows. No source timestamp or UTC start is invented.
 
 The current hosted application plus four raw archive roots were independently
 downloaded from OneDrive and restored into a disposable local database. All

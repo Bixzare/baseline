@@ -80,3 +80,14 @@ def test_staged_encoding_does_not_infer_source_acceptance(tmp_path: Path) -> Non
     staged["files"]["Players.csv"]["original"]["sha256"] = "0" * 64
     with pytest.raises(ValueError):
         plan_seed(report, tmp_path / "archive", manifest, raw_archives=staged)
+
+
+def test_calendar_only_owner_review_does_not_accept_seed(tmp_path: Path) -> None:
+    report, manifest, original = fixture_seed(tmp_path / "archive")
+    calendar_review = {**original["acceptance"], "kind": "owner_calendar_review"}
+    plan = plan_seed(
+        report, tmp_path / "archive", manifest, calendar_review, original["observations"]
+    )
+    assert plan["blockers"] == ["seed_acceptance_missing"]
+    assert not plan["hosted_ready"]
+    assert not plan["historical_pregame_cohort_verified"]

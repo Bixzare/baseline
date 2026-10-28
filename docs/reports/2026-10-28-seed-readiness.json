@@ -70,6 +70,20 @@
     "source_id": "nba_api.BoxScoreTraditionalV3",
     "validated_at": "2026-10-28T11:37:53.658960+00:00"
   },
+  "calendar_approved_import_plan": {
+    "blockers": [
+      "seed_acceptance_missing",
+      "seed_quarantine_unresolved"
+    ],
+    "counts": {
+      "games": 849,
+      "players": 5447,
+      "short_player_histories": 76,
+      "teams": 1698
+    },
+    "plan_sha256": "fe93a38733510a092017307f64460fa9eca8fe4a30bdc3e1118b2305344652dd",
+    "required_raw_bytes": 438321084
+  },
   "ci": {
     "nba_followup": {
       "pr": 42,
@@ -82,19 +96,27 @@
       "run_id": 40687042419
     }
   },
-  "cloud_archive_gate": "Pending: exact feature branch is not allowed in rehearsal environment; automatic approval review rejected widening secrets access without explicit owner approval",
+  "cloud_archive_gate": "Owner selected already allowed main after owner review/merge of PR #41. PR #41 is still open at this checkpoint; do not widen the secrets allowlist or run from a feature branch.",
+  "cloud_execution_choice": {
+    "approved_on": "2026-10-28",
+    "branch": "main",
+    "feature_branch_allowlist_change_approved": false,
+    "prerequisite": "owner_merge_of_pr_41"
+  },
   "date_comparison": {
+    "approval_record": "docs/approvals/2026-10-28-seed-calendar.json",
     "compared_game_ids": 1230,
     "inventory_manifest_sha256": "8ad2be7b9f55eb17d64477377903a0c405e28fa7b458015eb6c163178a0ad785",
     "mismatch_count": 0,
     "mismatches": [],
     "nba_inventory_raw_sha256": "8030861397de701ff20a51c4316731080e648ac751e4be80c68e2e786c9dd9cc",
-    "owner_mapping_acceptance_recorded": false,
+    "owner_approved_on": "2026-10-28",
+    "owner_mapping_acceptance_recorded": true,
     "seed_manifest_sha256": "1a98b146ef110647fcd165c7928abeb8b7df42d5ca3521cb413d1033449db123",
     "utc_start_or_dst_verified": false
   },
   "disposition": {
-    "DB-003": "blocked: seed quarantine, acceptance, date policy and raw capacity",
+    "DB-003": "blocked: 135 quarantined records and seed acceptance; date-only ordering approved",
     "LEDGER-001": "blocked: actual preparation descriptor and verified registration gates",
     "MODEL-001": "blocked: accepted seed and prospective schedule/roster evidence"
   },

@@ -263,3 +263,5 @@ reproducible with `python -m scripts.rehearse_hosted_backup`; its default is a
 no-write plan. Full launch archive coverage and daily backups remain pending.
 
 The owner-locked [raw archive protocol](docs/raw-archives.md) compresses large inputs into immutable parts with exact original-byte reconstruction. Backup export and isolated restore verify logical original hashes as well as physical objects. The manual archive rehearsal is default-off and does not accept sources or enable production.
+
+The owner approved calendar-only ordering for the pinned 2025-26 seed on October 28. The [scoped approval](docs/approvals/2026-10-28-seed-calendar.json) leaves seed acceptance and 135 quarantined rows blocked. The cloud archive check will run from existing allowed `main` after the owner merges PR #41; no new secrets-access rule is approved.

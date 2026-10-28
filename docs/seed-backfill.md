@@ -203,3 +203,10 @@ database was removed. The measured restore took 170 seconds with an explicit
 600-second budget after the incomplete first readback. This verifies the current
 hosted application/raw snapshot; local normalized manifests/inventory and daily
 automation are not covered, so the complete launch backup gate remains false.
+
+
+The owner subsequently approved date-only ordering for the exact pinned seed.
+The record in `docs/approvals/2026-10-28-seed-calendar.json` clears only that gate;
+it is not seed acceptance. All 135 quarantined rows remain unresolved. The owner
+selected the existing `main` branch for the cloud archive check after merging
+PR #41, with no expansion of the rehearsal environment's secrets allowlist.
