@@ -2,7 +2,7 @@
 
 Updated October 28, 2026. The owner merged integration #25 and issues #26-#28
 into main at `fa8c251`. The current review batch is EVAL-001 (PR #29), OPS-001 (PR #30) and OPS-002. Review in that order; none is merged by this execution.
-Supabase MCP is connected. The dedicated Free project is created, and 0001 through 0008 are applied, including both approved managed-role corrections. Windows restricted runtime TLS and Auth sign-in/refresh now pass. Storage create/read works, but three mutation checks, signup configuration and actual Actions checks remain gated. See [hosted setup evidence](supabase-setup-status.md). Production remains disabled.
+Supabase MCP is connected. The dedicated Free project is created, and 0001 through 0008 are applied, including both approved managed-role corrections. Windows restricted runtime TLS and Auth sign-in/refresh now pass. Storage create/read works, but three mutation checks and actual Actions checks remain gated. See [hosted setup evidence](supabase-setup-status.md). Production remains disabled.
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |

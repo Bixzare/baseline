@@ -17,7 +17,7 @@ local Postgres fixtures and production readiness.
 | Initial usage | Database 12,416,691 bytes; zero Storage objects/buckets and zero forecast batches at readback. This is initial usage, not a season estimate. |
 | Security advisor | No findings after reviewed schema deployment through 0008; not a replacement for role/API tests. |
 | Public HTTPS checks | Auth settings HTTP 200; private platform Data API refused with HTTP 406/PGRST106. |
-| Signup setting | disable_signup=false at readback; owner must disable public signup before backend readiness. |
+| Signup setting | disable_signup=true verified October 28 at 08:12 UTC; existing backend and negative-test sign-in/refresh both passed afterward. |
 | Runtime login / TLS | Windows session pooler verified as baseline_runtime with client TLS and verify-full. Owner membership, publisher membership and direct prediction INSERT are absent. Actions and direct mode remain untested. |
 | Pooler backend | pg_stat_ssl reports false for the pooler-to-Postgres leg; this differs from verified client TLS. No claim of backend TLS is made. |
 | Auth / private Storage | Dedicated backend and unbound negative-test identities created; independent sign-in/refresh passed. Two private buckets exist. Actual create/read and explicit write denials passed; delete, move and bucket administration remain inconclusive under the required verification contract. |
@@ -72,11 +72,11 @@ Replacement, upsert, unrelated-bucket create, private Data API access, anonymous
 read/create and other-identity read/create passed their required checks.
 
 Sanitized local reports are under artifacts/setup-verification/. Two small
-rehearsal objects remain unregistered and were not automatically deleted. Signup
-still reports disable_signup=false at the latest readback. Production remains off.
+rehearsal objects remain unregistered and were not automatically deleted. The earlier signup blocker was closed at the 08:12 UTC readback: disable_signup=true.
+Both existing identities still sign in and refresh. Production remains off.
 
 The current security advisor reports one Auth warning: leaked password protection
 is disabled. Supabase documents that protection as Pro-only. No paid feature was
 enabled; dedicated setup identities use independently generated random passwords.
 See [password security](https://supabase.com/docs/guides/auth/password-security).
-The warning and pending public-signup setting remain visible in the setup record.
+The warning remains visible in the setup record. Public signup is now verified disabled.
