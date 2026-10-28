@@ -232,3 +232,6 @@ No source is enabled by the default configuration.
 
 Versioned finals, DNP/unknown handling, correction work and rehearsal: [outcomes](docs/outcomes.md).
 Use `uv run --locked python -m scripts.rehearse_publication --outcomes` only with disposable local Postgres.
+
+Per-target errors, coverage and immutable report reproduction: [evaluation](docs/evaluation.md).
+Use `uv run --locked python -m scripts.rehearse_publication --reports` with disposable local Postgres for the complete walkthrough.

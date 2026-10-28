@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "policy_version": "player-errors-v1",
+  "season": "2026-27",
+  "season_lower_bound": "2026-09-01T00:00:00Z",
+  "targets": {
+    "minutes": "minutes", "points": "points", "rebounds": "rebounds",
+    "assists": "assists", "threes_made": "threes made"
+  },
+  "period_days": [7, 30],
+  "actual_minute_bands": [10, 25]
+}
