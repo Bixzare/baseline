@@ -91,3 +91,20 @@ def test_calendar_only_owner_review_does_not_accept_seed(tmp_path: Path) -> None
     assert plan["blockers"] == ["seed_acceptance_missing"]
     assert not plan["hosted_ready"]
     assert not plan["historical_pregame_cohort_verified"]
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("manifest_sha256", "0" * 64),
+        ("parser_version", "different-parser"),
+        ("kind", "unreviewed"),
+    ],
+)
+def test_calendar_approval_is_scoped_to_exact_seed_and_review_kind(
+    tmp_path: Path, field: str, value: str
+) -> None:
+    report, manifest, original = fixture_seed(tmp_path / "archive")
+    review = {**original["acceptance"], "kind": "owner_calendar_review", field: value}
+    plan = plan_seed(report, tmp_path / "archive", manifest, review, original["observations"])
+    assert plan["blockers"] == ["calendar_convention_unverified", "seed_acceptance_missing"]

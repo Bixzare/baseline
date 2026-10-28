@@ -90,13 +90,18 @@ def plan_seed(
             ):
                 raise EvidenceError("Original request observation mismatch")
     approved = acceptance or {}
-    if (
-        approved.get("manifest_sha256") != report["manifest_artifact"]["sha256"]
-        or approved.get("parser_version") != report["parser_version"]
-        or approved.get("kind") not in {"owner_review", "synthetic_fixture"}
-    ):
+    review_matches_seed = (
+        approved.get("manifest_sha256") == report["manifest_artifact"]["sha256"]
+        and approved.get("parser_version") == report["parser_version"]
+    )
+    if not review_matches_seed or approved.get("kind") not in {"owner_review", "synthetic_fixture"}:
         blockers.append("seed_acceptance_missing")
-    if approved.get("calendar_convention") != "source_calendar_verified":
+    if (
+        not review_matches_seed
+        or approved.get("kind")
+        not in {"owner_review", "synthetic_fixture", "owner_calendar_review"}
+        or approved.get("calendar_convention") != "source_calendar_verified"
+    ):
         blockers.append("calendar_convention_unverified")
     if report["quarantine"]:
         blockers.append("seed_quarantine_unresolved")
