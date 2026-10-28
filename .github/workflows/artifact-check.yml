@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     environment: artifact-rehearsal
+    env:
+      PGSSLROOTCERT: ${{ github.workspace }}/certificates/supabase-ca-2021.crt
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9
@@ -21,8 +23,10 @@ jobs:
       - name: Run restricted hosted check
         run: |
           mkdir -p artifacts/artifact-check
-          uv run --locked python -m hoop.platform.artifacts verify | tee artifacts/artifact-check/report.json
+          uv run --locked python -m hoop.platform.artifacts verify --policy-evidence | tee artifacts/artifact-check/report.json
         env:
+          BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
+          BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
           BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}
           BASELINE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.BASELINE_SUPABASE_PUBLISHABLE_KEY }}
           BASELINE_ARTIFACT_USER_ID: ${{ vars.BASELINE_ARTIFACT_USER_ID }}
