@@ -35,12 +35,16 @@ def plan(output: Path) -> dict[str, object]:
         raise RuntimeError("Project pythonw environment required")
     sid = powershell("[Security.Principal.WindowsIdentity]::GetCurrent().User.Value")
     output.mkdir(parents=True, exist_ok=True)
-    for name, collector in [("Baseline-Watchdog", False), ("Baseline-LocalCollector", True)]:
+    for name, collector, backup in [
+        ("Baseline-Watchdog", False, False),
+        ("Baseline-LocalCollector", True, False),
+        ("Baseline-Backup", False, True),
+    ]:
         (output / (name + ".xml")).write_text(
-            definition(ROOT, sid, collector=collector), encoding="utf-8"
+            definition(ROOT, sid, collector=collector, backup=backup), encoding="utf-8"
         )
     return {
-        "task_names": ["Baseline-Watchdog", "Baseline-LocalCollector"],
+        "task_names": ["Baseline-Watchdog", "Baseline-LocalCollector", "Baseline-Backup"],
         "enabled": False,
         "principal": "current interactive owner",
         "credentials_in_definitions": False,

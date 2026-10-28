@@ -206,6 +206,14 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Observe manual/unattended runs, verify owner notification and independent Windows recovery, then backup readiness before activation.
 - **Closure evidence:** Actual intended-environment failure/recovery traces and timely committed receipts on an approved future slate. This is a release gate.
 
+## W-22: Independent backup delivery is not verified
+
+- **Evidence:** BACKUP-001 preserves a real Postgres fixture snapshot, original ledger/receipt rows and checksummed objects through isolated restoration. Its remote boundary is synthetic. OneDrive OAuth/folder mapping, native hosted export and actual remote readback are not configured.
+- **Impact:** Local complete sets and passing restore tests do not provide a verified off-device recovery point. BACKUP-001 and launch readiness remain open.
+- **Current mitigation:** Default-off CLI/task, independent readback location, real OneDrive backend check, exact file/hash inventory, conservative capacity checks, bounded operations and no automatic deletion. OPS-002 continues to report backup unverified.
+- **Improvement / timing:** Configure the selected OneDrive account/folder and supported private export route, then download and restore a real set before activation.
+- **Closure evidence:** Actual remote hash readback, isolated restore and daily execution with a represented cutoff under 24 hours. This is a release gate. See [backup operations](docs/backups.md).
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

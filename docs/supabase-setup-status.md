@@ -15,7 +15,9 @@ local Postgres fixtures and production readiness.
 | Migration 0006 | Initial attempt rolled back; owner-approved SET-role correction applied successfully. ADR 0015 is locked. |
 | Verified roles | Runtime has no owner/publisher membership or direct prediction INSERT. Publisher owns protected functions and has no schema CREATE. |
 | Initial usage | Database 12,416,691 bytes; zero Storage objects/buckets and zero forecast batches at readback. This is initial usage, not a season estimate. |
-| Security advisor | No findings after foundation/evidence setup; not a replacement for role/API tests. |
+| Security advisor | No findings after reviewed schema deployment through 0008; not a replacement for role/API tests. |
+| Public HTTPS checks | Auth settings HTTP 200; private platform Data API refused with HTTP 406/PGRST106. |
+| Signup setting | disable_signup=false at readback; owner must disable public signup before backend readiness. |
 | Runtime login / TLS | Unverified; no local runtime or migration credentials configured. |
 | Auth / private Storage | Not provisioned. No backend identity or bucket has been created. |
 | Account quotas / usage | Actual included allowances and provider object usage remain unverified. |

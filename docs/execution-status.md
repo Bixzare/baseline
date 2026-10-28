@@ -20,7 +20,7 @@ Supabase MCP is connected. The dedicated Free project is created, and 0001 throu
 | EVAL-001 | [#14](https://github.com/Bixzare/baseline/issues/14) | In progress | Per-target errors, coverage and immutable report manifests tested locally; actual live reporting remains gated. |
 | OPS-001 | [#15](https://github.com/Bixzare/baseline/issues/15) | In progress | Default-off workflows, coordinated stages and fixture operations; actual source/notification/activation gates remain. |
 | OPS-002 | [#16](https://github.com/Bixzare/baseline/issues/16) | In progress | Alert lifecycle and disposable Windows task tested; GitHub notice received, Windows desktop delivery failed; source/upload and hosted recovery remain gated. |
-| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | Backlog | Persisted records/artifacts and independent sync/restore verification. |
+| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | In progress | Shared-snapshot export, complete-set integrity and real Postgres restoration tested; OneDrive/private setup, real readback and daily execution remain gates. |
 | LAUNCH-001 | [#18](https://github.com/Bixzare/baseline/issues/18) | Backlog | All required prior tasks plus future-slate readiness. |
 
 Finished means implemented and owner-reviewed, normally demonstrated by a merged
@@ -33,7 +33,7 @@ Backlog or In progress. Preserve the board's actual column names when mapping.
 The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
 is linked to Bixzare/baseline. It was created after confirming there was no
 existing open, closed, or repository-linked project. All sixteen issue memberships
-and Status values are three Finished, eleven In progress and two Backlog, read
+and Status values are three Finished, twelve In progress and one Backlog, read
 back October 27. Finished still requires owner review; hosted gates
 cannot be waived by moving a board card.
 The board view groups columns by Status. The repository connector supplied issue
