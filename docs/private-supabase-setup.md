@@ -40,8 +40,10 @@ Sources: [connection modes](https://supabase.com/docs/guides/database/connecting
 
 ## Close public signup
 
-The live Auth settings endpoint currently reports `disable_signup=false`. In
-Authentication, Sign In / Providers, switch off **Allow new users to sign up**.
+Verified October 28, 2026: the live Auth settings endpoint reports
+`disable_signup=true`, and existing backend/test identities still sign in and
+refresh. For a replacement project, in Authentication, Sign In / Providers,
+switch off **Allow new users to sign up**.
 This matches Baseline's backend-only identity design. Controlled administrator
 creation of the dedicated backend/test identities remains the supported setup.
 The agent will read back the setting; no user signup request is needed.

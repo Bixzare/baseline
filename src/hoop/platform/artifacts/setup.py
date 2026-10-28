@@ -9,7 +9,14 @@ from uuid import UUID
 import psycopg
 from psycopg.pq import TransactionStatus
 
-from hoop.platform.artifacts import ArtifactError, HTTPTransport, Session, Settings, Transport
+from hoop.platform.artifacts import (
+    ArtifactError,
+    HTTPTransport,
+    Session,
+    Settings,
+    Transport,
+    is_storage_error,
+)
 
 
 def provision(
@@ -46,6 +53,13 @@ def provision(
             headers,
             None if value is None else json.dumps(value).encode(),
         )
+        # A canonical missing-bucket error is not a generic bad request or denial.
+        if (
+            method == "GET"
+            and path.startswith("/storage/v1/bucket/")
+            and is_storage_error(result, code="NoSuchBucket", status=404)
+        ):
+            return None
         if result.status not in {200, 201, 404}:
             raise ArtifactError("controlled_setup_refused")
         if result.status == 404:
