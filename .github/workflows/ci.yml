@@ -10,6 +10,14 @@ on:
         description: "Run bounded live CDN probes and retain evidence (manual only)"
         type: boolean
         default: false
+      ops_rehearsal:
+        description: Run both operation adapters on disposable fixtures
+        type: boolean
+        default: false
+      ops_failure_drill:
+        description: Deliberately fail the isolated dispatcher source stage
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -19,6 +27,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  ops-nightly-rehearsal:
+    if: github.event_name == 'workflow_dispatch' && inputs.ops_rehearsal
+    uses: ./.github/workflows/operations-rehearsal.yml
+    with:
+      operation: nightly
+  ops-dispatcher-rehearsal:
+    if: github.event_name == 'workflow_dispatch' && inputs.ops_rehearsal
+    uses: ./.github/workflows/operations-rehearsal.yml
+    with:
+      operation: dispatcher
+      fail_stage: ${{ inputs.ops_failure_drill }}
   manual-source-probe:
     if: github.event_name == 'workflow_dispatch' && inputs.source_probe
     uses: ./.github/workflows/source-probe.yml
@@ -53,6 +72,8 @@ jobs:
       - run: uv run --locked mypy src scripts/check_boundaries.py
       - run: uv run --locked python scripts/check_boundaries.py
       - run: uv run --locked pytest
+        env:
+          BASELINE_PG_TOOL_CONTAINER: ${{ job.services.postgres.id }}
       - run: uv build --no-sources
       - name: Register project kernel
         run: uv run --locked python -m ipykernel install --sys-prefix --name baseline --display-name "Baseline (Python 3.12)"

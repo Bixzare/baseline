@@ -113,6 +113,16 @@ def test_denial_stops_source_and_keeps_failed_health(migrated: Any, tmp_path: Pa
     ).fetchone() == ("invalid",)
     with pytest.raises(EvidenceError):
         collect(conn, p["store"], runner, [], "local", rehearsal=True)
+    later = ProbeRunner(
+        Archive(tmp_path / "later"),
+        FakeTransport([Response(200, (ROOT / "scoreboard.json").read_bytes(), {})]),
+        FakeClock(),
+        Policy(),
+        str(uuid4()),
+    )
+    with pytest.raises(EvidenceError, match="stopped after denial"):
+        collect(conn, p["store"], later, [route()], "local", rehearsal=True)
+    assert later.requests == 0
 
 
 def test_restricted_runtime_collects_current_roster_without_using_final_members(

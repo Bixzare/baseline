@@ -176,3 +176,5 @@ read surface is delivered by this task.
 Provider references checked October 25: [Storage access control](https://supabase.com/docs/guides/storage/security/access-control),
 [REST API](https://supabase.com/docs/reference/self-hosting-storage/introduction),
 [Storage errors](https://supabase.com/docs/guides/storage/debugging/error-codes).
+
+Modern controlled-setup keys use the `apikey` header, without treating the key as a JWT. Legacy service JWTs retain their Bearer header only for compatibility. Ordinary jobs continue to use a publishable key plus their own backend Auth JWT. Actual hosted Auth/Storage verification remains required.

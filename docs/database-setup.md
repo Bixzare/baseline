@@ -1,10 +1,12 @@
 # Database foundation and verification
 
 DB-001 supplies repository migrations and separate privileged/runtime operations.
-The owner confirmed on October 25 that the dedicated Supabase project has **not
-been created**. Local implementation is authorized. Hosted activation, identity,
-region, Free allowance, Postgres version and direct/session connectivity are all
-unverified. No production migration has been applied.
+The dedicated Free project `baseline` is now created in eu-west-1 on Postgres
+17.11. Reviewed migrations 0001 through 0008 are applied, including the owner's
+approved managed Auth and publisher corrections. Exact hashes and role boundaries
+were read back through MCP. Actual runtime login, Windows/Actions TLS, Auth/Storage
+APIs and account allowance measurements remain gates. See the current
+[hosted setup evidence](supabase-setup-status.md).
 
 ## Roles and boundaries
 

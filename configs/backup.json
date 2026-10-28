@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "policy_version": "independent-backup-v1",
+  "domain": "nba",
+  "provider": "onedrive",
+  "schemas": ["platform", "nba", "api"],
+  "enabled": false,
+  "daily_utc": "08:17",
+  "automatic_deletion": false
+}

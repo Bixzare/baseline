@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: BOOT-001 is merged. [SOURCE-001, issue #3](https://github.com/Bixzare/baseline/issues/3) adds bounded capability probes and a truthful [source report](docs/source-verification.md) for owner review. The candidate schedule request returned HTTP 403 on GitHub Actions and the cloud-development runner; required source gates remain unresolved. October 15 local probes with Baseline's identity timed out. A later owner-approved stock-client notebook test returned HTTP 200 and validated 636 player rows and 60 team rows. Local historical sample access works; production source acceptance and full coverage remain pending. The focused [local access notebook](test.ipynb) tests history independently of schedules. Interactive VS Code kernel selection remains pending. Forecasting, service provisioning, and launch readiness remain outstanding.
+Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0008 are applied. Actual runtime TLS, backend Auth/Storage, accepted recurring sources, seed acceptance, independent backup and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
 
 ## Brand
 
@@ -71,7 +71,7 @@ All twelve ADRs, the agent guide, seven skills, and sixteen launch issue specifi
 
 ## Execution order and handoff
 
-The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. All sixteen launch tasks are published as GitHub issues; see the [execution status and issue map](docs/execution-status.md). BOOT-001 is finished, SOURCE-001 is in progress, and the other fourteen tasks are backlog. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
+The owner confirmed launch-first planning on October 14, then approved finalizing its remaining issues without individual lock pauses. This changes planning order, not approved scope. Later model/MLOps/dashboard/awards issues are detailed before their implementation. All sixteen launch tasks are published as GitHub issues; see the [execution status and issue map](docs/execution-status.md). Current issue and board states are recorded in that execution status map; implementation, owner review and hosted readiness remain separate. When publishing, convert document links to actual repository URLs and map dependencies to real issue numbers without changing approved contracts.
 
 | Order | Planning ID | Required implemented dependencies / gate |
 | --- | --- | --- |
@@ -153,7 +153,7 @@ retained 32,176 player and 2,460 team rows, and quarantined 135 records. It rema
 incomplete and unaccepted. Repair support does not automatically repair or accept
 those records. Backup and production collection remain separate gates.
 
-The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains two Finished, three In progress, and eleven Backlog items, read back October 25. Required hosted gates keep the database issues open even if local implementation PRs merge first.
+The [October 25 amendment](docs/PRD-data-source-amendment.md) resumes SOURCE-001 with a pinned-file assessment and repair report. The shared assessor also runs in `test.ipynb` on synthetic fixtures. A real assessment records unknown expected-game coverage and unresolved items honestly; it never repairs raw files or accepts a source automatically. See the [source report](docs/source-verification.md#october-25-resumed-execution) for the tested CLI command and the [execution status](docs/execution-status.md) for all sixteen published issues. The linked [execution board](https://github.com/users/Bixzare/projects/1/views/2) contains three Finished, eleven In progress, and two Backlog items, read back October 27. Required hosted gates keep the database issues open even if local implementation PRs merge first.
 
 To activate the existing environment in a VS Code PowerShell terminal, from the repository root:
 
@@ -184,13 +184,13 @@ Ignore rules exclude virtual environments, secrets, data, models, artifacts, cac
 
 Repository destination confirmed October 13, 2026: a new public `baseline` repository under the owner's personal account. On October 14, the authenticated GitHub account was verified as `Bixzare`, repository name availability was checked, local Git was initialized on `main`, and the public [Bixzare/baseline repository](https://github.com/Bixzare/baseline) was created. BOOT-001 reverified the authenticated owner, public repository, and unchanged main planning seed `cf6bcda14d0432dfbb49e8f48e19fb18836f16ec`; it uses the separate `boot-001-python-ci` branch and preserves existing history.
 
-Database destination confirmed October 13, 2026: a new dedicated Supabase Free project named baseline, subject to account allowance. No project has been provisioned; connectivity, roles, actual limits, and backup/restore remain verification gates. No paid plan or add-on is approved.
+Database destination confirmed October 13, 2026: a new dedicated Supabase Free project named baseline, subject to account allowance. The dedicated Free project is now provisioned; actual runtime connectivity, configured identities, allowance measurements and backup/restore remain gates. No paid plan or add-on is approved.
 
 ### Database rehearsal
 
 DB-001 adds [database setup and gates](docs/database-setup.md), ordered migrations,
 restricted runtime provisioning and a manual hosted connection workflow. The
-Supabase project is not created yet. Local Postgres 17.11 passed migration and
+Supabase Free project is created; see the current hosted setup evidence. Local Postgres 17.11 passed migration and
 role tests plus an isolated foundation export/restore. Postgres 17 in CI is
 provisional until the project's actual version is verified.
 
@@ -235,3 +235,11 @@ Use `uv run --locked python -m scripts.rehearse_publication --outcomes` only wit
 
 Per-target errors, coverage and immutable report reproduction: [evaluation](docs/evaluation.md).
 Use `uv run --locked python -m scripts.rehearse_publication --reports` with disposable local Postgres for the complete walkthrough.
+
+Default-off nightly/dispatcher stages, rehearsal and activation controls: [cloud operations](docs/cloud-operations.md).
+
+Independent Windows health, disabled task definitions, offline behavior and actual rehearsal evidence: [local recovery](docs/local-recovery.md). Owner notification delivery, accepted sources, hosted setup and backup remain gates.
+
+Actual Supabase project, migration progress and remaining setup gates: [hosted setup evidence](docs/supabase-setup-status.md). The owner-approved managed Auth correction is applied; publisher migration and runtime/Auth/Storage checks remain gated.
+
+Independent snapshot backups, original-reference restoration and default-off OneDrive verification: [backup operations](docs/backups.md). For the next private setup step, follow [Supabase credentials](docs/private-supabase-setup.md); the local `.env` has public metadata only until you fill its private fields.

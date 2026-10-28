@@ -160,7 +160,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-16: Hosted persistence has not been provisioned or verified
 
-- **Evidence:** On October 25 the owner confirmed that the dedicated Supabase project is not created. DB-001's real Postgres 17.11 fixture tests and isolated export/restore passed locally. Hosted major version, plan/region/limits, direct/session access, actual API roles and TLS remain unverified.
+- **Evidence:** On October 27 the dedicated Free project was created in eu-west-1 and verified on Postgres 17.11. Migrations 0001 through 0005 applied after the owner approved the claims-based Auth correction. Migration 0006 rolled back on explicit publisher SET-role permissions; a correction passed a rollback-only hosted test. Actual runtime TLS, Auth/Storage roles and allowances remain unverified. See [setup evidence](docs/supabase-setup-status.md).
 - **Impact:** Local success cannot establish production database or private-artifact readiness.
 - **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, real Postgres CI and explicit hosted gates. DB-002 tests actual policies against provider relation/claim fixtures and mocks HTTP faults; this does not verify real Auth/Storage APIs. No administrative credential enters ordinary jobs. See [artifact verification](docs/artifact-storage.md).
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
@@ -197,6 +197,22 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Current mitigation:** Unknown outcomes stay unscored, original cohorts/forecasts persist, source bytes and semantic versions remain linked, and default routes refuse execution. Recheck seven days plus unresolved live IDs; use explicit IDs/ranges for older corrections.
 - **Improvement / timing:** Accept real final-source identities, precision, participation and calendar semantics, then record regular-season completeness, cost and correction evidence before trusted reconciliation.
 - **Closure evidence:** Reviewed live-source rehearsal, verified role/artifact readback and honest outcome coverage. This is a release gate.
+
+## W-21: Scheduled operations are not production reliability evidence
+
+- **Evidence:** OPS-001 cloud fixture run 40496627455 passed both jobs and failure drill 40498186657 failed the dispatcher as intended. The owner confirmed GitHub failure notification receipt. OPS-002 ran an actual disposable Windows task with exit 0 and queued notice, but the owner saw no desktop notification, so that delivery drill failed. Accepted local uploads and unattended production recovery remain unverified. See [local recovery](docs/local-recovery.md).
+- **Impact:** Merged YAML or cron timing cannot guarantee a timely forecast. GitHub can delay/drop work and an asleep local machine cannot recover it.
+- **Current mitigation:** Explicit activation/readiness gates, no false disabled heartbeat, per-stage/operation audit, stable alerts, offline logs, source denial stop, session coordination and protected ledger deadlines. Persistent Windows tasks and production remain disabled. Provider object usage and actual account limits stay visibly unverified; registered objects are only an estimate.
+- **Improvement / timing:** Observe manual/unattended runs, verify owner notification and independent Windows recovery, then backup readiness before activation.
+- **Closure evidence:** Actual intended-environment failure/recovery traces and timely committed receipts on an approved future slate. This is a release gate.
+
+## W-22: Independent backup delivery is not verified
+
+- **Evidence:** BACKUP-001 preserves a real Postgres fixture snapshot, original ledger/receipt rows and checksummed objects through isolated restoration. Its remote boundary is synthetic. OneDrive OAuth/folder mapping, native hosted export and actual remote readback are not configured.
+- **Impact:** Local complete sets and passing restore tests do not provide a verified off-device recovery point. BACKUP-001 and launch readiness remain open.
+- **Current mitigation:** Default-off CLI/task, independent readback location, real OneDrive backend check, exact file/hash inventory, conservative capacity checks, bounded operations and no automatic deletion. OPS-002 continues to report backup unverified.
+- **Improvement / timing:** Configure the selected OneDrive account/folder and supported private export route, then download and restore a real set before activation.
+- **Closure evidence:** Actual remote hash readback, isolated restore and daily execution with a represented cutoff under 24 hours. This is a release gate. See [backup operations](docs/backups.md).
 
 ## Adding a development finding
 
