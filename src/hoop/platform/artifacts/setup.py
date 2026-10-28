@@ -32,9 +32,12 @@ def provision(
     client = transport or HTTPTransport()
     headers = {
         "apikey": admin_key,
-        "Authorization": "Bearer " + admin_key,
         "Content-Type": "application/json",
     }
+
+    if not admin_key.startswith("sb_secret_"):
+        # Legacy service JWT compatibility only. Modern keys are not JWTs.
+        headers["Authorization"] = "Bearer " + admin_key
 
     def call(method: str, path: str, value: Any = None) -> Any:
         result = client.request(
