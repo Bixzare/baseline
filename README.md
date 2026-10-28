@@ -247,3 +247,7 @@ Independent snapshot backups, original-reference restoration and default-off One
 Database health checks report client TLS and Postgres backend TLS separately;
 see [connection verification](docs/database-setup.md). Session-pooler setup uses
 the downloaded CA and `sslmode=verify-full`.
+
+Manual hosted rehearsals retain sanitized reports in Actions. The database
+workflow carries the reviewed public CA; environment credentials remain separate
+from fixture CI. See [database rehearsal](docs/database-setup.md).

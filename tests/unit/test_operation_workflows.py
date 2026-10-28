@@ -28,3 +28,23 @@ def test_reusable_fixture_workflow_has_no_production_secret_path() -> None:
     assert "BASELINE_TEST_DSN:" in body
     assert '"$OPERATION"' in body
     assert '"${arguments[@]}"' in body
+
+
+def test_hosted_rehearsals_keep_privileged_secrets_out_and_retain_failures() -> None:
+    for workflow, environment in [
+        ("database-check", "database-rehearsal"),
+        ("artifact-check", "artifact-rehearsal"),
+    ]:
+        body = (ROOT / f".github/workflows/{workflow}.yml").read_text()
+        assert "workflow_dispatch:" in body
+        assert "pull_request" not in body and "schedule:" not in body
+        assert f"environment: {environment}" in body
+        assert "cancel-in-progress: false" in body
+        assert "if: always()" in body and "report.json" in body
+        for name in ["BASELINE_MIGRATION_DSN", "BASELINE_SUPABASE_ADMIN_KEY", "SERVICE_ROLE"]:
+            assert name not in body
+    database = (ROOT / ".github/workflows/database-check.yml").read_text()
+    assert "PGSSLROOTCERT:" in database
+    assert "certificates/supabase-ca-2021.crt" in database
+    certificate = (ROOT / "certificates/supabase-ca-2021.crt").read_text()
+    assert "BEGIN CERTIFICATE" in certificate and "PRIVATE KEY" not in certificate

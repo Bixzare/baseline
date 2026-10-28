@@ -2,3 +2,4 @@
 tests/fixtures/nba/eoin-history/*.csv text eol=lf
 tests/fixtures/nba/seed/*.csv text eol=lf
 *.sql text eol=lf
+certificates/*.crt text eol=lf

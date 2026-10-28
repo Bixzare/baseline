@@ -3,6 +3,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: rehearsal-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
   check:
     runs-on: ubuntu-24.04
@@ -15,7 +18,10 @@ jobs:
           version: "0.12.23"
       - run: uv python install 3.12.14
       - run: uv sync --locked
-      - run: uv run --locked python -m hoop.platform.artifacts verify
+      - name: Run restricted hosted check
+        run: |
+          mkdir -p artifacts/artifact-check
+          uv run --locked python -m hoop.platform.artifacts verify | tee artifacts/artifact-check/report.json
         env:
           BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}
           BASELINE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.BASELINE_SUPABASE_PUBLISHABLE_KEY }}
@@ -27,3 +33,11 @@ jobs:
           BASELINE_OTHER_ARTIFACT_BUCKET: ${{ vars.BASELINE_OTHER_ARTIFACT_BUCKET }}
           BASELINE_OTHER_ARTIFACT_EMAIL: ${{ secrets.BASELINE_OTHER_ARTIFACT_EMAIL }}
           BASELINE_OTHER_ARTIFACT_PASSWORD: ${{ secrets.BASELINE_OTHER_ARTIFACT_PASSWORD }}
+      - name: Retain sanitized hosted result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: artifact-check-${{ github.run_id }}
+          path: artifacts/artifact-check/report.json
+          retention-days: 14
+          if-no-files-found: error
