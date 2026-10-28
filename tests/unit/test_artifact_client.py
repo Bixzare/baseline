@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, Session
+from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, Response, Session
 from tests.fixtures.storage_client import SETTINGS, MemoryStorage, other_settings
 
 
@@ -105,3 +105,50 @@ def test_bad_descriptor_does_not_contact_storage() -> None:
     with pytest.raises(ArtifactError):
         PrivateArtifacts(Session(SETTINGS, transport)).put(b"hi", kind="../raw", format="json")
     assert not transport.calls
+
+
+@pytest.mark.parametrize("status_code", [404, "404"])
+def test_wrapped_missing_key_uploads_once_and_verifies_bytes(status_code: int | str) -> None:
+    import json
+    from urllib.parse import urlsplit
+
+    class WrappedMissing(MemoryStorage):
+        def request(self, method, url, headers, body):
+            if method == "GET" and "/storage/" in url:
+                key = urlsplit(url).path.removeprefix("/storage/v1/object/authenticated/")
+                if key not in self.objects:
+                    return Response(
+                        400, json.dumps({"code": "NoSuchKey", "statusCode": status_code}).encode()
+                    )
+            return super().request(method, url, headers, body)
+
+    transport = WrappedMissing()
+    store = PrivateArtifacts(Session(SETTINGS, transport))
+    descriptor = store.put(b"wrapped-missing-key-fixture", kind="reports", format="txt")
+    assert store.read(descriptor) == b"wrapped-missing-key-fixture"
+    assert len(transport.objects) == 1
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        b'{"code":"NoSuchKey","statusCode":403}',
+        b'{"code":"AccessDenied","statusCode":404}',
+        b'{"code":"NoSuchKey","statusCode":[]}',
+        b"[]",
+        b"bad-json",
+    ],
+)
+def test_unrecognized_missing_key_response_never_uploads(body: bytes) -> None:
+    class RefusedMissing(MemoryStorage):
+        def request(self, method, url, headers, payload):
+            if method == "GET" and "/storage/" in url:
+                return Response(400, body)
+            return super().request(method, url, headers, payload)
+
+    transport = RefusedMissing()
+    with pytest.raises(ArtifactError, match="artifact_read_failed"):
+        PrivateArtifacts(Session(SETTINGS, transport)).put(
+            b"never-upload", kind="reports", format="txt"
+        )
+    assert not transport.objects

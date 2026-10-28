@@ -31,6 +31,21 @@ class Response:
     body: bytes
 
 
+def is_storage_error(response: Response, *, code: str, status: int) -> bool:
+    """Match a canonical Storage error, including its observed HTTP 400 wrapper."""
+    if response.status not in {400, status}:
+        return False
+    try:
+        error = json.loads(response.body)
+    except ValueError:
+        return False
+    return (
+        isinstance(error, dict)
+        and error.get("code") == code
+        and error.get("statusCode") in (status, str(status))
+    )
+
+
 class Transport(Protocol):
     def request(
         self, method: str, url: str, headers: dict[str, str], body: bytes | None
@@ -239,7 +254,7 @@ class PrivateArtifacts:
         path = f"/storage/v1/object/{bucket}/{key}"
         download = f"/storage/v1/object/authenticated/{bucket}/{key}"
         response = self.session.request("GET", download)
-        if response.status == 404:
+        if response.status == 404 or is_storage_error(response, code="NoSuchKey", status=404):
             try:
                 upload = self.session.request(
                     "POST",
