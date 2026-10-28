@@ -4,8 +4,9 @@ DB-001 supplies repository migrations and separate privileged/runtime operations
 The dedicated Free project `baseline` is now created in eu-west-1 on Postgres
 17.11. Reviewed migrations 0001 through 0008 are applied, including the owner's
 approved managed Auth and publisher corrections. Exact hashes and role boundaries
-were read back through MCP. Actual runtime login, Windows/Actions TLS, Auth/Storage
-APIs and account allowance measurements remain gates. See the current
+were read back through MCP. Windows/Actions restricted TLS, Auth/Storage protection checks, initial usage
+measurements and a remotely downloaded local restore now pass. Source acceptance,
+full archive coverage and production activation remain separate gates. See the current
 [hosted setup evidence](supabase-setup-status.md).
 
 ## Roles and boundaries
@@ -81,8 +82,8 @@ hand. Session connections are required for the session lock.
 
 The existing Docker installation ran the pinned official Postgres 17 image:
 `sha256:b8faeff7712663c2773a190181e1246e37e364b887611c04658c28b44e2408fe`.
-The actual server reports 17.11. Postgres 17 is a **provisional test major**, not
-a claimed match to an uncreated hosted project. Verify and align after creation.
+The actual server reports 17.11. The hosted project also reports major 17 and version 17.11; the test major is
+now aligned. Native export and restore clients are verified at 17.11.
 No Docker, WSL or VM installation is part of this task.
 
 Set `BASELINE_TEST_DSN` privately to an isolated local admin test connection, then
@@ -136,3 +137,9 @@ Use environment deployment-branch restrictions for main and the reviewed rehears
 branch. Configure only the restricted runtime/backend values; migration and
 server-secret keys stay local. Actual Actions success must be recorded separately
 from PR CI and local checks.
+
+Actual restricted Actions check passed in run 40660564246. A real hosted export
+was independently downloaded from OneDrive and restored into a new loopback-only
+baseline_restore database with matching application hashes. Its provider tables
+were disposable scaffolding; no hosted provider was modified or reactivated.
+The default-off rehearsal commands and remaining backup gates are in backups.md.

@@ -175,3 +175,10 @@ Full launch backup still needs the reviewed complete historical inventory,
 provider recovery setup and daily execution/health evidence. Do not turn the
 prelaunch rehearsal into a backup-health success event or reset its cutoff merely
 because the same set is downloaded again.
+
+The versioned command on commit 729988d also passed: backup ID
+bc7a65c2-56b4-4cdd-a4f8-c4dae3517088, manifest SHA-256
+eca4c72459efe08ec8a632b9a5a649850a1c5fd21446372ceafc4bccebd84016,
+represented cutoff October 28 at 09:40:26 UTC, the same 27 table digests and one
+artifact, 173,969 bytes downloaded and verified, 36.359 seconds for readback plus
+restore, and its isolated target removed. The launch gate remains false.
