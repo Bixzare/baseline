@@ -251,3 +251,7 @@ the downloaded CA and `sslmode=verify-full`.
 Manual hosted rehearsals retain sanitized reports in Actions. The database
 workflow carries the reviewed public CA; environment credentials remain separate
 from fixture CI. See [database rehearsal](docs/database-setup.md).
+
+Native backup tools receive the configured public CA while setup keys remain
+excluded from subprocess environments. OneDrive remote readback and native
+Postgres client provisioning remain explicit setup gates.

@@ -124,3 +124,8 @@ Sources: [Postgres snapshot export](https://www.postgresql.org/docs/17/app-pgdum
 [Supabase backup scope](https://supabase.com/docs/guides/platform/backups),
 [rclone OneDrive](https://rclone.org/onedrive/), and
 [remote backend verification](https://rclone.org/commands/rclone_listremotes/).
+
+Native PostgreSQL subprocesses preserve the public PGSSLROOTCERT trust-anchor
+setting when the DSN does not specify sslrootcert. An explicit DSN certificate
+wins. Privileged BASELINE environment variables remain excluded from child tools,
+and database passwords are passed through environment provisioning only.
