@@ -1,16 +1,23 @@
 # Baseline execution status
 
-Updated October 28, 2026. The owner merged integration #25 and issues #26-#28
-into main at `fa8c251`. The current review batch is EVAL-001 (PR #29), OPS-001 (PR #30) and OPS-002. Review in that order; none is merged by this execution.
-Supabase MCP is connected. The dedicated Free project is created, and 0001 through 0010 are applied, including both approved managed-role corrections. Windows restricted runtime TLS and Auth sign-in/refresh now pass. Storage create/read works, but Windows policy/byte-corroborated mutation checks pass; actual Actions checks remain gated. See [hosted setup evidence](supabase-setup-status.md). Production remains disabled.
+Updated October 28, 2026. The owner merged PRs #29 through #36. Because #35/#36
+merged into parent branches after those parents reached main, integration PR #37
+brings those approved fixes forward. This acceptance batch is DB-001 (#38),
+DB-002 (#39) and BACKUP-001 (#40). All target main and should be reviewed/merged in that order. Their initial diffs
+include dependencies and shrink as predecessors merge. None is merged by this work.
+Supabase migrations through 0010 are applied with exact hashes. Restricted
+Windows and actual Actions checks pass, including owner-locked ADR 0016 Storage
+corroboration. The actual OneDrive current-state export/local restore passed;
+full historical archive coverage, daily execution, accepted sources and seed
+readiness remain gates. Production stays disabled. See hosted setup evidence.
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
 | SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4; operational source gates remain. |
 | DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Finished | Owner merged PR #19, including #20/#21, into main on October 26; seed acceptance is separate. |
-| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Dedicated Free project created on Postgres 17.11; 0001 through 0010 applied; Windows restricted runtime TLS and denied owner/DDL checks passed; actual Actions TLS remains pending. |
-| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | Approved hosted Auth correction applied; private identities/buckets and Windows sign-in/refresh/create/read verified; ADR 0016 corroborated Windows mutation checks pass; actual Actions remain gates. |
+| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Dedicated Free project created on Postgres 17.11; 0001 through 0010 applied; Windows restricted runtime TLS and denied owner/DDL checks passed; actual Actions TLS and a remotely downloaded isolated current-state restore passed; this batch awaits review. |
+| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | Approved hosted Auth correction applied; private identities/buckets and Windows sign-in/refresh/create/read verified; ADR 0016 corroborated Windows mutation checks pass; actual Actions also passed; this batch awaits review. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | In progress | Schema/role/bootstrap and concurrent-slot tests on real Postgres; hosted registration and actual publication remain gated. |
@@ -20,7 +27,7 @@ Supabase MCP is connected. The dedicated Free project is created, and 0001 throu
 | EVAL-001 | [#14](https://github.com/Bixzare/baseline/issues/14) | In progress | Per-target errors, coverage and immutable report manifests tested locally; actual live reporting remains gated. |
 | OPS-001 | [#15](https://github.com/Bixzare/baseline/issues/15) | In progress | Default-off workflows, coordinated stages and fixture operations; actual source/notification/activation gates remain. |
 | OPS-002 | [#16](https://github.com/Bixzare/baseline/issues/16) | In progress | Alert lifecycle and disposable Windows task tested; GitHub notice received, Windows desktop delivery failed; source/upload and hosted recovery remain gated. |
-| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | In progress | Shared-snapshot export, complete-set integrity and real Postgres restoration tested; OneDrive/private setup, real readback and daily execution remain gates. |
+| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | In progress | Shared-snapshot export, complete-set integrity and real Postgres restoration tested; real personal OneDrive current-state export/readback/restore passed; full archive coverage and daily execution remain gates. |
 | LAUNCH-001 | [#18](https://github.com/Bixzare/baseline/issues/18) | Backlog | All required prior tasks plus future-slate readiness. |
 
 Finished means implemented and owner-reviewed, normally demonstrated by a merged

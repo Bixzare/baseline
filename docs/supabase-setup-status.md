@@ -18,9 +18,9 @@ local Postgres fixtures and production readiness.
 | Security advisor | No findings after reviewed schema deployment through 0008; not a replacement for role/API tests. |
 | Public HTTPS checks | Auth settings HTTP 200; private platform Data API refused with HTTP 406/PGRST106. |
 | Signup setting | disable_signup=true verified October 28 at 08:12 UTC; existing backend and negative-test sign-in/refresh both passed afterward. |
-| Runtime login / TLS | Windows session pooler verified as baseline_runtime with client TLS and verify-full. Owner membership, publisher membership and direct prediction INSERT are absent. Actions and direct mode remain untested. |
+| Runtime login / TLS | Windows session pooler verified as baseline_runtime with client TLS and verify-full. Owner membership, publisher membership and direct prediction INSERT are absent. The actual Actions session-pooler check also passed; direct mode remains untested. |
 | Pooler backend | pg_stat_ssl reports false for the pooler-to-Postgres leg; this differs from verified client TLS. No claim of backend TLS is made. |
-| Auth / private Storage | Dedicated backend and unbound negative-test identities created; independent sign-in/refresh passed. Two private buckets exist. Windows create/read and all required protection checks pass using owner-locked ADR 0016 policy/byte corroboration. Actual Actions evidence remains pending. |
+| Auth / private Storage | Dedicated backend and unbound negative-test identities created; independent sign-in/refresh passed. Two private buckets exist. Windows create/read and all required protection checks pass using owner-locked ADR 0016 policy/byte corroboration. Actual Actions corroborated verification passed. |
 | Current fixture usage | 12,785,331 database bytes, two private buckets, two 59-byte objects; zero registered artifacts and zero predictions. These measurements do not establish season capacity. |
 | Account quotas / usage | Actual included allowances and provider object usage remain unverified. |
 | Production | Disabled; no seed import, fake fixture forecasts or official predictions. |
@@ -97,3 +97,26 @@ policy evidence. Strict mode still reports those responses as inconclusive.
 The GitHub rehearsal environments now have selected deployment branches and only
 restricted runtime/backend secrets. No migration DSN or admin key was uploaded.
 Actual workflow runs are separate evidence from this setup or routine PR CI.
+
+## Actual cloud checks, persistence and independent recovery
+
+Both manually dispatched restricted GitHub checks passed:
+[database](https://github.com/Bixzare/baseline/actions/runs/40660564246) and
+[Auth/Storage](https://github.com/Bixzare/baseline/actions/runs/40660568720).
+The reports contain no privileged credentials. Actual upload-before-registration
+and exact retry produced one canonical rehearsal artifact, with readback hash
+b85888cb88061da52248b2f4a798a2cdd452cfaa576a528e3cbd1440b20e3e85.
+It belongs to a platform rehearsal run, not a production/source-health run.
+
+A real native-client application export was independently downloaded from the
+matching personal OneDrive and restored locally. All 27 table digests and the
+registered artifact matched, denied runtime mutation was retained, and the new
+test database was removed. The recovered provider APIs remain unconfigured;
+this does not claim a new hosted Supabase recovery or a complete launch backup.
+
+The organization remains Free. Supabase's published allowances are 500 MB for
+the database and 1 GB for file storage. Measured current usage was 12,957,363
+database bytes, 819,200 application-table bytes, five objects totaling 2,173
+bytes, and one registered artifact. There were no predictions or production
+runs. These tiny fixtures cannot establish season growth or egress capacity.
+[Published Free allowances](https://supabase.com/pricing).

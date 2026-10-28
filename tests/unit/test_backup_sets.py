@@ -211,3 +211,64 @@ def test_provider_schema_credentials_cannot_enter_application_dump(schemas: list
     with pytest.raises(BackupError, match="application_schemas"):
         application_schemas(schemas)
     assert application_schemas(["platform", "arena", "api"]) == ("platform", "arena", "api")
+
+
+@pytest.mark.parametrize("explicit", [False, True])
+def test_native_export_preserves_ca_and_keeps_setup_credentials_out(
+    monkeypatch: Any, explicit: bool
+) -> None:
+    import subprocess
+
+    from hoop.platform.backup.database import Tools
+
+    monkeypatch.setenv("PGSSLROOTCERT", "public-environment-ca.crt")
+    monkeypatch.setenv("BASELINE_SUPABASE_ADMIN_KEY", "synthetic-never-forwarded")
+    monkeypatch.setenv("BASELINE_MIGRATION_DSN", "synthetic-never-forwarded")
+    captured = []
+
+    def fake(command: Any, **kwargs: Any) -> Any:
+        captured.append((command, kwargs["env"]))
+        return subprocess.CompletedProcess(command, 0, b"pg_dump (PostgreSQL) 17.11", b"")
+
+    monkeypatch.setattr(subprocess, "run", fake)
+    dsn = (
+        "host=fixture.invalid user=fixture dbname=fixture "
+        "sslmode=verify-full password=fixture-private"
+    )
+    if explicit:
+        dsn += " sslrootcert=explicit-ca.crt"
+    Tools().run("pg_dump", ["--version"], dsn)
+    command, environment = captured[0]
+    assert environment["PGSSLROOTCERT"] == (
+        "explicit-ca.crt" if explicit else "public-environment-ca.crt"
+    )
+    assert environment["PGSSLMODE"] == "verify-full"
+    assert environment["PGPASSWORD"] == "fixture-private"
+    assert not any(key.startswith("BASELINE_") for key in environment)
+    assert "fixture-private" not in " ".join(command)
+
+
+def test_onedrive_keeps_windows_dns_environment_but_excludes_setup_secrets(
+    monkeypatch: Any,
+) -> None:
+    import subprocess
+
+    monkeypatch.setenv("SYSTEMROOT", "C:/Windows-fixture")
+    monkeypatch.setenv("BASELINE_SUPABASE_ADMIN_KEY", "synthetic-not-forwarded")
+    monkeypatch.setenv("PGPASSWORD", "synthetic-not-forwarded")
+    captured = []
+
+    def fake(command: Any, **kwargs: Any) -> Any:
+        captured.append(kwargs["env"])
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            b"rclone v1.75.2\n" if command[1] == "version" else b"fixture: onedrive\n",
+            b"",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake)
+    client = OneDrive(Path("rclone"), "fixture:BaselineBackups", "v1.75.2")
+    assert client.env["SYSTEMROOT"] == "C:/Windows-fixture"
+    assert "BASELINE_SUPABASE_ADMIN_KEY" not in client.env and "PGPASSWORD" not in client.env
+    assert len(captured) == 2 and all(env == client.env for env in captured)

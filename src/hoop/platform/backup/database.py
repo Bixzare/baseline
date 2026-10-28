@@ -90,6 +90,11 @@ class Tools:
             if key in os.environ
         }
         env.update({value: options[key] for key, value in ENV_FIELDS.items() if key in options})
+        # The connection API also accepts a CA supplied through libpq's public
+        # trust-anchor environment variable. Preserve it for native tools, while
+        # explicit DSN settings take precedence and privileged env stays excluded.
+        if "sslrootcert" not in options and os.environ.get("PGSSLROOTCERT"):
+            env["PGSSLROOTCERT"] = os.environ["PGSSLROOTCERT"]
         env["PGCONNECT_TIMEOUT"] = "5"
         env["PGOPTIONS"] = "-c timezone=UTC -c statement_timeout=120000"
         command = [str(self.directory / name) if self.directory else name, *args]

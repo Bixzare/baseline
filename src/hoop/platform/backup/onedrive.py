@@ -20,7 +20,7 @@ class OneDrive:
         self.binary, self.remote = binary, remote.rstrip("/")
         allowed = {
             "PATH",
-            "SystemRoot",
+            "SYSTEMROOT",
             "TEMP",
             "TMP",
             "USERPROFILE",
@@ -35,7 +35,9 @@ class OneDrive:
             "HTTP_PROXY",
             "NO_PROXY",
         }
-        self.env = {k: v for k, v in os.environ.items() if k in allowed or k.startswith("RCLONE_")}
+        self.env = {
+            k: v for k, v in os.environ.items() if k.upper() in allowed or k.startswith("RCLONE_")
+        }
         try:
             version = subprocess.run(
                 [str(binary), "version"],

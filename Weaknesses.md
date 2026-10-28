@@ -160,7 +160,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-16: Hosted persistence verification remains incomplete
 
-- **Evidence:** Through October 28, reviewed migrations 0001 through 0010 are applied to the Free eu-west-1 project on Postgres 17.11. Windows runtime client TLS/verify-full, denied owner/DDL access and backend Auth sign-in/refresh pass. Actual Storage create/read and explicit write denials pass, and owner-locked ADR 0016 policy/byte evidence verifies delete/move/bucket protection on Windows. Strict status-only results remain inconclusive; actual Actions verification is pending. Public signup was disabled and verified on October 28; existing identities still authenticate and refresh. Backend pg_stat_ssl is false behind the pooler; Actions, allowances and recovery remain unverified. See [setup evidence](docs/supabase-setup-status.md).
+- **Evidence:** Through October 28, reviewed migrations 0001 through 0010 are applied to the Free eu-west-1 project on Postgres 17.11. Windows runtime client TLS/verify-full, denied owner/DDL access and backend Auth sign-in/refresh pass. Actual Storage create/read and explicit write denials pass, and owner-locked ADR 0016 policy/byte evidence verifies delete/move/bucket protection on Windows. Strict status-only results remain inconclusive; the corroborated checks also passed in actual Actions. Public signup was disabled and verified on October 28; existing identities still authenticate and refresh. Backend pg_stat_ssl is false behind the pooler; Initial Free allowances/usage and an independently downloaded local restore are verified; source acceptance, season growth and full recovery/provider setup remain gates. See [setup evidence](docs/supabase-setup-status.md).
 - **Impact:** Local success cannot establish production database or private-artifact readiness.
 - **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, real Postgres CI and explicit hosted gates. DB-002 tests actual policies against provider relation/claim fixtures and mocks HTTP faults; this does not verify real Auth/Storage APIs. No administrative credential enters ordinary jobs. See [artifact verification](docs/artifact-storage.md).
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
@@ -213,6 +213,13 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Current mitigation:** Default-off CLI/task, independent readback location, real OneDrive backend check, exact file/hash inventory, conservative capacity checks, bounded operations and no automatic deletion. OPS-002 continues to report backup unverified.
 - **Improvement / timing:** Configure the selected OneDrive account/folder and supported private export route, then download and restore a real set before activation.
 - **Closure evidence:** Actual remote hash readback, isolated restore and daily execution with a represented cutoff under 24 hours. This is a release gate. See [backup operations](docs/backups.md).
+
+On October 28 the matching personal OneDrive was authenticated read-only and a
+current-state application export was independently downloaded/restored: 27 tables
+and one registered artifact matched, runtime mutation was refused and the test
+target was removed. This closes the current-state delivery uncertainty only;
+W-22 remains open for full historical inventory and daily execution. No partial
+rehearsal was logged as a complete launch backup or production heartbeat.
 
 ## Adding a development finding
 

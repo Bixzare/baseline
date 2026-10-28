@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0010 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. ADR 0016 verifies the concealed Storage mutations on Windows; actual Actions verification, accepted recurring sources, seed acceptance, independent backup and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
+Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0010 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. ADR 0016 verifies the concealed Storage mutations on Windows and Actions. Accepted recurring sources, seed acceptance, full historical backup coverage, daily backup execution and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
 
 ## Brand
 
@@ -47,7 +47,7 @@ Approved dashboard hosting plan: GitHub Pages for initial testing, then Vercel f
 | [ADR 0010: Dashboard and prediction history](docs/decisions/0010-publish-an-independent-dashboard-with-honest-history.md) | Locked. |
 | [ADR 0011: Awards eligibility and validation](docs/decisions/0011-separate-award-standing-eligibility-and-release-evidence.md) | Locked. |
 | [ADR 0012: Restricted artifact storage identity](docs/decisions/0012-restrict-runtime-artifact-storage-access.md) | Locked; authentication and hosted permissions remain execution gates. |
-| [Coding agent guide](AGENTS.md) | Locked; 184 lines. |
+| [Coding agent guide](AGENTS.md) | Locked; 199 lines. |
 | [Project skills and provenance](skills/README.md) | Locked; seven skills installed in `.agents/skills/` and discovered in this session on October 13. |
 | [Known weaknesses and improvements](Weaknesses.md) | Locked v1.0; living register maintained through owner review. |
 | [BOOT-001: Repository and PR checks](docs/issues/BOOT-001-repository-python-and-pr-ci.md) | [Issue #1](https://github.com/Bixzare/baseline/issues/1), merged [PR #2](https://github.com/Bixzare/baseline/pull/2). Local Windows install and automated checks verified October 15; interactive kernel selection remains pending. |
@@ -251,3 +251,11 @@ the downloaded CA and `sslmode=verify-full`.
 Manual hosted rehearsals retain sanitized reports in Actions. The database
 workflow carries the reviewed public CA; environment credentials remain separate
 from fixture CI. See [database rehearsal](docs/database-setup.md).
+
+Native backup tools receive the configured public CA while setup keys remain
+excluded from subprocess environments. OneDrive remote readback and native
+Postgres client provisioning remain explicit setup gates.
+
+Controlled current-state export and independently downloaded restore are now
+reproducible with `python -m scripts.rehearse_hosted_backup`; its default is a
+no-write plan. Full launch archive coverage and daily backups remain pending.
