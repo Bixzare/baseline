@@ -1,0 +1,303 @@
+{
+  "archive_decision_status": "ADR 0017 locked by owner on October 28; platform and NBA implementation supplied in separate review PRs",
+  "archive_encoding_measurement": {
+    "no_uploads_or_database_writes": true,
+    "results": [
+      {
+        "exact_roundtrip_verified": true,
+        "file": "Games.csv",
+        "fits_16_mib": true,
+        "gzip_bytes": 1253436,
+        "gzip_sha256": "0b58704c189c34f0fee6b6ce2a95311a0609a1d8bfe2c9cd67fd15f6caf2dd04",
+        "original_bytes": 11231460,
+        "original_sha256": "a2f000a4a2f8d49022401b0c2076a2470b52c839ba6112729b286d59597e5c05",
+        "seconds": 0.546
+      },
+      {
+        "exact_roundtrip_verified": true,
+        "file": "PlayerStatistics.csv",
+        "fits_16_mib": false,
+        "gzip_bytes": 52563266,
+        "gzip_sha256": "5d60e8acad2dae7f95efdfc3a7879c86d0c33a65ae23ceda42229fbd9129f1c2",
+        "original_bytes": 390485483,
+        "original_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "seconds": 52.735
+      },
+      {
+        "exact_roundtrip_verified": true,
+        "file": "Players.csv",
+        "fits_16_mib": true,
+        "gzip_bytes": 174557,
+        "gzip_sha256": "073228dc5b2e6867d4c09a5a65cd5d2922b4822407e97e0a90514a7b88fd20b5",
+        "original_bytes": 534520,
+        "original_sha256": "a4e470e3116fa2196885de66a78fa706d0fb98d47796709c13ea6b212b159880",
+        "seconds": 0.265
+      },
+      {
+        "exact_roundtrip_verified": true,
+        "file": "TeamStatistics.csv",
+        "fits_16_mib": true,
+        "gzip_bytes": 6623828,
+        "gzip_sha256": "276eed664ea7bc812fa144e068dfe4d85866693db2ae24aa1a0ee837cadc6ac3",
+        "original_bytes": 36069621,
+        "original_sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc",
+        "seconds": 10.313
+      }
+    ],
+    "total_gzip_bytes": 60615087,
+    "total_raw_bytes": 438321084
+  },
+  "backup_archive_gate": "Passed for the current hosted application snapshot and all four encoded raw originals. Full local historical archive inventory and automated daily backup remain outside this rehearsal; launch backup gate stays false.",
+  "bounded_local_cdn_request": {
+    "capability": "historical_repair_sample",
+    "http_status": 403,
+    "outcome": "failed",
+    "raw_path": "raw/71072772efe1096301ffa75d129ed20fad89a544f4159631976ebae214b73f11.bin",
+    "raw_sha256": "71072772efe1096301ffa75d129ed20fad89a544f4159631976ebae214b73f11",
+    "reason": "access_denied_or_html_challenge",
+    "received_at": "2026-10-28T11:40:14.928116+00:00",
+    "requested_at": "2026-10-28T11:40:14.252287+00:00",
+    "validated_at": null
+  },
+  "bounded_local_stats_request": {
+    "game_id": "0022500641",
+    "http_status": 200,
+    "outcome": "captured_pending_semantic_validation",
+    "raw_path": "raw/a4899514211774aee2503e5c2b738dca414ce133f1d4f4c0ddeab5c8ed88cac3.bin",
+    "raw_sha256": "a4899514211774aee2503e5c2b738dca414ce133f1d4f4c0ddeab5c8ed88cac3",
+    "received_at": "2026-10-28T11:37:53.618416+00:00",
+    "requested_at": "2026-10-28T11:37:51.914938+00:00",
+    "source_id": "nba_api.BoxScoreTraditionalV3",
+    "validated_at": "2026-10-28T11:37:53.658960+00:00"
+  },
+  "calendar_approved_import_plan": {
+    "blockers": [
+      "seed_acceptance_missing",
+      "seed_quarantine_unresolved"
+    ],
+    "counts": {
+      "games": 849,
+      "players": 5447,
+      "short_player_histories": 76,
+      "teams": 1698
+    },
+    "plan_sha256": "ed0238dd0a4976e843b5c5edd6dcf955e7768d76e6e6c25a0a6a0775c65ff0ea",
+    "required_raw_bytes": 438321084
+  },
+  "ci": {
+    "nba_followup": {
+      "pr": 42,
+      "result": "success",
+      "run_id": 40689377748
+    },
+    "platform": {
+      "pr": 41,
+      "result": "success",
+      "run_id": 40687042419
+    }
+  },
+  "cloud_archive_gate": "Owner selected already allowed main after owner review/merge of PR #41. PR #41 is still open at this checkpoint; do not widen the secrets allowlist or run from a feature branch.",
+  "cloud_execution_choice": {
+    "approved_on": "2026-10-28",
+    "branch": "main",
+    "feature_branch_allowlist_change_approved": false,
+    "prerequisite": "owner_merge_of_pr_41"
+  },
+  "date_comparison": {
+    "approval_record": "docs/approvals/2026-10-28-seed-calendar.json",
+    "compared_game_ids": 1230,
+    "inventory_manifest_sha256": "8ad2be7b9f55eb17d64477377903a0c405e28fa7b458015eb6c163178a0ad785",
+    "mismatch_count": 0,
+    "mismatches": [],
+    "nba_inventory_raw_sha256": "8030861397de701ff20a51c4316731080e648ac751e4be80c68e2e786c9dd9cc",
+    "owner_approved_on": "2026-10-28",
+    "owner_mapping_acceptance_recorded": true,
+    "seed_manifest_sha256": "1a98b146ef110647fcd165c7928abeb8b7df42d5ca3521cb413d1033449db123",
+    "utc_start_or_dst_verified": false
+  },
+  "disposition": {
+    "DB-003": "blocked: 135 quarantined records and seed acceptance; date-only ordering approved",
+    "LEDGER-001": "blocked: actual preparation descriptor and verified registration gates",
+    "MODEL-001": "blocked: accepted seed and prospective schedule/roster evidence"
+  },
+  "first_backup_readback_diagnostic": {
+    "declared_files": 13,
+    "downloaded_files": 12,
+    "error_type": "BackupError",
+    "manifest_downloaded": true,
+    "missing": [
+      {
+        "byte_count": 1937,
+        "label": "artifact:df5d7a18-c043-492d-8b14-247f63057ec5"
+      }
+    ],
+    "missing_count": 1,
+    "operation": "read_only_backup_diagnostic",
+    "readback_candidates": 2,
+    "reason_code": "backup_file_missing_or_corrupt",
+    "size_mismatches": []
+  },
+  "hosted_readback": {
+    "active_player_bundle": null,
+    "counts": {
+      "nba.games": 0,
+      "nba.player_game_versions": 0,
+      "nba.roster_snapshots": 0,
+      "nba.team_game_versions": 0,
+      "platform.active_bundles": 0,
+      "platform.events": 0,
+      "platform.model_bundles": 0,
+      "platform.models": 0,
+      "platform.predictions": 0,
+      "platform.source_checks": 0
+    },
+    "observed_at": "2026-10-28T11:45:22.485472+00:00",
+    "operation": "read_only_hosted_readiness",
+    "role": "baseline_runtime",
+    "writes_performed": false
+  },
+  "hosted_write_scope": "Immutable raw physical objects, archive roots, and a rehearsal run only; no accepted source checks, NBA facts, rosters, models or predictions",
+  "hosted_writes_performed_in_followup": true,
+  "independent_raw_backup_restore": {
+    "archive_count": 0,
+    "automation_enabled": false,
+    "backup_id": "5805b78b-bdd9-424c-9079-0d5422c24bae",
+    "bytes_verified": 60794320,
+    "elapsed_seconds": 170.047,
+    "files_verified": 13,
+    "isolated_target_removed": true,
+    "launch_backup_gate_satisfied": false,
+    "manifest_sha256": "ba2a7e550e8b38c6199ba222a9c8d607cbbcd649b271e95e783b4f30900a5c3c",
+    "off_device_verified": true,
+    "original_rows_preserved": true,
+    "provider_apis_verified": false,
+    "raw_archive_verification": {
+      "encoded_files_verified": 4,
+      "original_bytes_verified": 438321084
+    },
+    "readback_budget_seconds": 600,
+    "remote_kind": "onedrive_rclone_readback",
+    "represented_cutoff": "2026-10-28T12:25:09.035148+00:00",
+    "required_artifacts_verified": 12,
+    "runtime_mutation_denied": true,
+    "scope": "hosted-prelaunch-application-export-only",
+    "tables_verified": 27,
+    "verification_id": "f3dac78b-3529-41c4-8792-258c290a123f"
+  },
+  "production_enabled": false,
+  "quarantine_audit": {
+    "affected_game_count": 20,
+    "limitation": "Zero statistics and normalized overlaps do not resolve participation.",
+    "manifest_sha256": "1a98b146ef110647fcd165c7928abeb8b7df42d5ca3521cb413d1033449db123",
+    "operation": "read_only_quarantine_audit",
+    "parser_version": "eoin-seed-v1",
+    "quarantine_count": 135,
+    "reason_counts": [
+      {
+        "count": 80,
+        "file": "PlayerStatistics.csv",
+        "reason": "invalid_identity"
+      },
+      {
+        "count": 3,
+        "file": "PlayerStatistics.csv",
+        "reason": "unknown_participation_or_minutes"
+      },
+      {
+        "count": 50,
+        "file": "PlayerStatistics.csv",
+        "reason": "unsupported_competition_label"
+      },
+      {
+        "count": 2,
+        "file": "TeamStatistics.csv",
+        "reason": "unsupported_competition_label"
+      }
+    ],
+    "repairs_applied": 0,
+    "rows_with_existing_normalized_subject": 0,
+    "schema_version": 1,
+    "source_accepted": false
+  },
+  "quarantine_impact_analysis": {
+    "at_least_10_later_valid_appearances": 40,
+    "fewer_than_10_later_valid_appearances": 78,
+    "interpretation": "Potential recent-window impact only. No approval to omit quarantined rows, truncate history or infer DNP.",
+    "no_later_valid_appearances": 42,
+    "quarantined_player_ids": 118
+  },
+  "quarantine_report_sha256": "a33bd918940e3039a924117d3adc69f39eb2fb18bfcf87d2d809357ed11f0af9",
+  "reported_at": "2026-10-28T11:47:02.317997+00:00",
+  "review_order": [
+    41,
+    42
+  ],
+  "schema_version": 1,
+  "scope": "DB-003, MODEL-001, LEDGER-001 follow-up; not launch acceptance",
+  "separate_read_only_archive_verification": {
+    "operation": "bounded_read_only_archive_diagnostic",
+    "roots": [
+      {
+        "artifact_id": "57a91432-9c43-487a-a0c9-f03dd6a6aa97",
+        "logical_size": 534520,
+        "original": {
+          "byte_count": 534520,
+          "sha256": "a4e470e3116fa2196885de66a78fa706d0fb98d47796709c13ea6b212b159880"
+        },
+        "root_sha256": "c444c340ce618d0e6ad25d0715f6f546554d22e8c647046de90e78889bec5142",
+        "verified": true
+      },
+      {
+        "artifact_id": "6f5b74ea-e38d-4d22-a93e-f6c2ffcf142a",
+        "logical_size": 11231460,
+        "original": {
+          "byte_count": 11231460,
+          "sha256": "a2f000a4a2f8d49022401b0c2076a2470b52c839ba6112729b286d59597e5c05"
+        },
+        "root_sha256": "7c798a49c9b3ca5e706ad08a3b98ba32542af0114021f81c58f8371631e08b08",
+        "verified": true
+      },
+      {
+        "artifact_id": "83de62f2-f6ad-43a3-96ff-c0cb02c56967",
+        "logical_size": 36069621,
+        "original": {
+          "byte_count": 36069621,
+          "sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc"
+        },
+        "root_sha256": "700dda8414015a33c5e457460f2dfcabfeb74b0751cf9b1d18b768b9c24c8d37",
+        "verified": true
+      },
+      {
+        "artifact_id": "c0751a91-83b3-476c-bf45-8d76f5dd656d",
+        "logical_size": 390485483,
+        "original": {
+          "byte_count": 390485483,
+          "sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae"
+        },
+        "root_sha256": "4613ea40ceb12210bf0473b580398fa242df21b4ea2176d1f05cbbfcf09107aa",
+        "verified": true
+      }
+    ]
+  },
+  "staged_import_plan": {
+    "blockers": [
+      "calendar_convention_unverified",
+      "seed_acceptance_missing",
+      "seed_quarantine_unresolved"
+    ],
+    "counts": {
+      "games": 849,
+      "players": 5447,
+      "short_player_histories": 76,
+      "teams": 1698
+    },
+    "plan_sha256": "07661a4f2efea9d6d008c1f8f23f015fead6b14b1d5066c527e516ad85791a85",
+    "required_raw_bytes": 438321084
+  },
+  "windows_archive_rehearsal_failure": {
+    "operation": "retain",
+    "reason_code": "raw_archive_rehearsal_failed",
+    "run_id": "431cac1d-97ff-4bba-8782-df0ef474ffaf",
+    "status": "blocked"
+  }
+}

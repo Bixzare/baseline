@@ -98,7 +98,7 @@ The revised [critical path](docs/critical-path.md#updated-execution-plan-october
 
 ### Current execution assignment
 
-BOOT-001 was owner-reviewed and merged in [PR #2](https://github.com/Bixzare/baseline/pull/2). On October 25 the owner authorized incorporating the [historical-data strategy](docs/PRD-data-source-amendment.md) and resuming sequential issue execution. SOURCE-001 is merged in PR #4. The next batch has review PRs #19 (DATA-001), #20 (DB-001), and #21 (DB-002), stacked in that order with shared dependency changes resolved. All 236 combined tests passed locally. The candidate seed remains incomplete and the dedicated Supabase project is not created. These three tasks remain In progress; eleven later tasks remain Backlog. No merge or deployment is authorized by resuming execution.
+As of October 28, reviewed infrastructure through PRs #37 to #40 is merged into `main`, and Supabase migrations through 0010 are applied. The active batch is DB-003, MODEL-001 and LEDGER-001. [PR #41](https://github.com/Bixzare/baseline/pull/41) supplies the locked reusable archive protocol; the NBA follow-up adds explicit staging, streaming import provenance and a read-only quarantine audit. Both Linux and Windows checks passed for PR #41. Actual seed import, prospective baseline preparation and model registration remain blocked by their source/readiness gates; no production forecasts or jobs are enabled.
 
 Prefer pinned Eoin version 525 basic files with quarantine, exact coverage cross-checks, and versioned targeted repairs. Retain prospective roster/outcome evidence; defer injury ingestion, historical injury reconstruction, and all-time comparisons. The [dataset comparison](docs/dataset-comparison.md) records observed gaps. ADR 0013 is a draft decision record for owner review. The original October 20 date is past; activate only for future games after readiness.
 
@@ -208,6 +208,8 @@ synthetic second domain. Real Postgres checks use isolated provider fixtures;
 mocked HTTP success does not establish hosted Supabase behavior. No project,
 identity, bucket or production forecast is activated by this implementation.
 
+The October 28 follow-up adds a [read-only quarantine audit](docs/seed-backfill.md#october-28-read-only-quarantine-audit): 135 unresolved rows across 20 games. A successful local stock-client box-score request still leaves participation ambiguous; the separate local CDN sample was denied and was not retried. The lossless archive correction follows [locked ADR 0017](docs/decisions/0017-encode-large-raw-archives-with-verified-parts.md), with cloud verification still pending and scoped OneDrive restoration verified. No seed import, real baseline preparation, model activation, or production publication occurred in this follow-up.
+
 DB-003 adds [compact history planning/import](docs/seed-import.md), eight history
 tables and cutoff-aware revision reads. `uv run --locked python -m
 hoop.domains.nba.history --help` documents the plan/apply entry point. The notebook
@@ -261,3 +263,5 @@ reproducible with `python -m scripts.rehearse_hosted_backup`; its default is a
 no-write plan. Full launch archive coverage and daily backups remain pending.
 
 The owner-locked [raw archive protocol](docs/raw-archives.md) compresses large inputs into immutable parts with exact original-byte reconstruction. Backup export and isolated restore verify logical original hashes as well as physical objects. The manual archive rehearsal is default-off and does not accept sources or enable production.
+
+The owner approved calendar-only ordering for the pinned 2025-26 seed on October 28. The [scoped approval](docs/approvals/2026-10-28-seed-calendar.json) leaves seed acceptance and 135 quarantined rows blocked. The cloud archive check will run from existing allowed `main` after the owner merges PR #41; no new secrets-access rule is approved.

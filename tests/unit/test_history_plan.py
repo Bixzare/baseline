@@ -66,3 +66,45 @@ def test_ambiguous_dates_and_other_competitions_are_explicit() -> None:
     assert len(recent_rows(rows, "player_id", blockers)) == 2
     assert blockers == ["ambiguous_source_date_order"]
     assert recent_rows([{**rows[0], "competition": "preseason"}], "player_id", []) == []
+
+
+def test_staged_encoding_does_not_infer_source_acceptance(tmp_path: Path) -> None:
+    from hoop.domains.nba.history.raw import stage_raw_archives
+
+    report, manifest, _ = fixture_seed(tmp_path / "archive")
+    staged = stage_raw_archives(report, tmp_path / "archive")
+    plan = plan_seed(report, tmp_path / "archive", manifest, raw_archives=staged)
+    assert "seed_acceptance_missing" in plan["blockers"]
+    assert "calendar_convention_unverified" in plan["blockers"]
+    assert plan["raw_archives"] == staged
+    staged["files"]["Players.csv"]["original"]["sha256"] = "0" * 64
+    with pytest.raises(ValueError):
+        plan_seed(report, tmp_path / "archive", manifest, raw_archives=staged)
+
+
+def test_calendar_only_owner_review_does_not_accept_seed(tmp_path: Path) -> None:
+    report, manifest, original = fixture_seed(tmp_path / "archive")
+    calendar_review = {**original["acceptance"], "kind": "owner_calendar_review"}
+    plan = plan_seed(
+        report, tmp_path / "archive", manifest, calendar_review, original["observations"]
+    )
+    assert plan["blockers"] == ["seed_acceptance_missing"]
+    assert not plan["hosted_ready"]
+    assert not plan["historical_pregame_cohort_verified"]
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("manifest_sha256", "0" * 64),
+        ("parser_version", "different-parser"),
+        ("kind", "unreviewed"),
+    ],
+)
+def test_calendar_approval_is_scoped_to_exact_seed_and_review_kind(
+    tmp_path: Path, field: str, value: str
+) -> None:
+    report, manifest, original = fixture_seed(tmp_path / "archive")
+    review = {**original["acceptance"], "kind": "owner_calendar_review", field: value}
+    plan = plan_seed(report, tmp_path / "archive", manifest, review, original["observations"])
+    assert plan["blockers"] == ["calendar_convention_unverified", "seed_acceptance_missing"]

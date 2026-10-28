@@ -1,0 +1,16 @@
+{
+  "approved_on": "2026-10-28",
+  "calendar_convention": "source_calendar_verified",
+  "compared_game_ids": 1230,
+  "inventory_manifest_sha256": "8ad2be7b9f55eb17d64477377903a0c405e28fa7b458015eb6c163178a0ad785",
+  "kind": "owner_calendar_review",
+  "manifest_sha256": "1a98b146ef110647fcd165c7928abeb8b7df42d5ca3521cb413d1033449db123",
+  "mismatch_count": 0,
+  "nba_inventory_raw_sha256": "8030861397de701ff20a51c4316731080e648ac751e4be80c68e2e786c9dd9cc",
+  "parser_version": "eoin-seed-v1",
+  "purpose": "calendar_ordering_only",
+  "same_date_ambiguity_policy": "block_affected_history",
+  "season": "2025-26",
+  "seed_accepted": false,
+  "utc_start_or_dst_verified": false
+}
