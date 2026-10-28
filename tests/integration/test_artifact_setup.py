@@ -68,3 +68,25 @@ def test_existing_public_bucket_is_refused_without_binding(migrated: Any) -> Non
     assert conn.execute("SELECT count(*) FROM platform.artifact_storage_bindings").fetchone() == (
         0,
     )
+
+
+def test_modern_setup_key_uses_apikey_without_invalid_bearer(migrated: Any) -> None:
+    _, conn = migrated
+
+    class ModernTransport(SetupTransport):
+        def request(
+            self, method: str, url: str, headers: dict[str, str], body: bytes | None
+        ) -> Response:
+            if "/auth/v1/token" not in url:
+                assert headers["apikey"] == "sb_secret_synthetic_fixture_only"
+                assert "Authorization" not in headers
+                headers = {**headers, "apikey": "setup-only-fixture-key"}
+            return super().request(method, url, headers, body)
+
+    report = provision(
+        conn,
+        replace(SETTINGS, user_id=str(UUID(int=0))),
+        "sb_secret_synthetic_fixture_only",
+        transport=ModernTransport(),
+    )
+    assert report["backend_user_id"] == USER
