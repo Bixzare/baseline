@@ -54,6 +54,12 @@ mode is not proof of pooler behavior: verify the actual endpoint settings.
 Only explicit loopback rehearsals may set `BASELINE_DB_LOCAL_TEST=1`; these report
 their real TLS state and do not establish hosted security.
 
+The health report's `tls` field describes the local libpq client connection.
+`postgres_backend_tls` separately records `pg_stat_ssl` for the database backend.
+With session pooling these describe different network legs. A successful
+`verify-full` connection and client TLS do not establish pooler-to-Postgres TLS.
+The hosted check rejects a plaintext client even if the backend reports TLS.
+
 ## Migration behavior
 
 Files use contiguous IDs starting at `0001`, for example `0001_foundation.sql`.

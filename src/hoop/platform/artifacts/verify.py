@@ -5,8 +5,25 @@ import re
 from typing import Any
 from uuid import uuid4
 
-from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, Session
+from hoop.platform.artifacts import (
+    ArtifactError,
+    PrivateArtifacts,
+    Response,
+    Session,
+    is_storage_error,
+)
 from hoop.platform.provenance import digest
+
+
+def _denied(response: Response, *, concealed_read: bool = False) -> bool:
+    return (
+        response.status in {401, 403}
+        or is_storage_error(response, code="AccessDenied", status=403)
+        or (
+            concealed_read
+            and (response.status == 404 or is_storage_error(response, code="NoSuchKey", status=404))
+        )
+    )
 
 
 def verify(session: Session, other: Session, unrelated_bucket: str) -> dict[str, Any]:
@@ -68,8 +85,7 @@ def verify(session: Session, other: Session, unrelated_bucket: str) -> dict[str,
         # count for mutation probes. API schema rejection can legitimately be 406.
         checks[name] = {
             "status": result.status,
-            "denied": result.status in {401, 403}
-            or (name == "private_api" and result.status == 406),
+            "denied": _denied(result) or (name == "private_api" and result.status == 406),
         }
     other_result = other.request("GET", download)
     anonymous = session.transport.request(
@@ -77,11 +93,11 @@ def verify(session: Session, other: Session, unrelated_bucket: str) -> dict[str,
     )
     checks["other_identity_read"] = {
         "status": other_result.status,
-        "denied": other_result.status in {401, 403, 404},
+        "denied": _denied(other_result, concealed_read=True),
     }
     checks["anonymous_read"] = {
         "status": anonymous.status,
-        "denied": anonymous.status in {401, 403, 404},
+        "denied": _denied(anonymous, concealed_read=True),
     }
     # Explicitly attempt create as both negative identities too.
     other_path = f"/storage/v1/object/{bucket}/models/{digest(body)[:2]}/{digest(body)}"
@@ -95,11 +111,11 @@ def verify(session: Session, other: Session, unrelated_bucket: str) -> dict[str,
     )
     checks["other_identity_create"] = {
         "status": other_write.status,
-        "denied": other_write.status in {401, 403},
+        "denied": _denied(other_write),
     }
     checks["anonymous_create"] = {
         "status": anon_write.status,
-        "denied": anon_write.status in {401, 403},
+        "denied": _denied(anon_write),
     }
     final = session.request("GET", download)
     checks["original_bytes_preserved"] = final.status == 200 and final.body == body
