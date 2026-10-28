@@ -158,9 +158,9 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 
-## W-16: Hosted persistence has not been provisioned or verified
+## W-16: Hosted persistence verification remains incomplete
 
-- **Evidence:** On October 27 the dedicated Free project was created in eu-west-1 and verified on Postgres 17.11. Migrations 0001 through 0005 applied after the owner approved the claims-based Auth correction. Migration 0006 rolled back on explicit publisher SET-role permissions; a correction passed a rollback-only hosted test. Actual runtime TLS, Auth/Storage roles and allowances remain unverified. See [setup evidence](docs/supabase-setup-status.md).
+- **Evidence:** Through October 28, reviewed migrations 0001 through 0008 are applied to the Free eu-west-1 project on Postgres 17.11. Windows runtime client TLS/verify-full, denied owner/DDL access and backend Auth sign-in/refresh pass. Actual Storage create/read and explicit write denials pass, but delete/move/bucket administration remain inconclusive. Public signup is still enabled. Backend pg_stat_ssl is false behind the pooler; Actions, allowances and recovery remain unverified. See [setup evidence](docs/supabase-setup-status.md).
 - **Impact:** Local success cannot establish production database or private-artifact readiness.
 - **Current mitigation:** Separate migration/runtime credentials, restricted application schemas, real Postgres CI and explicit hosted gates. DB-002 tests actual policies against provider relation/claim fixtures and mocks HTTP faults; this does not verify real Auth/Storage APIs. No administrative credential enters ordinary jobs. See [artifact verification](docs/artifact-storage.md).
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
@@ -176,7 +176,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 ## W-18: Production publication has not been rehearsed against hosted inputs
 
-- **Evidence:** LEDGER-002 uses real Postgres with fixture sources and mock Storage; the two-transaction protocol and guarded roles are tested. Supabase credentials and accepted live input routing remain absent.
+- **Evidence:** LEDGER-002 uses real Postgres with fixture sources and mock Storage; the two-transaction protocol and guarded roles are tested. Supabase schemas and restricted Windows identities are configured; accepted live input routing and a complete hosted publication rehearsal remain absent.
 - **Impact:** This does not prove a real complete roster fits the payload/transaction limits or that hosted roles/functions behave identically. No production forecasts exist from this rehearsal.
 - **Current mitigation:** Refuse readiness claims; keep explicit source/hosted/backup gates, bounded payloads, exact-byte hashes, immutable reservations and separate receipts.
 - **Improvement / timing:** Verify the actual project major, source generations, cohort size, latency, permission denials and operational recovery before activation.

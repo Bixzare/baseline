@@ -77,3 +77,28 @@ def test_existing_concurrent_creation_is_hash_verified_after_conflict() -> None:
         == 2
     )
     assert len(transport.objects) == 1
+
+
+@pytest.mark.parametrize("inconclusive", [None, "concealed_mutation", "empty_delete"])
+def test_wrapped_denials_preserve_strict_mutation_checks(inconclusive: str | None) -> None:
+    class WrappedDenials(RehearsalTransport):
+        def request(self, method, url, headers, body):
+            if inconclusive == "concealed_mutation" and method == "PUT":
+                return Response(400, b'{"code":"NoSuchKey","statusCode":"404"}')
+            if inconclusive == "empty_delete" and method == "DELETE":
+                return Response(200, b"[]")
+            result = super().request(method, url, headers, body)
+            if result.status == 403:
+                return Response(400, b'{"code":"AccessDenied","statusCode":"403"}')
+            return result
+
+    transport = WrappedDenials()
+    report = verify(
+        Session(SETTINGS, transport), Session(other_settings(), transport), "negative-bucket"
+    )
+    assert report["verified"] is (inconclusive is None)
+    assert report["checks"]["original_bytes_preserved"]
+    if inconclusive == "concealed_mutation":
+        assert not report["checks"]["replacement"]["denied"]
+    elif inconclusive == "empty_delete":
+        assert not report["checks"]["delete"]["denied"]

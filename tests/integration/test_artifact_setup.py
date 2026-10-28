@@ -90,3 +90,50 @@ def test_modern_setup_key_uses_apikey_without_invalid_bearer(migrated: Any) -> N
         transport=ModernTransport(),
     )
     assert report["backend_user_id"] == USER
+
+
+class WrappedMissingBucketTransport(SetupTransport):
+    missing_response = Response(
+        400, b'{"statusCode":"404","code":"NoSuchBucket","error":"Bucket not found"}'
+    )
+
+    def request(
+        self, method: str, url: str, headers: dict[str, str], body: bytes | None
+    ) -> Response:
+        if method == "GET" and "/storage/v1/bucket/" in url:
+            if url.rsplit("/", 1)[-1] not in self.buckets:
+                return self.missing_response
+        return super().request(method, url, headers, body)
+
+
+def test_hosted_wrapped_missing_bucket_is_created_and_verified(migrated: Any) -> None:
+    _, conn = migrated
+    transport = WrappedMissingBucketTransport()
+    report = provision(conn, SETTINGS, "setup-only-fixture-key", transport=transport)
+    assert report["public"] is False and len(transport.buckets) == 2
+    assert conn.execute("SELECT count(*) FROM platform.artifact_storage_bindings").fetchone() == (
+        1,
+    )
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        b'{"statusCode":"403","code":"NoSuchBucket"}',
+        b'{"statusCode":"404","code":"AccessDenied"}',
+        b'{"statusCode":"404","code":"InvalidRequest"}',
+        b'{"code":"NoSuchBucket"}',
+        b"invalid-json",
+        b"[]",
+    ],
+)
+def test_unrecognized_bucket_errors_do_not_create_or_bind(migrated: Any, body: bytes) -> None:
+    _, conn = migrated
+    transport = WrappedMissingBucketTransport()
+    transport.missing_response = Response(400, body)
+    with pytest.raises(ArtifactError, match="controlled_setup_refused"):
+        provision(conn, SETTINGS, "setup-only-fixture-key", transport=transport)
+    assert not transport.buckets
+    assert conn.execute("SELECT count(*) FROM platform.artifact_storage_bindings").fetchone() == (
+        0,
+    )

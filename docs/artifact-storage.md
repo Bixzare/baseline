@@ -1,10 +1,12 @@
 # Private artifacts and source evidence
 
 DB-002 adds evidence persistence, a private artifact client and a SOURCE-001 report
-bridge. The Supabase project is not created. All hosted Auth, Storage API, policy
-enforcement and capacity checks remain **unverified**. Local Postgres policy tests
-and mocked HTTP tests do not establish hosted readiness. DB-002 is stacked on
-DB-001 for review; neither PR authorizes hosted activation.
+bridge. The dedicated Free project now has reviewed migrations through 0008,
+restricted identities and two private buckets. Windows sign-in/refresh and
+create/read passed; three mutation checks remain inconclusive, and actual cloud
+permission checks and capacity acceptance remain unverified. See the current
+[hosted setup evidence](supabase-setup-status.md). Local fixture tests do not
+establish hosted readiness or authorize production activation.
 
 ## Data flow and guarantees
 
@@ -178,3 +180,13 @@ Provider references checked October 25: [Storage access control](https://supabas
 [Storage errors](https://supabase.com/docs/guides/storage/debugging/error-codes).
 
 Modern controlled-setup keys use the `apikey` header, without treating the key as a JWT. Legacy service JWTs retain their Bearer header only for compatibility. Ordinary jobs continue to use a publishable key plus their own backend Auth JWT. Actual hosted Auth/Storage verification remains required.
+
+## Observed hosted Storage response format
+
+The October 28 checks observed HTTP 400 wrapping canonical statusCode 404 and
+NoSuchBucket/NoSuchKey. Controlled setup and immutable upload recognize those
+exact conditions. Generic bad requests and authorization failures do not become
+missing resources. The permission rehearsal also recognizes explicit wrapped
+AccessDenied/statusCode 403. It still fails for generic concealed mutation errors
+or a successful empty delete response, even when original bytes survive. The
+current hosted rehearsal is incomplete; no permissions were broadened to pass it.
