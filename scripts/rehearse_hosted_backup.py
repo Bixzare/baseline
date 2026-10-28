@@ -92,7 +92,9 @@ def export_current(output: Path) -> dict[str, Any]:
     return result
 
 
-def restore_downloaded(output: Path) -> dict[str, Any]:
+def restore_downloaded(output: Path, *, readback_seconds: int = 180) -> dict[str, Any]:
+    if type(readback_seconds) is not int or not 1 <= readback_seconds <= 1800:
+        raise BackupError("bounded_readback_budget_required")
     reference = json.loads((output / "hosted-export.json").read_text())
     source = project()
     if reference["project"] != source:
@@ -117,7 +119,7 @@ def restore_downloaded(output: Path) -> dict[str, Any]:
             Path(os.environ["BASELINE_BACKUP_SYNC_DIR"]),
             Path(os.environ["BASELINE_BACKUP_STAGING_DIR"]),
         ],
-        max_seconds=180,
+        max_seconds=readback_seconds,
     )
     manifest = verify_set(readback, reference["backup_id"], reference["manifest_sha256"])
     with psycopg.connect(base, autocommit=True, connect_timeout=5) as admin:
@@ -163,6 +165,7 @@ def restore_downloaded(output: Path) -> dict[str, Any]:
         runtime_mutation_denied=denied,
         isolated_target_removed=True,
         elapsed_seconds=round(time.monotonic() - started, 3),
+        readback_budget_seconds=readback_seconds,
         launch_backup_gate_satisfied=False,
         archive_count=manifest["archive_count"],
     )
@@ -176,6 +179,7 @@ def main() -> int:
         "operation", choices=["plan", "export", "restore"], nargs="?", default="plan"
     )
     parser.add_argument("--output", type=Path, default=Path("artifacts/hosted-backup-rehearsal"))
+    parser.add_argument("--readback-seconds", type=int, default=180)
     args = parser.parse_args()
     try:
         result = (
@@ -183,7 +187,7 @@ def main() -> int:
             if args.operation == "plan"
             else export_current(args.output)
             if args.operation == "export"
-            else restore_downloaded(args.output)
+            else restore_downloaded(args.output, readback_seconds=args.readback_seconds)
         )
         print(json.dumps(result, sort_keys=True))
         return 0

@@ -38,3 +38,11 @@ def test_restore_project_identity_needs_no_original_source_credential(monkeypatc
     monkeypatch.setenv("BASELINE_SUPABASE_URL", "https://fixture.supabase.co")
     monkeypatch.delenv("BASELINE_MIGRATION_DSN", raising=False)
     assert project() == "fixture"
+
+
+@pytest.mark.parametrize("budget", [0, -1, 1801, True])
+def test_readback_budget_is_bounded_before_private_setup(tmp_path, budget) -> None:
+    from scripts.rehearse_hosted_backup import restore_downloaded
+
+    with pytest.raises(BackupError, match="bounded_readback_budget_required"):
+        restore_downloaded(tmp_path, readback_seconds=budget)

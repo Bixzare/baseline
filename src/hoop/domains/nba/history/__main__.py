@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from hoop.domains.nba.history.raw import stage_raw_archives
 from hoop.domains.nba.history.seed import apply_seed, plan_seed
 from hoop.platform.artifacts import ArtifactError, PrivateArtifacts, Session, Settings
 from hoop.platform.database import DatabaseError, connection
@@ -13,11 +14,12 @@ from hoop.platform.local_artifacts import LocalArtifacts
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("operation", choices=["plan", "apply"])
+    parser.add_argument("operation", choices=["plan", "stage-raw", "apply"])
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--source-manifest", type=Path, required=True)
     parser.add_argument("--downloads", type=Path)
     parser.add_argument("--acceptance", type=Path)
+    parser.add_argument("--raw-archives", type=Path)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--confirm-hosted-gates", action="store_true")
     args = parser.parse_args()
@@ -29,6 +31,23 @@ def main() -> int:
             **json.loads(store.verify(descriptor).read_text()),
             "manifest_artifact": descriptor,
         }
+        if args.operation == "stage-raw":
+            staged = stage_raw_archives(report, args.archive)
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            args.report.write_text(json.dumps(staged, sort_keys=True))
+            print(
+                json.dumps(
+                    {
+                        "operation": "stage-raw",
+                        "source_accepted": False,
+                        "encoded_bytes": sum(
+                            a["encoded_byte_count"] for a in staged["files"].values()
+                        ),
+                        "part_count": sum(len(a["parts"]) for a in staged["files"].values()),
+                    }
+                )
+            )
+            return 0
         observations = None
         if args.downloads:
             observations = {
@@ -45,6 +64,7 @@ def main() -> int:
             json.loads(args.source_manifest.read_text()),
             json.loads(args.acceptance.read_text()) if args.acceptance else None,
             observations,
+            json.loads(args.raw_archives.read_text()) if args.raw_archives else None,
         )
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(plan, sort_keys=True))

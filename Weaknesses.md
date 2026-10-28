@@ -226,3 +226,20 @@ rehearsal was logged as a complete launch backup or production heartbeat.
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.
 
 Review affected entries during each related PR and review the open list before a release. Routine evidence/status updates follow normal owner diff review; changes to product requirements still follow the ADR and lock process.
+
+### October 28 seed follow-up
+
+The verified quarantine contains 135 rows in 20 games. Zero counts, blank team
+identities, and empty participation comments cannot establish DNP or a historical
+pregame roster. One successful stock nba_api box-score response still leaves its
+target player's participation unknown. Keep the seed import blocked pending
+explicit resolution; the read-only audit in docs/seed-backfill.md identifies the
+records and does not repair them. A local historical CDN sample was denied and
+was not retried; that result does not establish current cloud access.
+
+Raw-file capacity remains a release gate. Lossless gzip measured 61 MB versus
+438 MB original input; locked ADR 0017 now implements bounded verified parts. Actual Windows
+readback verified all originals after a failed rehearsal; cloud Actions and
+independent backup checks remain separate. Daily independent backup of the complete
+historical archive remains unverified. MODEL-001 and LEDGER-001 depend on an
+accepted seed plus prospective source evidence, not their successful fixtures.

@@ -1,7 +1,6 @@
 """Plan a compact seed before any network or database writes."""
 
 import csv
-import io
 import json
 import time
 from collections import Counter, defaultdict
@@ -15,13 +14,15 @@ import psycopg
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from hoop.domains.nba.history.raw import verify_raw_archives
+from hoop.platform import raw_archives as raw_codec
 from hoop.platform.artifacts import MAX_BYTES, PrivateArtifacts, retain
 from hoop.platform.evidence import EvidenceError, register
 from hoop.platform.local_artifacts import LocalArtifacts, atomic_json, checksum
 from hoop.platform.provenance import digest, parse_time
 from hoop.platform.records import immutable_insert
 
-POLICY = "compact-seed-v1"
+POLICY = "compact-seed-v2"
 
 
 def stable_id(*parts: str) -> UUID:
@@ -54,6 +55,7 @@ def plan_seed(
     source_manifest: dict[str, Any],
     acceptance: dict[str, Any] | None = None,
     observations: dict[str, dict[str, str]] | None = None,
+    raw_archives: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     store = LocalArtifacts(archive)
     if report["season"] != "2025-26":
@@ -100,7 +102,9 @@ def plan_seed(
         blockers.append("seed_quarantine_unresolved")
     if report["coverage"]["status"] != "matched_declared_inventory":
         blockers.append("game_coverage_unverified")
-    if any(item["byte_count"] > MAX_BYTES for item in raw.values()):
+    if raw_archives is not None:
+        verify_raw_archives(raw_archives, report, raw, store)
+    if raw_archives is None and any(item["byte_count"] > MAX_BYTES for item in raw.values()):
         blockers.append("original_raw_exceeds_verified_upload_limit")
     players = pq.read_table(store.verify(report["normalized"]["players"])).to_pylist()
     teams = pq.read_table(store.verify(report["normalized"]["teams"])).to_pylist()
@@ -148,6 +152,8 @@ def plan_seed(
         "validated_at": report["validated_at"],
         "source_normalized": report["normalized"],
         "raw": raw,
+        "raw_archives": raw_archives,
+        "raw_archive_implementation_sha256": checksum(Path(raw_codec.__file__)),
         "players": chosen_players,
         "teams": supporting,
         "games": games,
@@ -181,7 +187,9 @@ def _apply_seed(
 ) -> dict[str, Any]:
     expected = dict(plan)
     sha = expected.pop("plan_sha256")
-    if plan["importer_sha256"] != checksum(Path(__file__)):
+    if plan["importer_sha256"] != checksum(Path(__file__)) or plan[
+        "raw_archive_implementation_sha256"
+    ] != checksum(Path(raw_codec.__file__)):
         raise EvidenceError("Seed plan belongs to a different importer version")
     if digest(json.dumps(expected, sort_keys=True, allow_nan=False).encode()) != sha:
         raise EvidenceError("Seed plan identity changed")
@@ -190,9 +198,16 @@ def _apply_seed(
     if environment == "production" and plan["acceptance"]["kind"] != "owner_review":
         raise EvidenceError("Synthetic acceptance cannot authorize production import")
     archive_store = LocalArtifacts(archive)
-    raw_bodies = {
-        name: archive_store.verify(item).read_bytes() for name, item in plan["raw"].items()
-    }
+    raw_paths = {name: archive_store.verify(item) for name, item in plan["raw"].items()}
+    staged = plan["raw_archives"]
+    if staged is not None:
+        # Recheck the staged identity before any database or network operation.
+        for name, item in plan["raw"].items():
+            original = raw_codec.verify_archive(
+                staged["files"][name], lambda part: archive_store.verify(part).read_bytes()
+            )
+            if original != {"sha256": item["sha256"], "byte_count": item["byte_count"]}:
+                raise EvidenceError("Staged raw differs from import plan")
     # Resolve/check all local inputs before retaining anything remotely.
     selected = {}
     for name in ["players", "teams"]:
@@ -224,10 +239,18 @@ def _apply_seed(
             "details": {"plan_sha256": sha},
         },
     )
-    raw_objects = {
-        name: retain(conn, store, body, kind="raw", format="csv", manifest={})
-        for name, body in raw_bodies.items()
-    }
+    raw_objects = {}
+    for name, path in raw_paths.items():
+        if staged is None:
+            if path.stat().st_size > MAX_BYTES:
+                raise EvidenceError("Direct raw exceeds physical object bound")
+            raw_objects[name] = retain(
+                conn, store, path.read_bytes(), kind="raw", format="csv", manifest={}
+            )
+        else:
+            raw_objects[name] = raw_codec.retain_archive(
+                conn, store, archive_store, staged["files"][name]
+            )
     objects = [
         retain(conn, store, body, kind="history", format="parquet", manifest={})
         for body in selected.values()
@@ -261,6 +284,10 @@ def _apply_seed(
         )
     )
     checks = {}
+    raw_counts = {}
+    for name, path in raw_paths.items():
+        with path.open(encoding="utf-8-sig", newline="") as incoming:
+            raw_counts[name] = sum(1 for _ in csv.DictReader(incoming))
     for name, raw_object in raw_objects.items():
         check_id = stable_id("seed-check", sha, name, environment)
         register(
@@ -277,14 +304,15 @@ def _apply_seed(
                 "source_published_at": None,
                 "raw_artifact_id": raw_object["artifact_id"],
                 "http_status": None,
-                "record_count": sum(
-                    1 for _ in csv.DictReader(io.StringIO(raw_bodies[name].decode("utf-8-sig")))
-                ),
+                "record_count": raw_counts[name],
                 "state": "accepted",
                 "validation_summary": {
                     "evidence_tier": "archived_observed",
                     "import_plan": sha,
                     "original_request_time_unknown": False,
+                    "raw_representation": raw_codec.REPRESENTATION if staged else "direct_csv",
+                    "original_raw_sha256": plan["raw"][name]["sha256"],
+                    "original_raw_byte_count": plan["raw"][name]["byte_count"],
                 },
             },
         )

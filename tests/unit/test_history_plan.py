@@ -66,3 +66,17 @@ def test_ambiguous_dates_and_other_competitions_are_explicit() -> None:
     assert len(recent_rows(rows, "player_id", blockers)) == 2
     assert blockers == ["ambiguous_source_date_order"]
     assert recent_rows([{**rows[0], "competition": "preseason"}], "player_id", []) == []
+
+
+def test_staged_encoding_does_not_infer_source_acceptance(tmp_path: Path) -> None:
+    from hoop.domains.nba.history.raw import stage_raw_archives
+
+    report, manifest, _ = fixture_seed(tmp_path / "archive")
+    staged = stage_raw_archives(report, tmp_path / "archive")
+    plan = plan_seed(report, tmp_path / "archive", manifest, raw_archives=staged)
+    assert "seed_acceptance_missing" in plan["blockers"]
+    assert "calendar_convention_unverified" in plan["blockers"]
+    assert plan["raw_archives"] == staged
+    staged["files"]["Players.csv"]["original"]["sha256"] = "0" * 64
+    with pytest.raises(ValueError):
+        plan_seed(report, tmp_path / "archive", manifest, raw_archives=staged)
