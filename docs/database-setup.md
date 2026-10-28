@@ -125,3 +125,14 @@ executed, not skipped. Hosted CI and manual hosted checks are separate evidence.
 Do not treat local fixture success as completion of these gates or DB-001's
 hosted acceptance criteria. No paid feature, broad runtime grant or unrelated
 project replacement is authorized.
+
+## Actual Actions rehearsal preparation
+
+The manual database workflow now uses the same reviewed public CA as Windows,
+keeps the restricted runtime DSN in database-rehearsal, and retains only a
+sanitized JSON result. The artifact workflow also retains its result when a
+permission check fails. Both remain manual; no production schedule is enabled.
+Use environment deployment-branch restrictions for main and the reviewed rehearsal
+branch. Configure only the restricted runtime/backend values; migration and
+server-secret keys stay local. Actual Actions success must be recorded separately
+from PR CI and local checks.

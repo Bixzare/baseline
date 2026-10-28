@@ -3,11 +3,16 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: rehearsal-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
   check:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     environment: database-rehearsal
+    env:
+      PGSSLROOTCERT: ${{ github.workspace }}/certificates/supabase-ca-2021.crt
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9
@@ -15,7 +20,18 @@ jobs:
           version: "0.12.23"
       - run: uv python install 3.12.14
       - run: uv sync --locked
-      - run: uv run --locked python -m hoop.platform.database check
+      - name: Run restricted hosted check
+        run: |
+          mkdir -p artifacts/database-check
+          uv run --locked python -m hoop.platform.database check | tee artifacts/database-check/report.json
         env:
           BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
           BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
+      - name: Retain sanitized hosted result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: database-check-${{ github.run_id }}
+          path: artifacts/database-check/report.json
+          retention-days: 14
+          if-no-files-found: error
