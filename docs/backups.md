@@ -1,8 +1,9 @@
 # Independent backup operations
 
 BACKUP-001 supplies a default-off local backup job. OneDrive is the owner-selected
-provider. No real OneDrive backup, private Auth session, remote restoration or
-daily task activation has been verified yet. Those remain release gates.
+provider. A real current-state application export was independently downloaded
+from the matching personal OneDrive and restored into an isolated local target.
+Full historical archive coverage and daily task activation remain release gates.
 
 ## Data flow and integrity
 
@@ -129,3 +130,48 @@ Native PostgreSQL subprocesses preserve the public PGSSLROOTCERT trust-anchor
 setting when the DSN does not specify sslrootcert. An explicit DSN certificate
 wins. Privileged BASELINE environment variables remain excluded from child tools,
 and database passwords are passed through environment provisioning only.
+
+## Controlled current-state rehearsal
+
+The personal OneDrive remote was matched to the Windows sync account identifier.
+Only Files.Read and offline_access were requested; readback never uploads or
+deletes remote files. The existing OneDrive client provides synchronization.
+The actual 5 GiB account reported 3,113,851,289 free bytes at setup. PostgreSQL
+17.11 client tools came from the provider's official EDB archive and rclone
+v1.75.2 matched the publisher's release digest and checksum list. Tools live only
+in the ignored project cache; no Windows database service was installed.
+
+The adapter now preserves Windows SYSTEMROOT, required for DNS, while excluding
+PGPASSWORD and privileged BASELINE variables. The native database tools preserve
+the public CA separately. These boundaries have regression tests.
+
+The versioned rehearsal script defaults to a plan with no network or writes:
+
+```powershell
+uv run --locked python -m scripts.rehearse_hosted_backup
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup export
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup restore
+```
+
+Export is controlled and explicitly limited to current application records and
+registered artifacts. Restore first downloads and verifies the actual remote
+set. BASELINE_RESTORE_ADMIN_DSN must name a loopback baseline_test database;
+the helper creates a new randomly named baseline_restore database, applies
+provider scaffolding only there, verifies rows/artifacts and denied runtime
+mutation, then removes that exact temporary database. No production restore or
+provider API reactivation occurs. Original source credentials are unnecessary
+for the restore operation. Private paths and credentials stay in .env.
+
+The initial actual remote drill restored 27 tables and one registered 1,937-byte
+rehearsal artifact. It downloaded 173,969 logical bytes, preserved every original
+row digest and URI, and removed its isolated target in 60.266 seconds. Backup ID
+b5559324-d59f-4449-a590-f5c5625d0325 had manifest SHA-256
+cb50669ecc824fa03c4679fb49dc2af7526e4835ca9d5a3a3bf82c5abae39f0b.
+Its represented cutoff was October 28 at 09:16:56 UTC. It had no historical
+archive and no forecasts. off_device_verified=true applies to this set only;
+launch_backup_gate_satisfied=false and automation_enabled=false remain explicit.
+
+Full launch backup still needs the reviewed complete historical inventory,
+provider recovery setup and daily execution/health evidence. Do not turn the
+prelaunch rehearsal into a backup-health success event or reset its cutoff merely
+because the same set is downloaded again.
