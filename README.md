@@ -259,3 +259,5 @@ Postgres client provisioning remain explicit setup gates.
 Controlled current-state export and independently downloaded restore are now
 reproducible with `python -m scripts.rehearse_hosted_backup`; its default is a
 no-write plan. Full launch archive coverage and daily backups remain pending.
+
+The owner-locked [raw archive protocol](docs/raw-archives.md) compresses large inputs into immutable parts with exact original-byte reconstruction. Backup export and isolated restore verify logical original hashes as well as physical objects. The manual archive rehearsal is default-off and does not accept sources or enable production.

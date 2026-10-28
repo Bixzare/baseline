@@ -1,6 +1,12 @@
 name: Manual private artifact permissions
 on:
   workflow_dispatch:
+    inputs:
+      archive_root_ids:
+        description: Optional comma-separated registered archive UUIDs for read-only reconstruction
+        type: string
+        required: false
+        default: ""
 permissions:
   contents: read
 concurrency:
@@ -37,11 +43,24 @@ jobs:
           BASELINE_OTHER_ARTIFACT_BUCKET: ${{ vars.BASELINE_OTHER_ARTIFACT_BUCKET }}
           BASELINE_OTHER_ARTIFACT_EMAIL: ${{ secrets.BASELINE_OTHER_ARTIFACT_EMAIL }}
           BASELINE_OTHER_ARTIFACT_PASSWORD: ${{ secrets.BASELINE_OTHER_ARTIFACT_PASSWORD }}
+      - name: Verify registered encoded archives without laptop inputs
+        if: inputs.archive_root_ids != ''
+        run: uv run --locked python -m scripts.rehearse_raw_archives check --confirm-rehearsal --report artifacts/artifact-check/raw-archives.json
+        env:
+          BASELINE_RAW_ARCHIVE_ROOT_IDS: ${{ inputs.archive_root_ids }}
+          BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
+          BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
+          BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}
+          BASELINE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.BASELINE_SUPABASE_PUBLISHABLE_KEY }}
+          BASELINE_ARTIFACT_USER_ID: ${{ vars.BASELINE_ARTIFACT_USER_ID }}
+          BASELINE_ARTIFACT_BUCKET: ${{ vars.BASELINE_ARTIFACT_BUCKET }}
+          BASELINE_ARTIFACT_EMAIL: ${{ secrets.BASELINE_ARTIFACT_EMAIL }}
+          BASELINE_ARTIFACT_PASSWORD: ${{ secrets.BASELINE_ARTIFACT_PASSWORD }}
       - name: Retain sanitized hosted result
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: artifact-check-${{ github.run_id }}
-          path: artifacts/artifact-check/report.json
+          path: artifacts/artifact-check/*.json
           retention-days: 14
           if-no-files-found: error

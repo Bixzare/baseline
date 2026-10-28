@@ -20,6 +20,7 @@ from psycopg.rows import dict_row
 from hoop.platform.backup import BackupError, contained, exclusive, verify_set
 from hoop.platform.database import inspect, migrations
 from hoop.platform.local_artifacts import LocalArtifacts
+from hoop.platform.raw_archives import REPRESENTATION, verify_raw
 
 
 def application_schemas(names: list[str]) -> tuple[str, ...]:
@@ -297,6 +298,37 @@ def export(
         conn.execute("SELECT pg_advisory_unlock(617420260017)")
 
 
+def verify_raw_inputs(manifest: dict[str, Any], root: Path) -> dict[str, int]:
+    """Verify logical originals from downloaded backup bytes, without source APIs."""
+    inventory_by_id = {str(a["artifact_id"]): a for a in manifest["artifact_inventory"]}
+    files = {item["label"]: item for item in manifest["files"]}
+    local = LocalArtifacts(root)
+
+    def read(part: dict[str, Any]) -> bytes:
+        identity = str(part["artifact_id"])
+        canonical = inventory_by_id[identity]
+        if any(
+            part.get(key) != canonical.get(key)
+            for key in ["sha256", "kind", "format", "schema_version", "byte_count", "storage_uri"]
+        ):
+            raise BackupError("raw_archive_part_not_in_snapshot")
+        item = files["artifact:" + identity]
+        if item["sha256"] != canonical["sha256"] or item["byte_count"] != canonical["byte_count"]:
+            raise BackupError("raw_archive_backup_identity_mismatch")
+        return local.verify(item).read_bytes()
+
+    count, size = 0, 0
+    try:
+        for artifact in manifest["artifact_inventory"]:
+            if artifact["manifest"].get("representation") == REPRESENTATION:
+                original = verify_raw(artifact, read)
+                count += 1
+                size += original["byte_count"]
+    except (ValueError, KeyError, OSError, TypeError):
+        raise BackupError("raw_archive_reconstruction_failed") from None
+    return {"encoded_files_verified": count, "original_bytes_verified": size}
+
+
 def retain_inputs(
     manifest: dict[str, Any],
     stage: Path,
@@ -323,6 +355,7 @@ def retain_inputs(
             {"label": "artifact:" + str(artifact["artifact_id"]), **descriptor}
         )
         temporary.unlink()
+    manifest["raw_archive_verification"] = verify_raw_inputs(manifest, stage)
     for item in archive_files:
         if time.monotonic() >= deadline:
             raise BackupError("archive_backup_budget_exhausted")
@@ -356,6 +389,7 @@ def restore(
     manifest = verify_set(root, backup_id, expected_hash)
     if manifest["source_project"] != expected_project:
         raise BackupError("restore_source_project_mismatch")
+    raw_verification = verify_raw_inputs(manifest, root)
     schemas = application_schemas(manifest["schemas"])
     options = {k: str(v) for k, v in conninfo_to_dict(dsn).items() if v is not None}
     if options.get("host") not in {"localhost", "127.0.0.1", "::1", "postgres"} or not options.get(
@@ -403,6 +437,7 @@ def restore(
         "represented_cutoff": manifest["represented_cutoff"],
         "tables_verified": len(manifest["snapshot_inventory"]),
         "original_rows_preserved": True,
+        "raw_archive_verification": raw_verification,
         "automation_enabled": False,
         "provider_apis_verified": False,
     }
