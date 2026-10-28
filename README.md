@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0008 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. Three Storage mutation checks, actual Actions verification, accepted recurring sources, seed acceptance, independent backup and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
+Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0010 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. ADR 0016 verifies the concealed Storage mutations on Windows; actual Actions verification, accepted recurring sources, seed acceptance, independent backup and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
 
 ## Brand
 

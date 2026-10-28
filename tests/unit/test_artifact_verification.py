@@ -102,3 +102,92 @@ def test_wrapped_denials_preserve_strict_mutation_checks(inconclusive: str | Non
         assert not report["checks"]["replacement"]["denied"]
     elif inconclusive == "empty_delete":
         assert not report["checks"]["delete"]["denied"]
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        None,
+        "generic_move",
+        "destination_created",
+        "changed_bytes",
+        "policy_changed",
+        "invalid_claim",
+        "delete_nonempty",
+    ],
+)
+def test_policy_evidence_requires_corroborated_unchanged_resources(failure: str | None) -> None:
+    import base64
+
+    class HostedShapes(RehearsalTransport):
+        def request(self, method, url, headers, body):
+            path = urlsplit(url).path
+            if path == "/auth/v1/token":
+                response = super().request(method, url, headers, body)
+                payload = json.loads(response.body)
+                email = json.loads(body or b"{}").get("email", SETTINGS.email)
+                claims = {
+                    "role": "service_role" if failure == "invalid_claim" else "authenticated",
+                    "sub": payload["user"]["id"],
+                }
+                token = (
+                    "fixture."
+                    + base64.urlsafe_b64encode(json.dumps(claims).encode()).decode().rstrip("=")
+                    + ".signature"
+                )
+                self.tokens[token] = email
+                payload["access_token"] = token
+                return Response(200, json.dumps(payload).encode())
+            token = headers.get("Authorization", "").removeprefix("Bearer ")
+            backend = self.tokens.get(token) == SETTINGS.email
+            if backend and method == "DELETE":
+                if failure == "changed_bytes":
+                    self.objects.clear()
+                return Response(200, b'["unexpected"]' if failure == "delete_nonempty" else b"[]")
+            if backend and path.endswith("/move"):
+                data = json.loads(body)
+                if failure == "destination_created":
+                    self.objects[data["bucketId"] + "/" + data["destinationKey"]] = b"unexpected"
+                return (
+                    Response(404, b"{}")
+                    if failure == "generic_move"
+                    else Response(400, b'{"code":"NoSuchKey","statusCode":"404"}')
+                )
+            if backend and method == "PUT" and "/bucket/" in path:
+                return Response(400, b'{"code":"NoSuchBucket","statusCode":"404"}')
+            return super().request(method, url, headers, body)
+
+    calls = []
+
+    def policies():
+        calls.append(True)
+        return {
+            "verified": True,
+            "fingerprint": "changed" if failure == "policy_changed" and len(calls) > 1 else "same",
+        }
+
+    transport = HostedShapes()
+    if failure == "invalid_claim":
+        from hoop.platform.artifacts import ArtifactError
+
+        with pytest.raises(ArtifactError, match="api_role_claim"):
+            verify(
+                Session(SETTINGS, transport),
+                Session(other_settings(), transport),
+                "negative-bucket",
+                policies=policies,
+            )
+        assert not transport.objects
+        return
+    report = verify(
+        Session(SETTINGS, transport),
+        Session(other_settings(), transport),
+        "negative-bucket",
+        policies=policies,
+    )
+    assert report["verified"] is (failure is None)
+    if failure is None:
+        assert report["checks"]["delete"]["prevention_verified"]
+        assert not report["checks"]["delete"]["denied"]
+        assert report["checks"]["move"]["prevention_verified"]
+        assert report["checks"]["bucket_admin"]["prevention_verified"]

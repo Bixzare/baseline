@@ -3,8 +3,9 @@
 DB-002 adds evidence persistence, a private artifact client and a SOURCE-001 report
 bridge. The dedicated Free project now has reviewed migrations through 0008,
 restricted identities and two private buckets. Windows sign-in/refresh and
-create/read passed; three mutation checks remain inconclusive, and actual cloud
-permission checks and capacity acceptance remain unverified. See the current
+create/read passed. The owner-locked ADR 0016 corroborated mutation checks also
+pass on Windows; actual cloud permission checks and capacity acceptance remain
+unverified. See the current
 [hosted setup evidence](supabase-setup-status.md). Local fixture tests do not
 establish hosted readiness or authorize production activation.
 
@@ -190,3 +191,22 @@ missing resources. The permission rehearsal also recognizes explicit wrapped
 AccessDenied/statusCode 403. It still fails for generic concealed mutation errors
 or a successful empty delete response, even when original bytes survive. The
 current hosted rehearsal is incomplete; no permissions were broadened to pass it.
+
+## Corroborated mutation rehearsal (ADR 0016)
+
+The owner locked [ADR 0016](decisions/0016-corroborate-concealed-storage-mutations.md).
+Use `uv run --locked --env-file .env python -m hoop.platform.artifacts verify
+--policy-evidence` for the additional mode. It needs the existing restricted
+BASELINE_RUNTIME_DSN, with the same verified CA, to read the policy catalog.
+No privileged key enters verification. Each read-only transaction ends before
+an Auth/Storage request. The callback checks policy state before and after and
+requires a matching fingerprint, both RLS flags, a nonprivileged/nonowner API
+role, only the reviewed SELECT/INSERT object policies, and no bucket policies.
+
+Every mutation checks the known fixture bytes immediately before and after.
+Move also checks that the unique destination remains absent. Canonical concealed
+errors or an empty delete result can count as prevention only with that combined
+evidence. Reports preserve denied=false for those responses and separately set
+prevention_verified=true. Generic 404s, bad JSON, broader policies, bypass roles,
+changed evidence, new destinations or changed bytes fail. Strict mode without the
+flag retains its earlier behavior. No grants or provider policies change.
