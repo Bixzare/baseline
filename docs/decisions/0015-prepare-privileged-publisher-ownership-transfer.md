@@ -1,6 +1,6 @@
 # ADR 0015: Prepare privileged publisher ownership transfer
 
-Status: DRAFT for owner review, October 27, 2026.
+Status: LOCKED by the owner after review of PR #33.
 
 ## Evidence
 
@@ -9,7 +9,7 @@ Supabase grants the migrator ADMIN without SET or INHERIT on a newly created
 custom role. A local superuser hid this difference. PostgreSQL requires SET
 permission to transfer function ownership to that role.
 
-## Proposed correction
+## Decision
 
 Before the first hosted application of 0006, explicitly grant the privileged
 migration identity SET on baseline_publisher, with INHERIT false. After ownership
@@ -45,3 +45,5 @@ for the fixture backend to disappear before checking lock release. The
 production lock remains nonblocking and unchanged.
 
 Source: [PostgreSQL 17 GRANT](https://www.postgresql.org/docs/17/sql-grant.html).
+
+The owner approved this correction and it was applied successfully, followed by 0007 and 0008. Hashes and the protected role/function boundaries were read back from Supabase. No stored checksum was rewritten and no production forecast was inserted.
