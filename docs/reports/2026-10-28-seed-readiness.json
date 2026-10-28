@@ -47,7 +47,7 @@
     "total_gzip_bytes": 60615087,
     "total_raw_bytes": 438321084
   },
-  "backup_archive_gate": "Hosted export created; first readback lacked final 1937-byte setup report after downloading raw objects. A fresh 600-second remote readback/isolated restore is running; no off-device success claimed yet.",
+  "backup_archive_gate": "Passed for the current hosted application snapshot and all four encoded raw originals. Full local historical archive inventory and automated daily backup remain outside this rehearsal; launch backup gate stays false.",
   "bounded_local_cdn_request": {
     "capability": "historical_repair_sample",
     "http_status": 403,
@@ -69,6 +69,18 @@
     "requested_at": "2026-10-28T11:37:51.914938+00:00",
     "source_id": "nba_api.BoxScoreTraditionalV3",
     "validated_at": "2026-10-28T11:37:53.658960+00:00"
+  },
+  "ci": {
+    "nba_followup": {
+      "pr": 42,
+      "result": "success",
+      "run_id": 40689377748
+    },
+    "platform": {
+      "pr": 41,
+      "result": "success",
+      "run_id": 40687042419
+    }
   },
   "cloud_archive_gate": "Pending: exact feature branch is not allowed in rehearsal environment; automatic approval review rejected widening secrets access without explicit owner approval",
   "date_comparison": {
@@ -124,6 +136,32 @@
   },
   "hosted_write_scope": "Immutable raw physical objects, archive roots, and a rehearsal run only; no accepted source checks, NBA facts, rosters, models or predictions",
   "hosted_writes_performed_in_followup": true,
+  "independent_raw_backup_restore": {
+    "archive_count": 0,
+    "automation_enabled": false,
+    "backup_id": "5805b78b-bdd9-424c-9079-0d5422c24bae",
+    "bytes_verified": 60794320,
+    "elapsed_seconds": 170.047,
+    "files_verified": 13,
+    "isolated_target_removed": true,
+    "launch_backup_gate_satisfied": false,
+    "manifest_sha256": "ba2a7e550e8b38c6199ba222a9c8d607cbbcd649b271e95e783b4f30900a5c3c",
+    "off_device_verified": true,
+    "original_rows_preserved": true,
+    "provider_apis_verified": false,
+    "raw_archive_verification": {
+      "encoded_files_verified": 4,
+      "original_bytes_verified": 438321084
+    },
+    "readback_budget_seconds": 600,
+    "remote_kind": "onedrive_rclone_readback",
+    "represented_cutoff": "2026-10-28T12:25:09.035148+00:00",
+    "required_artifacts_verified": 12,
+    "runtime_mutation_denied": true,
+    "scope": "hosted-prelaunch-application-export-only",
+    "tables_verified": 27,
+    "verification_id": "f3dac78b-3529-41c4-8792-258c290a123f"
+  },
   "production_enabled": false,
   "quarantine_audit": {
     "affected_game_count": 20,
@@ -168,6 +206,10 @@
   },
   "quarantine_report_sha256": "a33bd918940e3039a924117d3adc69f39eb2fb18bfcf87d2d809357ed11f0af9",
   "reported_at": "2026-10-28T11:47:02.317997+00:00",
+  "review_order": [
+    41,
+    42
+  ],
   "schema_version": 1,
   "scope": "DB-003, MODEL-001, LEDGER-001 follow-up; not launch acceptance",
   "separate_read_only_archive_verification": {

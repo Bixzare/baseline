@@ -82,6 +82,11 @@ The actual staged plan retains its other three blockers. Owner review of the
 calendar evidence and eventual seed acceptance are still missing. The 135
 quarantined rows remain unresolved. No source timestamp or UTC start is invented.
 
+The current hosted application plus four raw archive roots were independently
+downloaded from OneDrive and restored into a disposable local database. All
+438,321,084 logical raw bytes verified. This is scoped recovery evidence, not
+acceptance of the source or a complete daily/local-history backup.
+
 ## Controlled apply and recovery
 
 The same command supports `apply`, adding `--acceptance PATH` and

@@ -239,7 +239,9 @@ was not retried; that result does not establish current cloud access.
 
 Raw-file capacity remains a release gate. Lossless gzip measured 61 MB versus
 438 MB original input; locked ADR 0017 now implements bounded verified parts. Actual Windows
-readback verified all originals after a failed rehearsal; cloud Actions and
-independent backup checks remain separate. Daily independent backup of the complete
+readback verified all originals after a failed rehearsal. Independent OneDrive
+readback and isolated restoration now verify all four raw originals. Cloud
+Actions verification remains pending owner choice; the environment allowlist
+was not widened after automatic approval review rejected that action. Daily independent backup of the complete
 historical archive remains unverified. MODEL-001 and LEDGER-001 depend on an
 accepted seed plus prospective source evidence, not their successful fixtures.

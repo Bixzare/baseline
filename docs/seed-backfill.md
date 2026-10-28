@@ -192,3 +192,14 @@ Forty have at least ten later valid appearances, 78 have fewer than ten, and 42
 have none. These are potential window impacts, not permission to discard records,
 truncate histories, or infer participation. Resolving or explicitly bounding that
 uncertainty requires a reviewed source/seed decision before production import.
+
+
+The independent OneDrive readback and isolated restore subsequently passed for
+backup `5805b78b-bdd9-424c-9079-0d5422c24bae`: 13 files, 60,794,320 physical
+bytes, 12 registered artifacts, 27 tables, and all four original raw files
+(438,321,084 logical bytes). Reconstruction used remotely downloaded bytes,
+not the provider or laptop archive. Runtime mutation was denied and the temporary
+database was removed. The measured restore took 170 seconds with an explicit
+600-second budget after the incomplete first readback. This verifies the current
+hosted application/raw snapshot; local normalized manifests/inventory and daily
+automation are not covered, so the complete launch backup gate remains false.

@@ -208,7 +208,7 @@ synthetic second domain. Real Postgres checks use isolated provider fixtures;
 mocked HTTP success does not establish hosted Supabase behavior. No project,
 identity, bucket or production forecast is activated by this implementation.
 
-The October 28 follow-up adds a [read-only quarantine audit](docs/seed-backfill.md#october-28-read-only-quarantine-audit): 135 unresolved rows across 20 games. A successful local stock-client box-score request still leaves participation ambiguous; the separate local CDN sample was denied and was not retried. The lossless archive correction follows [locked ADR 0017](docs/decisions/0017-encode-large-raw-archives-with-verified-parts.md), with actual cloud and backup gates still separate. No seed import, real baseline preparation, model activation, or production publication occurred in this follow-up.
+The October 28 follow-up adds a [read-only quarantine audit](docs/seed-backfill.md#october-28-read-only-quarantine-audit): 135 unresolved rows across 20 games. A successful local stock-client box-score request still leaves participation ambiguous; the separate local CDN sample was denied and was not retried. The lossless archive correction follows [locked ADR 0017](docs/decisions/0017-encode-large-raw-archives-with-verified-parts.md), with cloud verification still pending and scoped OneDrive restoration verified. No seed import, real baseline preparation, model activation, or production publication occurred in this follow-up.
 
 DB-003 adds [compact history planning/import](docs/seed-import.md), eight history
 tables and cutoff-aware revision reads. `uv run --locked python -m
