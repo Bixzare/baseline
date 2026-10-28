@@ -9,7 +9,7 @@ local Postgres fixtures and production readiness.
 | Project | `baseline`, `lkwfzdfaqempnwffocmm`, eu-west-1; ACTIVE_HEALTHY. |
 | Creation cost | Provider quoted $0 monthly, matching the owner's Free-only choice. |
 | Database | Actual SQL and project metadata report Postgres 17.11. |
-| Application schema | Migrations 0001 through 0008 committed with repository byte hashes. |
+| Application schema | Migrations 0001 through 0010 committed with repository byte hashes. |
 | Migration 0003 | Initial attempt rolled back; owner-approved claims correction applied successfully. |
 | Approved correction | [ADR 0014](decisions/0014-read-request-claims-without-managed-auth-grants.md), locked by the owner; both local tests and hosted dry run passed before deployment. |
 | Migration 0006 | Initial attempt rolled back; owner-approved SET-role correction applied successfully. ADR 0015 is locked. |
@@ -20,7 +20,7 @@ local Postgres fixtures and production readiness.
 | Signup setting | disable_signup=true verified October 28 at 08:12 UTC; existing backend and negative-test sign-in/refresh both passed afterward. |
 | Runtime login / TLS | Windows session pooler verified as baseline_runtime with client TLS and verify-full. Owner membership, publisher membership and direct prediction INSERT are absent. Actions and direct mode remain untested. |
 | Pooler backend | pg_stat_ssl reports false for the pooler-to-Postgres leg; this differs from verified client TLS. No claim of backend TLS is made. |
-| Auth / private Storage | Dedicated backend and unbound negative-test identities created; independent sign-in/refresh passed. Two private buckets exist. Actual create/read and explicit write denials passed; delete, move and bucket administration remain inconclusive under the required verification contract. |
+| Auth / private Storage | Dedicated backend and unbound negative-test identities created; independent sign-in/refresh passed. Two private buckets exist. Windows create/read and all required protection checks pass using owner-locked ADR 0016 policy/byte corroboration. Actual Actions evidence remains pending. |
 | Current fixture usage | 12,785,331 database bytes, two private buckets, two 59-byte objects; zero registered artifacts and zero predictions. These measurements do not establish season capacity. |
 | Account quotas / usage | Actual included allowances and provider object usage remain unverified. |
 | Production | Disabled; no seed import, fake fixture forecasts or official predictions. |
@@ -80,3 +80,20 @@ is disabled. Supabase documents that protection as Pro-only. No paid feature was
 enabled; dedicated setup identities use independently generated random passwords.
 See [password security](https://supabase.com/docs/guides/auth/password-security).
 The warning remains visible in the setup record. Public signup is now verified disabled.
+
+## Approved continuation on October 28
+
+The owner approved the remaining PRs and explicitly authorized hosted deployment
+of 0009/0010 and the integration push. The repository migration runner applied
+both and verified hashes through 0010. The changes add evaluation/alert records;
+no production job, forecast, source route or seed import was activated.
+
+The owner locked ADR 0016. Windows optional policy-evidence verification passed
+with fingerprint 8941f99b8edbc234523e170b7aa3cc785c9958aefa317db2322bde4a96d1fdb7.
+The three concealed operations report denied=false and prevention_verified=true,
+with unchanged fixture bytes, absent move destination and matching before/after
+policy evidence. Strict mode still reports those responses as inconclusive.
+
+The GitHub rehearsal environments now have selected deployment branches and only
+restricted runtime/backend secrets. No migration DSN or admin key was uploaded.
+Actual workflow runs are separate evidence from this setup or routine PR CI.

@@ -14,6 +14,11 @@ from hoop.platform.database import DatabaseError, connection
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("operation", choices=["setup", "verify"])
+    parser.add_argument(
+        "--policy-evidence",
+        action="store_true",
+        help="Corroborate concealed mutations with the restricted SQL policy catalog",
+    )
     args = parser.parse_args()
     try:
         if args.operation == "setup":
@@ -46,8 +51,18 @@ def main() -> int:
                 password=os.environ["BASELINE_OTHER_ARTIFACT_PASSWORD"],
                 user_id=os.environ["BASELINE_OTHER_ARTIFACT_USER_ID"],
             )
+
+            def read_policies() -> dict[str, object]:
+                from hoop.platform.artifacts.policies import policy_evidence
+
+                with connection("BASELINE_RUNTIME_DSN") as conn:
+                    return policy_evidence(conn)
+
             result = verify(
-                Session(settings), Session(other), os.environ["BASELINE_OTHER_ARTIFACT_BUCKET"]
+                Session(settings),
+                Session(other),
+                os.environ["BASELINE_OTHER_ARTIFACT_BUCKET"],
+                policies=read_policies if args.policy_evidence else None,
             )
         print(json.dumps(result, sort_keys=True))
         return 0 if result.get("verified", args.operation == "setup") else 1
