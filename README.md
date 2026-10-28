@@ -243,3 +243,7 @@ Independent Windows health, disabled task definitions, offline behavior and actu
 Actual Supabase project, migration progress and remaining setup gates: [hosted setup evidence](docs/supabase-setup-status.md). The owner-approved managed Auth correction is applied; publisher migration and runtime/Auth/Storage checks remain gated.
 
 Independent snapshot backups, original-reference restoration and default-off OneDrive verification: [backup operations](docs/backups.md). For the next private setup step, follow [Supabase credentials](docs/private-supabase-setup.md); the local `.env` has public metadata only until you fill its private fields.
+
+Database health checks report client TLS and Postgres backend TLS separately;
+see [connection verification](docs/database-setup.md). Session-pooler setup uses
+the downloaded CA and `sslmode=verify-full`.

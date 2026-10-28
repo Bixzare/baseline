@@ -61,7 +61,14 @@ def health(conn: psycopg.Connection[Any]) -> dict[str, Any]:
         "coalesce((SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()),false)"
     ).fetchone()
     assert row is not None
-    return dict(zip(("role", "server_version", "tls"), row, strict=True))
+    # Behind a pooler, pg_stat_ssl describes the pooler-to-Postgres leg.
+    # libpq reports the transport actually negotiated by this client.
+    return {
+        "role": row[0],
+        "server_version": row[1],
+        "tls": conn.pgconn.ssl_in_use,
+        "postgres_backend_tls": row[2],
+    }
 
 
 @dataclass(frozen=True)
