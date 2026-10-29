@@ -1,0 +1,198 @@
+{
+  "calendar_evidence": {
+    "candidate_manifest_sha256": "29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e",
+    "game_count": 1230,
+    "mismatch_count": 0,
+    "nba_inventory_raw_sha256": "8030861397de701ff20a51c4316731080e648ac751e4be80c68e2e786c9dd9cc",
+    "owner_acceptance_granted": false,
+    "utc_start_or_dst_verified": false
+  },
+  "candidate": {
+    "available_at": "2026-10-29T18:24:38.870809+00:00",
+    "confirmed_appearances": [
+      {
+        "base_row_sha256": "9ab0518ee1d5b2c8a0574ce60a5d750a4f8b5ddda7251533a322560c997f276c",
+        "evidence_sha256": "35df2220682a7dad54a1890bec54fe55b0d79429eac2abd57e78fd5b8c2c7c45",
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500641",
+        "operation": "confirm_appearance",
+        "overlay_sha256": "a1255d4b1df08852c2fcd99ba07aee37f7921faa9868c98a3093392cb0f345ee",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "Positive matching NBA game-log entry; reported zero minutes retained",
+        "source_row": 21267
+      },
+      {
+        "base_row_sha256": "70fddebba9f065efbb9862cc5c2beb7a665f13b33f21b56cd11578feffcfc6e1",
+        "evidence_sha256": "889322043ba2a38266cf3461f41a1744e32b5097199f08100d9734a10591cfe6",
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500568",
+        "operation": "confirm_appearance",
+        "overlay_sha256": "45e933d16079f35daa6a69135da0036ae090dc72e608aef1850215d067e0b135",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "Positive matching NBA game-log entry; reported zero minutes retained",
+        "source_row": 23309
+      },
+      {
+        "base_row_sha256": "08ce9a835ad14fa5dca1be4e9eb1fa9b3dc4b7b0634e7697324b2052cfbbdb57",
+        "evidence_sha256": "1cc4cd0bc09a711cffae8dc26af9a11696956996a7ac4fef519f289ee6f8ef59",
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500564",
+        "operation": "confirm_appearance",
+        "overlay_sha256": "03337ed0fec19fe08e0be015614bb1bdeabc3906a55fe72356c5cfa107b2b74a",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "Positive matching NBA game-log entry; reported zero minutes retained",
+        "source_row": 23328
+      }
+    ],
+    "manifest_artifact": {
+      "byte_count": 168455,
+      "format": "json",
+      "kind": "seed_manifest",
+      "path": "objects/29/29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e",
+      "schema_version": 1,
+      "sha256": "29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e"
+    },
+    "parser_version": "eoin-seed-v2",
+    "participation": {
+      "did_not_play": 5657,
+      "played": 26651
+    },
+    "quarantine": [
+      {
+        "adjudication_evidence_sha256": "db2682e491a0b3ed72bade0c0fd8061d7154620e6c7ee451e05465a0049c1e9f",
+        "base_row_sha256": "aeea3f070b44410a31df3c05b0ff5e77de86ec8df8c11b843bb09ab62846af59",
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500826",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "invalid_identity",
+        "source_row": 16304,
+        "subject_id": "1641712"
+      }
+    ],
+    "repairs_applied": 135,
+    "reviewed_exclusions": [
+      {
+        "base_row_sha256": "ba6d9b6822f07841a4ed788628ea2429c9aa3a390381257b7d53c47648ccf63d",
+        "evidence_sha256": "e110990971245ba0d0db79fabf66f95734f54e84c967114a169e9ec415537b13",
+        "file": "TeamStatistics.csv",
+        "game_id": "0022500652",
+        "operation": "exclude_invalid_extra_team",
+        "overlay_sha256": "844b6563c816c9314af5d9c1ae8a0723695b53a21778bd5592b45552da4b17e0",
+        "raw_sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc",
+        "reason": "Invalid zero-ID extra; authoritative final teams and scores corroborate two valid sides",
+        "source_row": 1494
+      },
+      {
+        "base_row_sha256": "2a645a143fc72ebd526af4d8c07814640d8da70ef060e267f8a433a2b5ae7a7d",
+        "evidence_sha256": "94f18544da7751191edcdb50191a1b4621caca9ea8d93794a8507694a1221a13",
+        "file": "TeamStatistics.csv",
+        "game_id": "0022500651",
+        "operation": "exclude_invalid_extra_team",
+        "overlay_sha256": "0c9b1216121d8f877f6b889d18deb4f13622438027f76cd73fffb9752ac5dc43",
+        "raw_sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc",
+        "reason": "Invalid zero-ID extra; authoritative final teams and scores corroborate two valid sides",
+        "source_row": 1495
+      }
+    ],
+    "row_counts": {
+      "players": 32308,
+      "teams": 2460
+    },
+    "seed_status": "incomplete",
+    "source_accepted": false,
+    "unit_id": "82b23a728c27d8bcaf72e5744af4e1b9170e324a3f736912c5578a08cecf4ed6",
+    "unresolved_adjudications": [
+      {
+        "base_row_sha256": "aeea3f070b44410a31df3c05b0ff5e77de86ec8df8c11b843bb09ab62846af59",
+        "evidence_sha256": "db2682e491a0b3ed72bade0c0fd8061d7154620e6c7ee451e05465a0049c1e9f",
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500826",
+        "operation": "retain_unresolved",
+        "overlay_sha256": "cd0b12d27a674d63010d2375ec64ea392c27bfc59f6d3bf018275c7c012e33ba",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "Participation remains unknown; retain source proof and require an independently reviewed compact window",
+        "source_row": 16304
+      }
+    ]
+  },
+  "compact_plan": {
+    "blockers": [
+      "calendar_convention_unverified",
+      "seed_acceptance_missing",
+      "seed_quarantine_unresolved"
+    ],
+    "counts": {
+      "games": 848,
+      "players": 5447,
+      "short_player_histories": 76,
+      "teams": 1696
+    },
+    "plan_sha256": "ce1da9bf3c202905cd5950f1fcf5e1c43e30821fcbe7ae5411b31152ef0f35b6",
+    "policy": "compact-seed-v3",
+    "quarantine_review": {
+      "all_outside_required_window": true,
+      "evaluations": [
+        {
+          "adjudication_evidence_sha256": "db2682e491a0b3ed72bade0c0fd8061d7154620e6c7ee451e05465a0049c1e9f",
+          "base_row_sha256": "aeea3f070b44410a31df3c05b0ff5e77de86ec8df8c11b843bb09ab62846af59",
+          "eligible": true,
+          "file": "PlayerStatistics.csv",
+          "game_id": "0022500826",
+          "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+          "reviewed": false,
+          "selected_appearance_count": 10,
+          "source_row": 16304,
+          "subject_id": "1641712",
+          "unknown_game_date": "2026-02-22"
+        }
+      ],
+      "historical_participation_resolved": false,
+      "review_accepted": false
+    },
+    "required_raw_bytes": 438321084
+  },
+  "hosted_fact_import_performed": false,
+  "lineage": {
+    "candidate_and_repair_objects": 156,
+    "cloud_independent_check": "pending_owner_permission_and_main_merge",
+    "elapsed_seconds": 125.55,
+    "independent_windows_readback_verified": true,
+    "repair_inputs": 155,
+    "root_artifact_id": "f7a31c6e-d3c0-4d68-a47f-814c8727c43c",
+    "stage_attempt_1": "incomplete_terminal_audit",
+    "stage_attempt_2": "failed_durably_recorded",
+    "stage_failure_2_cause": "unresolved; not inferred from a passing separate readback",
+    "verified_object_bytes": 541764
+  },
+  "production_activated": false,
+  "raw_cloud_reconstruction": {
+    "actions_run": "https://github.com/Bixzare/baseline/actions/runs/40920359705",
+    "encoded_bytes": 60615087,
+    "logical_bytes": 438321084,
+    "parts": 7,
+    "verified": true
+  },
+  "remaining_gates": [
+    "Owner review of PRs",
+    "Exact compact candidate/calendar acceptance",
+    "Cloud repair-lineage verification",
+    "Explicit hosted import authorization",
+    "Complete independent backup",
+    "Accepted prospective schedule/status/roster sources"
+  ],
+  "repairs": {
+    "confirmed_inactive": 129,
+    "invalid_extra_team_exclusions": 2,
+    "positive_zero_minute_appearances": 3,
+    "retained_unknowns": 1
+  },
+  "reported_on": "2026-10-29",
+  "scope": "Candidate evidence and compact planning only; not seed acceptance",
+  "seed_accepted": false,
+  "verification": {
+    "focused_audit_and_import_tests": "11 passed after final diagnostic change",
+    "fresh_kernel": "passed identity/import assertions; Windows libzmq emitted shutdown diagnostic",
+    "full_suite": "583 passed; before additional failure-phase diagnostics",
+    "lint_types_boundaries_build": "passed"
+  }
+}

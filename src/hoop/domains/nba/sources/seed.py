@@ -17,11 +17,12 @@ from uuid import uuid4
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from hoop.domains.nba.sources.adjudication import OPERATIONS, verify_operation
 from hoop.domains.nba.sources.bulk_history import FILES, TARGETS, assess_snapshot, identity, numeric
 from hoop.platform.local_artifacts import LocalArtifacts, atomic_json, checksum
 from hoop.platform.provenance import digest, parse_time
 
-PARSER_VERSION = "eoin-seed-v1"
+PARSER_VERSION = "eoin-seed-v2"
 
 
 def row_hash(row: dict[str, str]) -> str:
@@ -45,8 +46,12 @@ def build_seed(
     store = LocalArtifacts(destination)
     patches: dict[tuple[str, int], dict[str, Any]] = {}
     repair_inputs = []
+    evidence_paths = {}
+    overlay_hashes = {}
     for path in repair_paths:
         patch = json.loads(path.read_text(encoding="utf-8"))
+        if patch.get("operation", "field_update") not in OPERATIONS:
+            raise ValueError("Unsupported repair operation")
         if not patch.get("source_id"):
             raise ValueError("Repair source identity is required")
         if patch["target_file"] not in FILES or patch["target_file"] == "Players.csv":
@@ -67,12 +72,15 @@ def build_seed(
         descriptor = store.put(path, kind="repair_overlay", format="json")
         repair_inputs.extend([evidence, descriptor])
         patches[key] = patch
+        evidence_paths[key] = store.verify(evidence)
+        overlay_hashes[key] = descriptor["sha256"]
     cache_identity = {
         "source_id": manifest["source_id"],
         "dataset_version": manifest["dataset_version"],
         "files": manifest["files"],
         "parser": PARSER_VERSION,
         "code_hash": checksum(Path(__file__)),
+        "adjudication_code_hash": checksum(Path(__file__).with_name("adjudication.py")),
         "season": season,
         "inventory": inventory,
         "repairs": [item["sha256"] for item in repair_inputs],
@@ -109,6 +117,11 @@ def build_seed(
         normalized_teams: list[dict[str, Any]] = []
         games: dict[str, dict[str, Any]] = {}
         applied_patches: set[tuple[str, int]] = set()
+        original_hashes: dict[tuple[str, int], str] = {}
+        appearance_rows: set[tuple[str, int]] = set()
+        confirmed_appearances = []
+        reviewed_exclusions = []
+        unresolved_adjudications = []
 
         def problem(name: str, line: int, row: dict[str, str], reason: str) -> None:
             quarantine.append(
@@ -119,6 +132,10 @@ def build_seed(
                     "subject_id": row.get("personId", row.get("teamId")),
                     "reason": reason,
                     "raw_sha256": source_artifacts[name]["sha256"],
+                    "base_row_sha256": original_hashes.get((name, line)),
+                    "adjudication_evidence_sha256": patches.get((name, line), {}).get(
+                        "evidence_sha256"
+                    ),
                 }
             )
 
@@ -134,26 +151,57 @@ def build_seed(
                         continue
                     key = (name, line)
                     if key in patches:
+                        original_hashes[key] = row_hash(row)
                         patch = patches[key]
-                        if patch["base_row_sha256"] != row_hash(row):
+                        if patch["base_row_sha256"] != original_hashes[key]:
                             raise ValueError("Repair parent row has changed")
-                        changes = patch["changes"]
-                        if (
-                            not changes
-                            or not set(changes).issubset(row)
-                            or any(not isinstance(value, str) for value in changes.values())
-                        ):
-                            raise ValueError(
-                                "Repair changes must preserve the input column contract"
+                        try:
+                            operation = verify_operation(
+                                patch, evidence_paths[key], row, games, season
                             )
-                        row = {**row, **changes}
+                        except (KeyError, TypeError, AttributeError):
+                            raise ValueError("Malformed typed adjudication evidence") from None
+                        changes = patch["changes"]
+                        if operation == "field_update":
+                            if (
+                                not changes
+                                or not set(changes).issubset(row)
+                                or any(not isinstance(value, str) for value in changes.values())
+                            ):
+                                raise ValueError(
+                                    "Repair changes must preserve the input column contract"
+                                )
+                            row = {**row, **changes}
+                        else:
+                            record = {
+                                "operation": operation,
+                                "file": name,
+                                "source_row": line,
+                                "game_id": identity(row["gameId"], game=True),
+                                "raw_sha256": source_artifacts[name]["sha256"],
+                                "base_row_sha256": original_hashes[key],
+                                "overlay_sha256": overlay_hashes[key],
+                                "evidence_sha256": patch["evidence_sha256"],
+                                "reason": patch["reason"],
+                            }
+                            if operation == "confirm_appearance":
+                                appearance_rows.add(key)
+                                confirmed_appearances.append(record)
+                            elif operation == "exclude_invalid_extra_team":
+                                reviewed_exclusions.append(record)
+                            else:
+                                unresolved_adjudications.append(record)
                         applied_patches.add(key)
+                        if operation == "exclude_invalid_extra_team":
+                            continue
                     try:
                         gid = identity(row["gameId"], game=True)
                     except ValueError:
                         problem(name, line, row, "invalid_game_id")
                         continue
                     if gid.startswith(prefix):
+                        if key not in original_hashes:
+                            original_hashes[key] = row_hash(row)
                         rows.append((line, {**row, "gameId": gid}))
             return rows
 
@@ -225,6 +273,12 @@ def build_seed(
                 )
             except ValueError as error:
                 problem("TeamStatistics.csv", line, row, str(error))
+        for exclusion in reviewed_exclusions:
+            gid = exclusion["game_id"]
+            if any(
+                (gid, side) not in team_keys for side in [games[gid]["home"], games[gid]["away"]]
+            ):
+                raise ValueError("Reviewed exclusion requires both valid normalized team sides")
         player_ids = set()
         with store.verify(source_artifacts["Players.csv"]).open(
             encoding="utf-8-sig", newline=""
@@ -255,6 +309,8 @@ def build_seed(
                     if any(values.values()) or (minutes is not None and minutes > 0):
                         raise ValueError("conflicting_nonparticipation")
                     participation = "did_not_play"
+                elif ("PlayerStatistics.csv", line) in appearance_rows:
+                    participation = "played"
                 elif minutes is None or (minutes == 0 and not any(values.values())):
                     raise ValueError("unknown_participation_or_minutes")
                 else:
@@ -271,7 +327,9 @@ def build_seed(
                         if "." in minutes_text
                         else "reported_whole_or_unknown",
                         "participation": participation,
-                        "participation_evidence": comment or None,
+                        "participation_evidence": "observed_game_log_entry"
+                        if ("PlayerStatistics.csv", line) in appearance_rows
+                        else comment or None,
                         "rate_eligible": participation == "played"
                         and minutes is not None
                         and minutes > 0,
@@ -361,6 +419,9 @@ def build_seed(
             "quarantine": quarantine,
             "base_repair_items": base_assessment["repair_items"],
             "repairs_applied": len(patches),
+            "confirmed_appearances": confirmed_appearances,
+            "reviewed_exclusions": reviewed_exclusions,
+            "unresolved_adjudications": unresolved_adjudications,
             "artifacts": artifacts,
             "normalized": normalized,
             "source_accepted": False,

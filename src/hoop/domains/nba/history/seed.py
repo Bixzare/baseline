@@ -14,6 +14,9 @@ import psycopg
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from hoop.domains.nba.history import lineage
+from hoop.domains.nba.history import quarantine as quarantine_policy
+from hoop.domains.nba.history.lineage import retain_repairs
 from hoop.domains.nba.history.raw import verify_raw_archives
 from hoop.platform import raw_archives as raw_codec
 from hoop.platform.artifacts import MAX_BYTES, PrivateArtifacts, retain
@@ -22,7 +25,7 @@ from hoop.platform.local_artifacts import LocalArtifacts, atomic_json, checksum
 from hoop.platform.provenance import digest, parse_time
 from hoop.platform.records import immutable_insert
 
-POLICY = "compact-seed-v2"
+POLICY = "compact-seed-v3"
 
 
 def stable_id(*parts: str) -> UUID:
@@ -103,8 +106,6 @@ def plan_seed(
         or approved.get("calendar_convention") != "source_calendar_verified"
     ):
         blockers.append("calendar_convention_unverified")
-    if report["quarantine"]:
-        blockers.append("seed_quarantine_unresolved")
     if report["coverage"]["status"] != "matched_declared_inventory":
         blockers.append("game_coverage_unverified")
     if raw_archives is not None:
@@ -117,6 +118,9 @@ def plan_seed(
     chosen_players = recent_rows(
         [row for row in players if row["participation"] == "played"], "player_id", blockers
     )
+    quarantine_review = quarantine_policy.compact_review(report, chosen_players, teams, approved)
+    if report["quarantine"] and not quarantine_review["review_accepted"]:
+        blockers.append("seed_quarantine_unresolved")
     chosen_teams = recent_rows(teams, "team_id", blockers)
     game_ids = {row["game_id"] for row in chosen_players + chosen_teams}
     supporting = [row for row in teams if row["game_id"] in game_ids]
@@ -156,6 +160,16 @@ def plan_seed(
         "observations": observations,
         "validated_at": report["validated_at"],
         "source_normalized": report["normalized"],
+        "quarantine_review": quarantine_review,
+        "quarantine_policy_sha256": checksum(Path(quarantine_policy.__file__)),
+        "repair_lineage_implementation_sha256": checksum(Path(lineage.__file__)),
+        "repair_inputs": list(
+            {
+                a["sha256"]: a
+                for a in report["artifacts"]
+                if a["kind"] in {"repair_evidence", "repair_overlay"}
+            }.values()
+        ),
         "raw": raw,
         "raw_archives": raw_archives,
         "raw_archive_implementation_sha256": checksum(Path(raw_codec.__file__)),
@@ -202,7 +216,47 @@ def _apply_seed(
         raise EvidenceError("Seed import blocked by unresolved plan gates")
     if environment == "production" and plan["acceptance"]["kind"] != "owner_review":
         raise EvidenceError("Synthetic acceptance cannot authorize production import")
+    if plan["quarantine_policy_sha256"] != checksum(Path(quarantine_policy.__file__)):
+        raise EvidenceError("Seed plan belongs to another quarantine policy")
+    if plan["repair_lineage_implementation_sha256"] != checksum(Path(lineage.__file__)):
+        raise EvidenceError("Seed plan belongs to another repair-lineage implementation")
     archive_store = LocalArtifacts(archive)
+    manifest = plan["seed_manifest"]
+    seed_report = {
+        **json.loads(archive_store.verify(manifest).read_text()),
+        "manifest_artifact": manifest,
+    }
+    all_players = pq.read_table(
+        archive_store.verify(plan["source_normalized"]["players"])
+    ).to_pylist()
+    all_teams = pq.read_table(archive_store.verify(plan["source_normalized"]["teams"])).to_pylist()
+    selection_blockers: list[str] = []
+    actual_selected = recent_rows(
+        [p for p in all_players if p["participation"] == "played"], "player_id", selection_blockers
+    )
+    review = quarantine_policy.compact_review(
+        seed_report, actual_selected, all_teams, plan["acceptance"]
+    )
+    if (
+        selection_blockers
+        or actual_selected != plan["players"]
+        or review != plan["quarantine_review"]
+        or seed_report["quarantine"]
+        and not review["review_accepted"]
+    ):
+        raise EvidenceError("Compact quarantine window no longer matches reviewed plan")
+    expected_repairs = list(
+        {
+            a["sha256"]: a
+            for a in seed_report["artifacts"]
+            if a["kind"] in {"repair_evidence", "repair_overlay"}
+        }.values()
+    )
+    if plan["repair_inputs"] != expected_repairs:
+        raise EvidenceError("Repair lineage differs from immutable seed manifest")
+    repair_paths = {a["sha256"]: archive_store.verify(a) for a in plan["repair_inputs"]}
+    if any(path.stat().st_size > MAX_BYTES for path in repair_paths.values()):
+        raise EvidenceError("Repair input exceeds physical object bound")
     raw_paths = {name: archive_store.verify(item) for name, item in plan["raw"].items()}
     staged = plan["raw_archives"]
     if staged is not None:
@@ -256,6 +310,7 @@ def _apply_seed(
             raw_objects[name] = raw_codec.retain_archive(
                 conn, store, archive_store, staged["files"][name]
             )
+    repair_objects = retain_repairs(conn, store, archive_store, plan["repair_inputs"])
     objects = [
         retain(conn, store, body, kind="history", format="parquet", manifest={})
         for body in selected.values()
@@ -272,6 +327,8 @@ def _apply_seed(
         "policy": POLICY,
         "plan_sha256": sha,
         "raw": raw_objects,
+        "repair_lineage": repair_objects,
+        "quarantine_review": plan["quarantine_review"],
         "selected": objects,
         "seed_manifest": seed_manifest,
         "source_manifest": plan["source_manifest"],
@@ -315,6 +372,10 @@ def _apply_seed(
                     "evidence_tier": "archived_observed",
                     "import_plan": sha,
                     "original_request_time_unknown": False,
+                    "scope": "compact_seed_only",
+                    "repair_artifact_ids": [r["artifact_id"] for r in repair_objects],
+                    "unresolved_historical_rows": len(seed_report["quarantine"]),
+                    "reviewed_exclusions": len(seed_report.get("reviewed_exclusions", [])),
                     "raw_representation": raw_codec.REPRESENTATION if staged else "direct_csv",
                     "original_raw_sha256": plan["raw"][name]["sha256"],
                     "original_raw_byte_count": plan["raw"][name]["byte_count"],
