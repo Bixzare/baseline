@@ -210,3 +210,13 @@ evidence. Reports preserve denied=false for those responses and separately set
 prevention_verified=true. Generic 404s, bad JSON, broader policies, bypass roles,
 changed evidence, new destinations or changed bytes fail. Strict mode without the
 flag retains its earlier behavior. No grants or provider policies change.
+
+## October 29 acceptance
+
+DB-002 is closed after owner-reviewed merges and actual Windows/main Actions
+verification. [Run 40920359705](https://github.com/Bixzare/baseline/actions/runs/40920359705)
+passed restricted Auth/Storage policy-and-byte checks and reconstructed all four
+original raw files without laptop inputs (438,321,084 bytes). Concealed mutation
+responses still report denied=false/prevention_verified=true under ADR 0016.
+No allowlist, privilege, source acceptance or production setting changed.
+See [the measured report](reports/2026-10-29-hosted-acceptance.json).

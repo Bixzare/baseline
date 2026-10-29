@@ -1,23 +1,21 @@
 # Baseline execution status
 
-Updated October 28, 2026. The owner merged PRs #29 through #36. Because #35/#36
-merged into parent branches after those parents reached main, integration PR #37
-brings those approved fixes forward. This acceptance batch is DB-001 (#38),
-DB-002 (#39) and BACKUP-001 (#40). All target main and should be reviewed/merged in that order. Their initial diffs
-include dependencies and shrink as predecessors merge. None is merged by this work.
-Supabase migrations through 0010 are applied with exact hashes. Restricted
-Windows and actual Actions checks pass, including owner-locked ADR 0016 Storage
-corroboration. The actual OneDrive current-state export/local restore passed;
-full historical archive coverage, daily execution, accepted sources and seed
-readiness remain gates. Production stays disabled. See hosted setup evidence.
+Updated October 29, 2026. The owner merged PRs #37 through #42 into main.
+The main-branch restricted database check (40921820389) and private Storage/raw
+archive check (40920359705) passed. DB-001 and DB-002 now meet their reviewed
+acceptance criteria and are closed/Finished. Actual cloud reconstruction verified
+all 438,321,084 original raw bytes without laptop files. No secrets allowlist
+changed. Seed quarantine/acceptance, prospective sources, complete daily backups,
+notifications and launch supervision remain separate gates. Production is disabled.
+See [the measured acceptance report](reports/2026-10-29-hosted-acceptance.json).
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |
 | BOOT-001 | [#1](https://github.com/Bixzare/baseline/issues/1) | Finished | Owner-reviewed PR #2 merged; issue closed. |
 | SOURCE-001 | [#3](https://github.com/Bixzare/baseline/issues/3) | Finished | Owner merged PR #4; operational source gates remain. |
 | DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Finished | Owner merged PR #19, including #20/#21, into main on October 26; seed acceptance is separate. |
-| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | In progress | Dedicated Free project created on Postgres 17.11; 0001 through 0010 applied; Windows restricted runtime TLS and denied owner/DDL checks passed; actual Actions TLS and a remotely downloaded isolated current-state restore passed; this batch awaits review. |
-| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | In progress | Approved hosted Auth correction applied; private identities/buckets and Windows sign-in/refresh/create/read verified; ADR 0016 corroborated Windows mutation checks pass; actual Actions also passed; this batch awaits review. |
+| DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | Finished | Owner-reviewed fixes merged; migrations through 0010, Windows/Actions restricted TLS/roles and independent current-state restore verified; issue closed. |
+| DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | Finished | Owner-reviewed Auth/Storage fixes merged; Windows and main Actions permissions/byte checks and full raw reconstruction pass; issue closed. |
 | DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | In progress | Schema/role/bootstrap and concurrent-slot tests on real Postgres; hosted registration and actual publication remain gated. |
@@ -32,16 +30,15 @@ readiness remain gates. Production stays disabled. See hosted setup evidence.
 
 Finished means implemented and owner-reviewed, normally demonstrated by a merged
 PR and closed issue. Passing local checks alone does not move a task to Finished.
-DB-001 and DB-002 remain open until their required hosted acceptance checks pass,
-even if the local implementation PRs are merged first.
+DB-001 and DB-002 closed only after their actual hosted acceptance checks passed.
 Blocked prerequisites stay visible in the issue while its current column remains
 Backlog or In progress. Preserve the board's actual column names when mapping.
 
 The private [Baseline execution board](https://github.com/users/Bixzare/projects/1/views/2)
 is linked to Bixzare/baseline. It was created after confirming there was no
 existing open, closed, or repository-linked project. All sixteen issue memberships
-and Status values are three Finished, twelve In progress and one Backlog, read
-back October 27. Finished still requires owner review; hosted gates
+and Status values are five Finished, ten In progress and one Backlog, verified
+on October 29. Finished still requires owner review; hosted gates
 cannot be waived by moving a board card.
 The board view groups columns by Status. The repository connector supplied issue
 operations; the owner's authorized GitHub CLI/Projects API supplied board operations.

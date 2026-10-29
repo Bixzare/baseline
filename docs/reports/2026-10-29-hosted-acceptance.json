@@ -1,0 +1,148 @@
+{
+  "accepted_issues": [
+    6,
+    7
+  ],
+  "database_check": {
+    "ref": "main",
+    "result": {
+      "postgres_backend_tls": false,
+      "role": "baseline_runtime",
+      "server_version": "17.11",
+      "tls": true
+    },
+    "run_id": 40921820389
+  },
+  "independent_restore_reference": {
+    "backup_id": "5805b78b-bdd9-424c-9079-0d5422c24bae",
+    "launch_backup_gate_satisfied": false,
+    "manifest_sha256": "ba2a7e550e8b38c6199ba222a9c8d607cbbcd649b271e95e783b4f30900a5c3c",
+    "original_raw_bytes_verified": 438321084,
+    "tables_verified": 27
+  },
+  "production_enabled": false,
+  "project": {
+    "id": "lkwfzdfaqempnwffocmm",
+    "postgres_version": "17.11.0.003",
+    "region": "eu-west-1",
+    "status": "ACTIVE_HEALTHY"
+  },
+  "raw_archive_check": {
+    "archive_root_ids": [
+      "57a91432-9c43-487a-a0c9-f03dd6a6aa97",
+      "6f5b74ea-e38d-4d22-a93e-f6c2ffcf142a",
+      "83de62f2-f6ad-43a3-96ff-c0cb02c56967",
+      "c0751a91-83b3-476c-bf45-8d76f5dd656d"
+    ],
+    "environment": "rehearsal",
+    "hosted_writes_performed": false,
+    "logical_bytes_verified": 438321084,
+    "operation": "check",
+    "originals": {
+      "57a91432-9c43-487a-a0c9-f03dd6a6aa97": {
+        "byte_count": 534520,
+        "sha256": "a4e470e3116fa2196885de66a78fa706d0fb98d47796709c13ea6b212b159880"
+      },
+      "6f5b74ea-e38d-4d22-a93e-f6c2ffcf142a": {
+        "byte_count": 11231460,
+        "sha256": "a2f000a4a2f8d49022401b0c2076a2470b52c839ba6112729b286d59597e5c05"
+      },
+      "83de62f2-f6ad-43a3-96ff-c0cb02c56967": {
+        "byte_count": 36069621,
+        "sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc"
+      },
+      "c0751a91-83b3-476c-bf45-8d76f5dd656d": {
+        "byte_count": 390485483,
+        "sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae"
+      }
+    },
+    "publication_enabled": false,
+    "readback_verified": true,
+    "run_id": null,
+    "source_accepted": false,
+    "verified_at": "2026-10-29T17:21:18.284450+00:00"
+  },
+  "reported_on": "2026-10-29",
+  "scope": "DB-001 and DB-002 acceptance; not NBA source or launch acceptance",
+  "secret_allowlist_changed": false,
+  "seed_accepted": false,
+  "storage_check": {
+    "ref": "main",
+    "result": {
+      "checks": {
+        "anonymous_create": {
+          "denied": true,
+          "status": 400
+        },
+        "anonymous_read": {
+          "denied": true,
+          "status": 400
+        },
+        "bucket_admin": {
+          "denied": false,
+          "original_bytes_unchanged": true,
+          "prevention_verified": true,
+          "status": 400
+        },
+        "create_read_verified": true,
+        "delete": {
+          "denied": false,
+          "original_bytes_unchanged": true,
+          "prevention_verified": true,
+          "status": 200
+        },
+        "move": {
+          "denied": false,
+          "original_bytes_unchanged": true,
+          "prevention_verified": true,
+          "status": 400
+        },
+        "mutation_bytes_verified": true,
+        "original_bytes_preserved": true,
+        "other_identity_create": {
+          "denied": true,
+          "status": 400
+        },
+        "other_identity_read": {
+          "denied": true,
+          "status": 400
+        },
+        "policy_stable": true,
+        "private_api": {
+          "denied": true,
+          "status": 406
+        },
+        "replacement": {
+          "denied": true,
+          "status": 400
+        },
+        "unrelated_bucket": {
+          "denied": true,
+          "status": 400
+        },
+        "upsert": {
+          "denied": true,
+          "status": 400
+        }
+      },
+      "fixture": {
+        "byte_count": 59,
+        "format": "txt",
+        "kind": "reports",
+        "schema_version": 1,
+        "sha256": "7a7a77d12a6471cdb52470e665f1656d5a0c9a9febbfe3955deb034e3d5a2db6",
+        "storage_uri": "supabase://lkwfzdfaqempnwffocmm/baseline-artifacts/reports/7a/7a7a77d12a6471cdb52470e665f1656d5a0c9a9febbfe3955deb034e3d5a2db6"
+      },
+      "note": "No cleanup by runtime; administrator maintenance is separate",
+      "policy_evidence": {
+        "api_role": "authenticated",
+        "bucket_policy_count": 0,
+        "fingerprint": "8941f99b8edbc234523e170b7aa3cc785c9958aefa317db2322bde4a96d1fdb7",
+        "object_mutation_policy_count": 0,
+        "verified": true
+      },
+      "verified": true
+    },
+    "run_id": 40920359705
+  }
+}
