@@ -148,6 +148,7 @@ In local VS Code, select the repository's `.venv` interpreter as the notebook ke
 DATA-001 adds the [local seed workflow](docs/seed-backfill.md) and
 `notebooks/01_sources_and_backfill.ipynb`, which defaults to offline fixtures.
 Run `uv run --locked python -m hoop.cli seed --help` for the shared CLI.
+The [offline inactive-repair helper](docs/inactive-repairs.md) prepares source-confirmed field overlays without accepting a seed or importing hosted facts.
 The real 2025-26 run matched 1,230 game IDs against a separate local NBA inventory,
 retained 32,176 player and 2,460 team rows, and quarantined 135 records. It remains
 incomplete and unaccepted. Repair support does not automatically repair or accept

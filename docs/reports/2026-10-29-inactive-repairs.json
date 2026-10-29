@@ -1,0 +1,83 @@
+{
+  "hosted_fact_import_performed": false,
+  "intermediate_candidate": {
+    "available_at": "2026-10-29T17:46:42.942369+00:00",
+    "manifest_artifact": {
+      "byte_count": 162064,
+      "format": "json",
+      "kind": "seed_manifest",
+      "path": "objects/34/349fb4709d86477c87bda1fe5e2469e7eb9c67993a40ec7134f925887a1185c5",
+      "schema_version": 1,
+      "sha256": "349fb4709d86477c87bda1fe5e2469e7eb9c67993a40ec7134f925887a1185c5"
+    },
+    "participation": {
+      "did_not_play": 5657,
+      "played": 26648
+    },
+    "quarantine": [
+      {
+        "file": "TeamStatistics.csv",
+        "game_id": "0022500652",
+        "raw_sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc",
+        "reason": "unsupported_competition_label",
+        "source_row": 1494,
+        "subject_id": "0"
+      },
+      {
+        "file": "TeamStatistics.csv",
+        "game_id": "0022500651",
+        "raw_sha256": "a6480093618196114e373f0670aeeaa2adfc805d8952cdf4b4092ce6183498fc",
+        "reason": "unsupported_competition_label",
+        "source_row": 1495,
+        "subject_id": "0"
+      },
+      {
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500826",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "invalid_identity",
+        "source_row": 16304,
+        "subject_id": "1641712"
+      },
+      {
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500641",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "unknown_participation_or_minutes",
+        "source_row": 21267,
+        "subject_id": "1628396"
+      },
+      {
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500568",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "unknown_participation_or_minutes",
+        "source_row": 23309,
+        "subject_id": "203482"
+      },
+      {
+        "file": "PlayerStatistics.csv",
+        "game_id": "0022500564",
+        "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+        "reason": "unknown_participation_or_minutes",
+        "source_row": 23328,
+        "subject_id": "1630208"
+      }
+    ],
+    "repairs_applied": 129,
+    "row_counts": {
+      "players": 32305,
+      "teams": 2460
+    },
+    "seed_status": "incomplete",
+    "source_accepted": false,
+    "unit_id": "4281b68728f664756c160c2218e481aadddf0773bedb34e271883a037cfa117d"
+  },
+  "next_step": "The separately locked ADR 0018 handles three positive appearances, two invalid extras and a retained unknown. Its code follows separately.",
+  "repair_count": 129,
+  "reported_on": "2026-10-29",
+  "scope": "Intermediate local inactive-player repairs only; not seed acceptance",
+  "source_accepted": false,
+  "source_endpoint": "nba_api.BoxScoreSummaryV3",
+  "source_policy": "unchanged released defaults; one call per retained snapshot; no retries"
+}
