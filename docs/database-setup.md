@@ -2,7 +2,7 @@
 
 DB-001 supplies repository migrations and separate privileged/runtime operations.
 The dedicated Free project `baseline` is now created in eu-west-1 on Postgres
-17.11. Reviewed migrations 0001 through 0008 are applied, including the owner's
+17.11. Reviewed migrations 0001 through 0010 are applied, including the owner's
 approved managed Auth and publisher corrections. Exact hashes and role boundaries
 were read back through MCP. Windows/Actions restricted TLS, Auth/Storage protection checks, initial usage
 measurements and a remotely downloaded local restore now pass. Source acceptance,
@@ -143,3 +143,13 @@ was independently downloaded from OneDrive and restored into a new loopback-only
 baseline_restore database with matching application hashes. Its provider tables
 were disposable scaffolding; no hosted provider was modified or reactivated.
 The default-off rehearsal commands and remaining backup gates are in backups.md.
+
+## October 29 acceptance
+
+The owner merged the required implementation/fixes, and DB-001 is closed.
+The fresh [main Actions database check](https://github.com/Bixzare/baseline/actions/runs/40921820389)
+passed with the restricted role and verified client TLS. Current project identity
+and Postgres 17.11 were re-read through Supabase MCP. The prior independent
+27-table restore remains scoped recovery evidence. Direct mode remains untested;
+source/seed acceptance, daily full-history backup and production remain separate.
+See [the sanitized report](reports/2026-10-29-hosted-acceptance.json).
