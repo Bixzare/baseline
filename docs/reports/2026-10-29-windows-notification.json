@@ -1,0 +1,19 @@
+{
+  "actual_provider_access": false,
+  "checked_at_actual_utc": "2026-10-29T21:04:50.451016+00:00",
+  "disposable_task_removed": true,
+  "invocation_id": "a52ae59f-6dd4-4018-95db-624cf464bd94",
+  "local_checks": "12 focused tests, lint, format, mypy and platform boundary passed",
+  "notification": {
+    "attempted": true,
+    "delivery": "unverified",
+    "queued": true,
+    "shell_shown_event": true
+  },
+  "owner_visible_delivery": "pending_confirmation",
+  "persistent_tasks_enabled": false,
+  "production_enabled": false,
+  "reported_on": "2026-10-29",
+  "task_exit_code": 0,
+  "task_name": "Baseline-Rehearsal-4b4c0d36a4b3"
+}

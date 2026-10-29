@@ -1,7 +1,6 @@
 """Independent local assessment and guarded recovery; offline mode never publishes."""
 
 import json
-import os
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -17,46 +16,10 @@ from hoop.platform.database import DatabaseError, connection, health
 from hoop.platform.evidence import EvidenceError
 from hoop.platform.local_artifacts import atomic_json
 from hoop.platform.monitoring import reconcile_conditions
+from hoop.platform.notifications import notify
 from hoop.platform.operations import production_enabled, run_pipeline
 from hoop.platform.prepared import encoded
 from hoop.platform.provenance import parse_time
-
-
-def notify(*, rehearsal: bool = False) -> dict[str, Any]:
-    """Queuing is not proof of delivery. The owner verifies the actual session."""
-    import subprocess
-    import sys
-
-    if sys.platform != "win32":
-        return {"attempted": False, "delivery": "unverified"}
-    command = """Add-Type -AssemblyName System.Windows.Forms
-    $baselineNotice = New-Object System.Windows.Forms.NotifyIcon
-    $baselineNotice.Icon = [System.Drawing.SystemIcons]::Information
-    $baselineNotice.Visible = $true
-    $baselineMessage = if($env:BASELINE_NOTIFICATION_REHEARSAL -eq '1') {
-      'Rehearsal completed; production remains disabled.'
-    } else {
-      'Operational check needs review. See the local health report.'
-    }
-    $baselineNotice.ShowBalloonTip(3000, 'Baseline', $baselineMessage,
-      [System.Windows.Forms.ToolTipIcon]::Info)
-    Start-Sleep -Milliseconds 3500
-    $baselineNotice.Dispose()
-    """
-    try:
-        result = subprocess.run(
-            ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
-            capture_output=True,
-            env={
-                **os.environ,
-                "BASELINE_NOTIFICATION_REHEARSAL": "1" if rehearsal else "0",
-            },
-            timeout=15,
-            creationflags=subprocess.CREATE_NO_WINDOW,
-        )
-    except (OSError, subprocess.TimeoutExpired):
-        return {"attempted": True, "queued": False, "delivery": "unverified"}
-    return {"attempted": True, "queued": result.returncode == 0, "delivery": "unverified"}
 
 
 def local_incident(directory: Path, reason: str, now: datetime) -> bool:

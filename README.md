@@ -250,6 +250,8 @@ Use `uv run --locked python -m scripts.rehearse_publication --reports` with disp
 
 Default-off nightly/dispatcher stages, rehearsal and activation controls: [cloud operations](docs/cloud-operations.md).
 
+Windows notices now use bounded UI event processing and credential-free child settings. The actual disposable drill reported a shown event; owner-visible delivery remains pending.
+
 Independent Windows health, disabled task definitions, offline behavior and actual rehearsal evidence: [local recovery](docs/local-recovery.md). Owner notification delivery, accepted sources, hosted setup and backup remain gates.
 
 Actual Supabase project, migration progress and remaining setup gates: [hosted setup evidence](docs/supabase-setup-status.md). The owner-approved managed Auth correction is applied; publisher migration and runtime/Auth/Storage checks remain gated.
