@@ -46,3 +46,38 @@ def test_readback_budget_is_bounded_before_private_setup(tmp_path, budget) -> No
 
     with pytest.raises(BackupError, match="bounded_readback_budget_required"):
         restore_downloaded(tmp_path, readback_seconds=budget)
+
+
+@pytest.mark.parametrize("value", [{}, [], ["invalid"], [{"label": "x"}]])
+def test_invalid_history_inventory_is_rejected_before_private_setup(tmp_path, monkeypatch, value):
+    import json
+
+    from scripts.rehearse_hosted_backup import export_current
+
+    path = tmp_path / "inventory.json"
+    path.write_text(json.dumps(value))
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("No private setup or provider access on invalid inventory")
+
+    monkeypatch.setattr("scripts.rehearse_hosted_backup.project", forbidden)
+    with pytest.raises(BackupError):
+        export_current(tmp_path / "out", archive_inventory=path)
+
+
+def test_dirty_backup_implementation_is_rejected_before_private_setup(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    from scripts.rehearse_hosted_backup import export_current
+
+    monkeypatch.setattr(
+        "scripts.rehearse_hosted_backup.subprocess.run",
+        lambda *a, **k: SimpleNamespace(returncode=1),
+    )
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("No source access with uncommitted implementation")
+
+    monkeypatch.setattr("scripts.rehearse_hosted_backup.project", forbidden)
+    with pytest.raises(BackupError, match="implementation_must_be_committed"):
+        export_current(tmp_path / "out")

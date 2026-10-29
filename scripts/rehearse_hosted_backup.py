@@ -56,7 +56,37 @@ def project(*, require_source_dsn: bool = False) -> str:
     return value
 
 
-def export_current(output: Path) -> dict[str, Any]:
+def export_current(output: Path, *, archive_inventory: Path | None = None) -> dict[str, Any]:
+    archives = json.loads(archive_inventory.read_text()) if archive_inventory else []
+    if not isinstance(archives, list) or archive_inventory is not None and not archives:
+        raise BackupError("nonempty_reviewed_archive_inventory_required")
+    labels = set()
+    for item in archives:
+        if (
+            not isinstance(item, dict)
+            or set(item) != {"label", "source", "sha256", "byte_count"}
+            or not all(isinstance(item[k], str) for k in ["label", "source", "sha256"])
+            or type(item["byte_count"]) is not int
+            or item["byte_count"] < 0
+            or item["label"] in labels
+        ):
+            raise BackupError("invalid_reviewed_archive_inventory")
+        labels.add(item["label"])
+    implementation = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--quiet",
+            "HEAD",
+            "--",
+            "scripts/rehearse_hosted_backup.py",
+            "src/hoop/platform/backup",
+        ],
+        capture_output=True,
+        timeout=10,
+    )
+    if implementation.returncode:
+        raise BackupError("backup_implementation_must_be_committed")
     source = project(require_source_dsn=True)
     stage = Path(os.environ["BASELINE_BACKUP_STAGING_DIR"]) / ("prelaunch-" + uuid4().hex)
     with connection("BASELINE_MIGRATION_DSN") as conn:
@@ -71,12 +101,17 @@ def export_current(output: Path) -> dict[str, Any]:
                 ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
             ).stdout.strip(),
             lock_hash=hashlib.sha256(Path("uv.lock").read_bytes()).hexdigest(),
-            archive_files=[],
+            archive_files=archives,
             schemas=["platform", "nba", "api"],
         )
-    retain_inputs(manifest, stage, PrivateArtifacts(Session(Settings.from_env())), [])
+    retain_inputs(manifest, stage, PrivateArtifacts(Session(Settings.from_env())), archives)
     manifest.update(
-        scope="hosted-prelaunch-application-export-only", launch_backup_gate_satisfied=False
+        scope=(
+            "hosted-prelaunch-application-and-reviewed-history"
+            if archives
+            else "hosted-prelaunch-application-export-only"
+        ),
+        launch_backup_gate_satisfied=False,
     )
     sha = finalize(stage, Path(os.environ["BASELINE_BACKUP_SYNC_DIR"]), manifest)
     result = {
@@ -85,6 +120,7 @@ def export_current(output: Path) -> dict[str, Any]:
         "project": source,
         "represented_cutoff": manifest["represented_cutoff"],
         "scope": manifest["scope"],
+        "archive_count": manifest["archive_count"],
         "launch_backup_gate_satisfied": False,
     }
     output.mkdir(parents=True, exist_ok=True)
@@ -180,12 +216,13 @@ def main() -> int:
     )
     parser.add_argument("--output", type=Path, default=Path("artifacts/hosted-backup-rehearsal"))
     parser.add_argument("--readback-seconds", type=int, default=180)
+    parser.add_argument("--archive-inventory", type=Path)
     args = parser.parse_args()
     try:
         result = (
             {"mode": "plan", "automation_enabled": False, "launch_backup_gate_satisfied": False}
             if args.operation == "plan"
-            else export_current(args.output)
+            else export_current(args.output, archive_inventory=args.archive_inventory)
             if args.operation == "export"
             else restore_downloaded(args.output, readback_seconds=args.readback_seconds)
         )

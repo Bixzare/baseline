@@ -182,3 +182,37 @@ eca4c72459efe08ec8a632b9a5a649850a1c5fd21446372ceafc4bccebd84016,
 represented cutoff October 28 at 09:40:26 UTC, the same 27 table digests and one
 artifact, 173,969 bytes downloaded and verified, 36.359 seconds for readback plus
 restore, and its isolated target removed. The launch gate remains false.
+
+
+## Complete accepted seed inventory
+
+The offline `python -m hoop.domains.nba.history.backup_inventory` command derives
+required files from the exact accepted candidate manifest. It verifies every
+referenced raw/normalized/repair object, original source manifest and download
+receipts, owner acceptance, and the original NBA inventory body hash. Unrelated
+files are excluded. Missing/corrupt inputs, stale or pending acceptance and changed
+proof block preparation; a directory scan cannot establish completeness.
+
+Supply explicit `--archive`, `--source-manifest`, `--downloads`, `--acceptance`,
+`--inventory-raw`, optional `--raw-archives`, and `--output` paths. The output is
+a private JSON list containing absolute source paths; keep it under ignored
+artifacts. Standard output contains only a sanitized count/hash/scope summary.
+The existing backup adapter consumes this reviewed list without changing original
+bytes or public metadata. It preserves the full normalized seed and the retained
+unknown, but does not accept broader history or historical pregame rosters.
+
+After reviewing and committing the implementation, explicitly include that list:
+
+```powershell
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup export --archive-inventory PATH_TO_PRIVATE_INVENTORY --output PATH_TO_REHEARSAL_REPORTS
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup restore --output PATH_TO_REHEARSAL_REPORTS --readback-seconds 900
+```
+
+The export refuses uncommitted backup implementation changes so its saved code
+version identifies executable code. A first October 29 preparation was stopped
+before finalization to correct that provenance issue; its incomplete staging is
+preserved. A finalized set alone is insufficient: independently download it,
+verify every required file, and restore its database into an isolated target.
+These manual commands keep automation and the launch backup gate false. Daily
+execution, provider recovery setup and a later accepted operational state remain
+separate release requirements.

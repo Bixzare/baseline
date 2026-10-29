@@ -258,3 +258,14 @@ review remains non-authorizing. Repair evidence retention creates no NBA facts.
 DB-001 and DB-002 hosted acceptance checks now pass on Windows and actual main
 Actions, and their issues are closed. This narrows W-16's remaining work to source,
 season capacity and complete recovery gates; it does not activate production.
+
+
+### October 29 historical backup inventory
+
+A manifest-derived inventory now covers every required accepted-seed object,
+source/download provenance, owner acceptance and original game-inventory proof.
+The measured graph contains 166 distinct files and 439,640,345 bytes. OneDrive
+capacity was checked before export. The first uncommitted-code preparation was
+stopped before finalization; no incomplete set counts as a verified backup.
+W-22 remains open pending independent readback/restore, daily execution and
+provider recovery setup. Broader history and hosted fact import stay unapproved.
