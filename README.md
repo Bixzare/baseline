@@ -211,6 +211,15 @@ identity, bucket or production forecast is activated by this implementation.
 
 The October 28 follow-up adds a [read-only quarantine audit](docs/seed-backfill.md#october-28-read-only-quarantine-audit): 135 unresolved rows across 20 games. A successful local stock-client box-score request still leaves participation ambiguous; the separate local CDN sample was denied and was not retried. The lossless archive correction follows [locked ADR 0017](docs/decisions/0017-encode-large-raw-archives-with-verified-parts.md), with cloud verification still pending and scoped OneDrive restoration verified. No seed import, real baseline preparation, model activation, or production publication occurred in this follow-up.
 
+The October 29 [adjudicated candidate](docs/reports/2026-10-29-adjudicated-seed.json)
+implements locked ADR 0018: 129 inactive repairs, three confirmed zero-minute
+appearances and two invalid extra-team exclusions. One old player row remains
+unknown. The [exact compact review draft](docs/approvals/2026-10-29-compact-seed-review.json)
+is pending owner acceptance and cannot authorize import. The plan selects 5,447
+player rows and 848 supporting games; no real model or forecast is created.
+Main Actions verified the large raw archives independently; repair lineage is a
+separate check documented in [seed import](docs/seed-import.md).
+
 DB-003 adds [compact history planning/import](docs/seed-import.md), eight history
 tables and cutoff-aware revision reads. `uv run --locked python -m
 hoop.domains.nba.history --help` documents the plan/apply entry point. The notebook

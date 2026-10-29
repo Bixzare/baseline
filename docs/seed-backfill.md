@@ -210,3 +210,25 @@ The record in `docs/approvals/2026-10-28-seed-calendar.json` clears only that ga
 it is not seed acceptance. All 135 quarantined rows remain unresolved. The owner
 selected the existing `main` branch for the cloud archive check after merging
 PR #41, with no expansion of the rehearsal environment's secrets allowlist.
+
+
+## October 29 evidence-backed adjudication
+
+The [inactive-repair helper](inactive-repairs.md) validates retained NBA summary
+bytes before preparing the standard field overlays. The intermediate 129 repairs
+left six quarantined rows. The owner then locked ADR 0018 for typed appearance,
+invalid-extra exclusion and retained-unknown review. All previous manifests and
+original CSV hashes remain intact; a new parser/candidate gets a new availability
+time no earlier than the repair evidence. A new candidate does not inherit the
+old exact-manifest calendar approval or full seed acceptance.
+
+The parser now accepts `operation` values `field_update` (the existing default),
+`confirm_appearance`, `exclude_invalid_extra_team`, and `retain_unresolved` in
+an explicit repair overlay. Typed operations require empty `changes` and exact
+source body/parent-row proof. Positive appearances require a matching one-row
+PlayerGameLog response; absence and zero alone never establish participation.
+Exclusions require invalid zero-ID shape, matching NBA final scores/teams and
+both valid normalized team sides. Retained uncertainty remains in quarantine.
+Use the existing explicit `--repair PATH` for each reviewed overlay, or call the
+same tested `build_seed` operation as the notebook. No live request or database
+import happens automatically.

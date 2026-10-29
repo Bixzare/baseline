@@ -154,7 +154,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 - **Evidence:** The [pinned comparison](docs/dataset-comparison.md) found Eoin 525 team ID 0 rows, blank player-team IDs, missing minutes/nonparticipation ambiguity, varying minute precision, and older-season coverage gaps. Internal row counts cannot prove exact game completeness. Wyatt 238 does not establish a recent player seed.
 - **Impact:** Silent filtering or guessed repairs could bias coverage, rates, historical evaluation, and later model promotion.
-- **Current mitigation:** SOURCE-001 is merged. DATA-001's local inventory matches all 1,230 game IDs; normalization retains 32,176 player and 2,460 team rows, quarantines 133 player and two team records, and preserves raw bytes. See the [seed report](docs/seed-backfill.md). Seed acceptance remains gated; no repairs or historical pregame cohorts are invented.
+- **Current mitigation:** October 29 inventory still matches all 1,230 game IDs. Locked ADR 0018 supports 129 source-confirmed inactive repairs, three positive zero-minute appearances and two invalid extra-team exclusions. The new candidate retains 32,308 player and 2,460 team rows, with one orphan player record still unresolved. Exact compact-window review and seed acceptance remain pending; no historical pregame cohorts are invented. See the [candidate review](docs/approvals/2026-10-29-compact-seed-review.json).
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 
@@ -166,13 +166,13 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 - **Improvement / timing:** Create and verify the Free project before hosted activation or dependent import. Align CI major version to observed settings.
 - **Closure evidence:** Owner-reviewed hosted migrations, Windows and Actions restricted/TLS checks, real permission denials and an isolated supported recovery test. This remains a release gate.
 
-## W-17: Full raw provenance exceeds the verified upload path
+## W-17: Original raw upload limit resolved; complete seed lineage still gated
 
-- **Evidence:** DB-003's October 26 dry plan retains 438,321,084 original raw bytes, including player/team CSVs larger than the client's 16 MiB object bound. The plan selects 5,447 player rows and supporting results for 849 games; reducing normalized rows does not shrink their original source bodies.
-- **Impact:** Cloud jobs cannot yet resolve all required seed provenance without the laptop. Real seed import is blocked.
-- **Current mitigation:** Refuse apply before upload; retain original checksummed local files and never invent a smaller original response. Calendar verification, quarantine and seed acceptance also remain explicit blockers.
-- **Improvement / timing:** Review a supported raw archival/upload design, with exact-byte reconstruction and capacity evidence, before hosted seed import. No raw segmentation or increased provider allowance is assumed here.
-- **Closure evidence:** Owner-reviewed design plus upload/retrieval/hash verification from the actual cloud runner within verified free limits. This is a release gate.
+- **Evidence:** Owner-locked ADR 0017 preserves 438,321,084 original bytes as seven immutable compressed parts totaling 60,615,087 bytes. Actual Windows, independent OneDrive restoration and main-branch Actions run 40920359705 reconstructed the original hashes. The raw size obstacle is resolved.
+- **Impact:** Raw reconstruction alone does not verify the new candidate's repair overlays, complete backup or accepted facts.
+- **Current mitigation:** Keep exact source/physical identities and owner acceptance separate. The October 29 compact plan selects 5,447 player rows, 1,696 team sides and 848 games; it remains blocked pending exact candidate review.
+- **Improvement / timing:** Verify all candidate/repair lineage independently from cloud, then complete the accepted seed backup and daily execution before activation.
+- **Closure evidence:** Raw archival is verified. Broader DB-003 and backup gates remain explicit; no seed acceptance or fact import is implied.
 
 ## W-18: Production publication has not been rehearsed against hosted inputs
 
@@ -241,7 +241,20 @@ Raw-file capacity remains a release gate. Lossless gzip measured 61 MB versus
 438 MB original input; locked ADR 0017 now implements bounded verified parts. Actual Windows
 readback verified all originals after a failed rehearsal. Independent OneDrive
 readback and isolated restoration now verify all four raw originals. Cloud
-Actions verification remains pending owner choice; the environment allowlist
-was not widened after automatic approval review rejected that action. Daily independent backup of the complete
-historical archive remains unverified. MODEL-001 and LEDGER-001 depend on an
+Actions verification subsequently passed from the owner-selected main branch on
+October 29 (run 40920359705), with the environment allowlist unchanged. Daily
+independent backup of the complete historical archive remains unverified. MODEL-001 and LEDGER-001 depend on an
 accepted seed plus prospective source evidence, not their successful fixtures.
+
+
+### October 29 adjudication follow-up
+
+Locked ADR 0018 keeps the single remaining orphan unknown, rather than inferring
+DNP. Sixteen strictly later played appearances exist; the compact seed selects
+ten after that date. This may support exact compact acceptance only, not full
+historical completeness or historical full-roster evaluation. The draft owner
+review remains non-authorizing. Repair evidence retention creates no NBA facts.
+
+DB-001 and DB-002 hosted acceptance checks now pass on Windows and actual main
+Actions, and their issues are closed. This narrows W-16's remaining work to source,
+season capacity and complete recovery gates; it does not activate production.

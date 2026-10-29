@@ -101,8 +101,8 @@ before enabling it. A flag is operator confirmation, not proof of hosted health.
 
 An acceptance file must match the seed manifest SHA-256 and parser version, with
 `kind: owner_review` and `calendar_convention: source_calendar_verified`. Do not
-create one until the owner has accepted the actual evidence. Any quarantine still
-blocks apply. Tests use `kind: synthetic_fixture`, which cannot authorize a
+create one until the owner has accepted the actual evidence. Unreviewed quarantine still
+blocks apply; the narrowly scoped ADR 0018 compact review is described below. Tests use `kind: synthetic_fixture`, which cannot authorize a
 production import. The default notebook only plans with invented fixture inputs.
 
 Apply verifies raw/normalized inputs, stores original raw bodies, selected Parquet
@@ -153,3 +153,46 @@ For the manual current-state backup rehearsal, larger artifact inventories can u
 The optional readback budget is bounded to 1 through 1,800 seconds; the default is
 still 180 seconds. This does not change production backup cadence or establish a
 complete historical archive backup. Review the actual remote/restore report.
+
+
+## Compact scope under locked ADR 0018
+
+The v3 planner may consider a retained unknown player row outside the required
+window only when ten selected played appearances have distinct calendar dates
+strictly after that row. The row's raw hash, original record hash, retained source
+proof and exact manifest/parser must match an explicit compact review. Ties,
+fewer later appearances, missing proof, stale approval or affected selected facts
+keep the gate blocked. The historical participation remains unresolved.
+
+A candidate review draft uses `kind: pending_owner_review`; it cannot authorize
+an import. Full owner acceptance must bind the exact new candidate, date evidence
+and compact review. The full dataset still remains incomplete where an old
+unknown is retained. Do not confuse compact launch suitability with historical
+backtest completeness or pregame cohort reconstruction.
+
+Apply rechecks the normalized window and complete repair inventory against the
+immutable manifest before any remote write. It stores every source body and
+overlay, plus a portable repair-lineage map, before fact transactions. Source
+validation summaries explicitly scope acceptance to the compact seed. Original
+source hashes and late repair availability remain separate from physical object
+identity. No new table, grant, privileged credential or production switch is used.
+
+
+### Repair-lineage rehearsal
+
+`uv run --locked python -m hoop.domains.nba.history.lineage` defaults to a local,
+credential-free plan. Explicit `stage --archive PATH --confirm-rehearsal --report
+PATH` retains only candidate/repair evidence using the restricted runtime and
+backend identity. No source acceptance or NBA fact is created. `check
+--confirm-rehearsal --report PATH` reads the registered root UUID from
+`BASELINE_SEED_LINEAGE_ROOT_ID`, verifies every referenced registry record and
+object hash, then compares the complete repair inventory with the retained
+candidate. No local CSV is needed for this check. Terminal stage events include
+the database-required counts and measured duration on success and failure.
+
+The first actual stage stored its objects but failed terminal audit recording;
+its missing required audit fields are fixed and covered by real Postgres tests.
+A separate read-only pass verified all 156 candidate/repair objects. Preserve the
+incomplete attempt and assess the corrected repeat separately. A proposed cloud
+workflow step is still subject to explicit owner authorization and review; no
+new credential-bearing workflow step has been applied.

@@ -1,0 +1,23 @@
+{
+  "calendar_convention": "source_calendar_verified",
+  "compact_quarantine_review": [
+    {
+      "adjudication_evidence_sha256": "db2682e491a0b3ed72bade0c0fd8061d7154620e6c7ee451e05465a0049c1e9f",
+      "base_row_sha256": "aeea3f070b44410a31df3c05b0ff5e77de86ec8df8c11b843bb09ab62846af59",
+      "disposition": "outside_selected_appearance_window",
+      "file": "PlayerStatistics.csv",
+      "game_id": "0022500826",
+      "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
+      "source_row": 16304,
+      "subject_id": "1641712"
+    }
+  ],
+  "full_historical_dataset_accepted": false,
+  "historical_pregame_cohort_verified": false,
+  "kind": "pending_owner_review",
+  "manifest_sha256": "29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e",
+  "parser_version": "eoin-seed-v2",
+  "scope": "compact_launch_seed_only",
+  "season": "2025-26",
+  "status": "DRAFT_AWAITING_OWNER_ACCEPTANCE"
+}
