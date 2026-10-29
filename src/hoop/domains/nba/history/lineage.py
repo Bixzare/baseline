@@ -197,6 +197,8 @@ def main() -> int:
     try:
         if not args.confirm_rehearsal or args.report is None:
             raise EvidenceError("Explicit rehearsal and report required")
+        if args.operation == "check":
+            UUID(os.environ.get("BASELINE_SEED_LINEAGE_ROOT_ID", ""))
         with connection() as conn:
             if health(conn)["role"] != "baseline_runtime":
                 raise EvidenceError("Restricted runtime required")

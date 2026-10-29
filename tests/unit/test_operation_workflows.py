@@ -48,3 +48,27 @@ def test_hosted_rehearsals_keep_privileged_secrets_out_and_retain_failures() -> 
     assert "certificates/supabase-ca-2021.crt" in database
     certificate = (ROOT / "certificates/supabase-ca-2021.crt").read_text()
     assert "BEGIN CERTIFICATE" in certificate and "PRIVATE KEY" not in certificate
+
+
+def test_repair_lineage_cloud_step_is_manual_main_only_and_uses_data_not_shell_input() -> None:
+    body = (ROOT / ".github/workflows/artifact-check.yml").read_text()
+    input_section = body.split("      seed_lineage_root_id:\n", 1)[1].split("permissions:", 1)[0]
+    assert "required: false" in input_section and 'default: ""' in input_section
+    step = next(
+        block
+        for block in body.split("      - name: ")
+        if "hoop.domains.nba.history.lineage check" in block
+    )
+    assert "if: inputs.seed_lineage_root_id != '' && github.ref == 'refs/heads/main'" in step
+    command = next(
+        line.strip()[5:] for line in step.splitlines() if line.strip().startswith("run: ")
+    )
+    assert "${{" not in command and "--confirm-rehearsal" in command
+    assert "repair-lineage.json" in command and " stage " not in command
+    assert "BASELINE_SEED_LINEAGE_ROOT_ID: ${{ inputs.seed_lineage_root_id }}" in step
+    assert set(re.findall(r"secrets\.([A-Z_]+)", step)) == {
+        "BASELINE_RUNTIME_DSN",
+        "BASELINE_ARTIFACT_EMAIL",
+        "BASELINE_ARTIFACT_PASSWORD",
+    }
+    assert "schedule:" not in body and "pull_request" not in body

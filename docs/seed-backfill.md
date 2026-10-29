@@ -232,3 +232,10 @@ both valid normalized team sides. Retained uncertainty remains in quarantine.
 Use the existing explicit `--repair PATH` for each reviewed overlay, or call the
 same tested `build_seed` operation as the notebook. No live request or database
 import happens automatically.
+
+
+The owner accepted the exact October 29 candidate for compact launch history,
+including verified calendar dates and the specific outside-window unknown. See
+[the scoped acceptance](approvals/2026-10-29-compact-seed-review.json). A regenerated
+local import plan has no blockers and selects 5,447 player rows, 1,696 team sides
+and 848 games. This does not approve hosted fact import or broader history.

@@ -1,4 +1,5 @@
 {
+  "accepted_on": "2026-10-29",
   "calendar_convention": "source_calendar_verified",
   "compact_quarantine_review": [
     {
@@ -14,10 +15,11 @@
   ],
   "full_historical_dataset_accepted": false,
   "historical_pregame_cohort_verified": false,
-  "kind": "pending_owner_review",
+  "hosted_fact_import_authorized": false,
+  "kind": "owner_review",
   "manifest_sha256": "29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e",
   "parser_version": "eoin-seed-v2",
   "scope": "compact_launch_seed_only",
   "season": "2025-26",
-  "status": "DRAFT_AWAITING_OWNER_ACCEPTANCE"
+  "status": "ACCEPTED_COMPACT_SEED_ONLY"
 }

@@ -4,7 +4,7 @@
     "game_count": 1230,
     "mismatch_count": 0,
     "nba_inventory_raw_sha256": "8030861397de701ff20a51c4316731080e648ac751e4be80c68e2e786c9dd9cc",
-    "owner_acceptance_granted": false,
+    "owner_acceptance_granted": true,
     "utc_start_or_dst_verified": false
   },
   "candidate": {
@@ -116,18 +116,14 @@
     ]
   },
   "compact_plan": {
-    "blockers": [
-      "calendar_convention_unverified",
-      "seed_acceptance_missing",
-      "seed_quarantine_unresolved"
-    ],
+    "blockers": [],
     "counts": {
       "games": 848,
       "players": 5447,
       "short_player_histories": 76,
       "teams": 1696
     },
-    "plan_sha256": "ce1da9bf3c202905cd5950f1fcf5e1c43e30821fcbe7ae5411b31152ef0f35b6",
+    "plan_sha256": "8a907f1546e60983ec520f57ecd64b74ae9e76613f497f2ccf49178e3dd14e76",
     "policy": "compact-seed-v3",
     "quarantine_review": {
       "all_outside_required_window": true,
@@ -139,7 +135,7 @@
           "file": "PlayerStatistics.csv",
           "game_id": "0022500826",
           "raw_sha256": "bb8cfcd2154f4b62b915d1e1ddbf5d207f367dbac2b055f9829d30b77f99abae",
-          "reviewed": false,
+          "reviewed": true,
           "selected_appearance_count": 10,
           "source_row": 16304,
           "subject_id": "1641712",
@@ -147,14 +143,16 @@
         }
       ],
       "historical_participation_resolved": false,
-      "review_accepted": false
+      "review_accepted": true
     },
     "required_raw_bytes": 438321084
   },
+  "full_historical_dataset_accepted": false,
+  "hosted_fact_import_authorized": false,
   "hosted_fact_import_performed": false,
   "lineage": {
     "candidate_and_repair_objects": 156,
-    "cloud_independent_check": "pending_owner_permission_and_main_merge",
+    "cloud_independent_check": "approved; pending reviewed main merge and execution",
     "elapsed_seconds": 125.55,
     "independent_windows_readback_verified": true,
     "repair_inputs": 155,
@@ -164,6 +162,7 @@
     "stage_failure_2_cause": "unresolved; not inferred from a passing separate readback",
     "verified_object_bytes": 541764
   },
+  "owner_acceptance_record": "docs/approvals/2026-10-29-compact-seed-review.json",
   "production_activated": false,
   "raw_cloud_reconstruction": {
     "actions_run": "https://github.com/Bixzare/baseline/actions/runs/40920359705",
@@ -173,8 +172,7 @@
     "verified": true
   },
   "remaining_gates": [
-    "Owner review of PRs",
-    "Exact compact candidate/calendar acceptance",
+    "Owner review/merge of approved cloud step implementation",
     "Cloud repair-lineage verification",
     "Explicit hosted import authorization",
     "Complete independent backup",
@@ -187,9 +185,10 @@
     "retained_unknowns": 1
   },
   "reported_on": "2026-10-29",
-  "scope": "Candidate evidence and compact planning only; not seed acceptance",
-  "seed_accepted": false,
+  "scope": "Owner-accepted compact launch history only; hosted fact import not authorized",
+  "seed_accepted": true,
   "verification": {
+    "approval_followup": "30 focused workflow, UUID, quarantine, lineage and real Postgres import tests passed; lint, format, mypy and boundary passed",
     "focused_audit_and_import_tests": "11 passed after final diagnostic change",
     "fresh_kernel": "passed identity/import assertions; Windows libzmq emitted shutdown diagnostic",
     "full_suite": "583 passed; before additional failure-phase diagnostics",

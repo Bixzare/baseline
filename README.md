@@ -2,7 +2,7 @@
 
 NBA season prediction platform and public ML analytics dashboard for 2026-27.
 
-Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0010 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. ADR 0016 verifies the concealed Storage mutations on Windows and Actions. Accepted recurring sources, seed acceptance, full historical backup coverage, daily backup execution and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
+Status: implementation now covers source validation, seed planning, player baselines, protected ledger publication, outcomes, evaluation and batch operations. The dedicated Supabase Free project is healthy on Postgres 17.11, and reviewed migrations through 0010 are applied. Windows restricted runtime TLS, backend sign-in/refresh and private Storage create/read now pass. ADR 0016 verifies the concealed Storage mutations on Windows and Actions. Accepted recurring sources, hosted seed import, full historical backup coverage, daily backup execution and Windows notification delivery remain release gates. Production is disabled. See [execution status](docs/execution-status.md) and [hosted setup evidence](docs/supabase-setup-status.md).
 
 ## Brand
 
@@ -55,7 +55,7 @@ Approved dashboard hosting plan: GitHub Pages for initial testing, then Vercel f
 | [DATA-001: Local backfill and first notebook](docs/issues/DATA-001-local-seed-backfill-and-source-notebook.md) | Locked specification; requires accepted local historical source evidence during execution. |
 | [DB-001: Migrations, roles, and connectivity](docs/issues/DB-001-migrations-roles-and-supabase-connectivity.md) | Locked specification; dedicated Supabase Free project setup remains an execution gate. |
 | [DB-002: Private artifacts and source evidence](docs/issues/DB-002-private-artifacts-and-source-evidence.md) | Locked specification; hosted storage enforcement and evidence persistence remain execution gates. |
-| [DB-003: History contracts and seed import](docs/issues/DB-003-history-contracts-and-seed-import.md) | Locked specification; seed acceptance, import, and cloud reference resolution remain execution gates. |
+| [DB-003: History contracts and seed import](docs/issues/DB-003-history-contracts-and-seed-import.md) | Locked specification; exact compact seed accepted October 29; hosted import and cloud repair-lineage verification remain gates. |
 | [MODEL-001: Player baseline and feature snapshots](docs/issues/MODEL-001-player-baseline-and-feature-snapshots.md) | Locked specification; preparation, snapshot reproduction, and real-input rehearsal remain execution gates. |
 | [LEDGER-001: Schema, permissions, and baseline registration](docs/issues/LEDGER-001-schema-permissions-and-baseline-registration.md) | Locked specification; migrations, baseline registration, and protected publication remain execution gates. |
 | [LEDGER-002: Protected publication and commit confirmation](docs/issues/LEDGER-002-protected-publication-and-commit-confirmation.md) | Locked under batch approval; protected operations and receipts remain execution gates. |
@@ -214,8 +214,9 @@ The October 28 follow-up adds a [read-only quarantine audit](docs/seed-backfill.
 The October 29 [adjudicated candidate](docs/reports/2026-10-29-adjudicated-seed.json)
 implements locked ADR 0018: 129 inactive repairs, three confirmed zero-minute
 appearances and two invalid extra-team exclusions. One old player row remains
-unknown. The [exact compact review draft](docs/approvals/2026-10-29-compact-seed-review.json)
-is pending owner acceptance and cannot authorize import. The plan selects 5,447
+unknown. The [exact compact acceptance](docs/approvals/2026-10-29-compact-seed-review.json)
+was approved by the owner on October 29 for compact history only. Hosted import
+still needs separate authorization. The plan selects 5,447
 player rows and 848 supporting games; no real model or forecast is created.
 Main Actions verified the large raw archives independently; repair lineage is a
 separate check documented in [seed import](docs/seed-import.md).
@@ -223,8 +224,8 @@ separate check documented in [seed import](docs/seed-import.md).
 DB-003 adds [compact history planning/import](docs/seed-import.md), eight history
 tables and cutoff-aware revision reads. `uv run --locked python -m
 hoop.domains.nba.history --help` documents the plan/apply entry point. The notebook
-defaults to a fixture-only plan. The real seed remains blocked by quarantine,
-source-date verification, acceptance and the original raw upload size.
+defaults to a fixture-only plan. The exact compact seed is accepted as of October 29; hosted import and independent
+cloud repair-lineage verification remain separate gates.
 
 MODEL-001 adds [baseline preparation](docs/baseline-preparation.md) and
 `notebooks/02_baseline_and_ledger.ipynb`. The fixture CLI prepares five targets per
