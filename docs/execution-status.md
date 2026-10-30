@@ -1,6 +1,6 @@
 # Baseline execution status
 
-Updated October 30, 2026. The owner merged PRs #37 through #42 into main.
+Updated October 29, 2026. The owner merged PRs #37 through #42 into main.
 The main-branch restricted database check (40921820389) and private Storage/raw
 archive check (40920359705) passed. DB-001 and DB-002 now meet their reviewed
 acceptance criteria and are closed/Finished. Actual cloud reconstruction verified
@@ -8,6 +8,10 @@ all 438,321,084 original raw bytes without laptop files. No secrets allowlist
 changed. Seed quarantine/acceptance, prospective sources, complete daily backups,
 notifications and launch supervision remain separate gates. Production is disabled.
 See [the measured acceptance report](reports/2026-10-29-hosted-acceptance.json).
+
+Backup follow-up, October 30: the complete accepted-seed manual recovery passed.
+All 27 tables and 336 required references matched; unattended daily execution and
+provider recovery remain open. See [the recovery report](reports/2026-10-30-accepted-seed-backup.json).
 
 | Planning task | GitHub issue | Current status | Evidence / gate |
 | --- | --- | --- | --- |
