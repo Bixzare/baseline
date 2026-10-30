@@ -1,0 +1,111 @@
+{
+  "capacity_preflight": {
+    "provider_free_bytes": 3113851289,
+    "provider_total_bytes": 5368709120,
+    "required_seed_bytes": 439640345
+  },
+  "checks": {
+    "coding_agent_guide_lines": 199,
+    "focused_tests_passed": 61,
+    "lint_format_mypy_boundaries": "passed",
+    "linux_windows_ci": "passed on 3cbe658"
+  },
+  "export": {
+    "archive_count": 166,
+    "backup_id": "bf992d55-b74e-4324-a322-721b3eff3c5e",
+    "code_hash": "c29cb9d5f0c73c10a586196a36d684fb6f1bc477",
+    "distinct_objects": 180,
+    "launch_backup_gate_satisfied": false,
+    "logical_required_bytes": 501050403,
+    "manifest_sha256": "45430a8fe814b902f69408eb35d39658daea2bda71a40d1803d07368c62cd2af",
+    "off_device_verified": false,
+    "project": "lkwfzdfaqempnwffocmm",
+    "raw_archive_verification": {
+      "encoded_files_verified": 4,
+      "original_bytes_verified": 438321084
+    },
+    "registered_artifacts": 169,
+    "represented_cutoff": "2026-10-29T21:23:05.265406+00:00",
+    "required_file_references": 336,
+    "scope": "hosted-prelaunch-application-and-reviewed-history",
+    "table_count": 27
+  },
+  "hosted_fact_import_performed": false,
+  "incidents": [
+    {
+      "completion_marker_present": false,
+      "incomplete_stage_preserved": true,
+      "phase": "initial_export_preparation",
+      "reason": "commit executable implementation before recording its version",
+      "state": "interrupted_before_finalization"
+    },
+    {
+      "artifact_sha256": "44da8a1fb17def2c6b682c9c62ac07039cebbc658b4e4524935032e4b7bece4a",
+      "cause": "unresolved",
+      "downloaded_bytes": 0,
+      "expected_bytes": 2231618,
+      "phase": "first_sequential_readback",
+      "separate_exact_object_diagnostic_passed": true,
+      "state": "failed"
+    },
+    {
+      "cause": "older helper did not retain the exact safe error code; measured sequential throughput put the budget at risk",
+      "configured_budget_seconds": 1200,
+      "counted_as_recovery": false,
+      "observed_progress": {
+        "elapsed_seconds": 1056.0,
+        "objects_present": 128
+      },
+      "phase": "second_sequential_readback",
+      "state": "failed"
+    }
+  ],
+  "independent_restore": {
+    "archive_count": 166,
+    "automation_enabled": false,
+    "backup_id": "bf992d55-b74e-4324-a322-721b3eff3c5e",
+    "bytes_verified": 501050403,
+    "elapsed_seconds": 367.0,
+    "files_verified": 336,
+    "isolated_target_removed": true,
+    "launch_backup_gate_satisfied": false,
+    "manifest_sha256": "45430a8fe814b902f69408eb35d39658daea2bda71a40d1803d07368c62cd2af",
+    "off_device_verified": true,
+    "original_rows_preserved": true,
+    "provider_apis_verified": false,
+    "raw_archive_verification": {
+      "encoded_files_verified": 4,
+      "original_bytes_verified": 438321084
+    },
+    "readback_budget_seconds": 1200,
+    "remote_kind": "onedrive_rclone_readback",
+    "represented_cutoff": "2026-10-29T21:23:05.265406+00:00",
+    "required_artifacts_verified": 169,
+    "runtime_mutation_denied": true,
+    "scope": "hosted-prelaunch-application-and-reviewed-history",
+    "tables_verified": 27,
+    "verification_id": "4f7b7419-7763-4a4e-9236-07970fadef73"
+  },
+  "persistent_tasks_enabled": false,
+  "production_enabled": false,
+  "remaining_gates": [
+    "Unattended daily delivery and cutoff-based health events",
+    "Managed provider recovery APIs and secret reprovisioning",
+    "Actual cloud seed repair-lineage check after owner merges PR #46",
+    "Explicit hosted seed import authorization",
+    "Accepted prospective collection sources",
+    "Owner confirmation of Windows notice delivery"
+  ],
+  "report_timezone": "Africa/Johannesburg",
+  "reported_on": "2026-10-30",
+  "restore_verifier_commit": "3cbe658e7c534da62ec8dfcc031e9f532ca4730a",
+  "scope": "Manual current application and accepted compact-seed backup; daily and provider recovery gates remain open",
+  "seed_graph": {
+    "candidate_manifest_sha256": "29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e",
+    "full_historical_dataset_accepted": false,
+    "hosted_fact_import_performed": false,
+    "original_cutoff_preserved": true,
+    "seed_graph_objects": 162,
+    "seed_graph_verified_from_remote_bytes": true
+  }
+}

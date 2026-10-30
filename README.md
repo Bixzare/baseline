@@ -254,7 +254,7 @@ Independent Windows health, disabled task definitions, offline behavior and actu
 
 Actual Supabase project, migration progress and remaining setup gates: [hosted setup evidence](docs/supabase-setup-status.md). The owner-approved managed Auth correction is applied; publisher migration and runtime/Auth/Storage checks remain gated.
 
-The accepted seed now has an offline, manifest-derived private backup inventory. Manual export can include it with `--archive-inventory`; committed code and independently downloaded restoration remain required.
+The accepted seed now has an offline, manifest-derived private backup inventory. Its [October 30 OneDrive recovery drill](docs/reports/2026-10-30-accepted-seed-backup.json) verified 336 references and all 27 tables in 367 seconds. Manual protection passes for that set; unattended daily backups and provider recovery setup remain gated.
 
 Independent snapshot backups, original-reference restoration and default-off OneDrive verification: [backup operations](docs/backups.md). For the next private setup step, follow [Supabase credentials](docs/private-supabase-setup.md); the local `.env` has public metadata only until you fill its private fields.
 

@@ -236,3 +236,26 @@ no cloud upload/delete or local-source substitution occurs. The behavior follows
 [rclone copy](https://rclone.org/commands/rclone_copy/),
 [explicit file lists](https://rclone.org/filtering/#files-from-raw-read-list-of-source-file-names)
 and [transfer limits](https://rclone.org/docs/#max-transfer-size).
+
+
+### October 30 actual accepted-seed recovery
+
+The [measured drill](reports/2026-10-30-accepted-seed-backup.json) passed from
+OneDrive: 336 required references (180 distinct objects), 501,050,403 logical
+bytes, 169 registered artifacts and 166 historical archive files. All 27 table
+inventories matched; restricted runtime mutation was refused and the isolated
+target was removed. Download/readback/restore took 367 seconds. The represented
+cutoff remains October 29 at 21:23:05 UTC; a later verification does not refresh it.
+
+A separate original-namespace check resolved all 162 accepted-seed objects from
+the downloaded store, without original laptop CSVs. The original candidate
+manifest and each `objects/<prefix>/<hash>` path remain unchanged. The backed-up
+owner review and source/download metadata are identified by their archive labels;
+they can restore the local seed inputs without inventing new collection times.
+The immutable manifest, not a regenerated candidate, identifies the accepted data.
+
+Earlier incomplete/failed attempts remain recorded. This verifies this set only.
+Actual unattended daily delivery, freshness events and managed provider API
+reprovisioning are still open; automation and the launch backup flag remain false.
+There are no official forecasts in this prelaunch snapshot and no source or
+hosted fact import is authorized by successful restoration.

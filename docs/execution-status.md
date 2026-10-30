@@ -1,6 +1,6 @@
 # Baseline execution status
 
-Updated October 29, 2026. The owner merged PRs #37 through #42 into main.
+Updated October 30, 2026. The owner merged PRs #37 through #42 into main.
 The main-branch restricted database check (40921820389) and private Storage/raw
 archive check (40920359705) passed. DB-001 and DB-002 now meet their reviewed
 acceptance criteria and are closed/Finished. Actual cloud reconstruction verified
@@ -25,7 +25,7 @@ See [the measured acceptance report](reports/2026-10-29-hosted-acceptance.json).
 | EVAL-001 | [#14](https://github.com/Bixzare/baseline/issues/14) | In progress | Per-target errors, coverage and immutable report manifests tested locally; actual live reporting remains gated. |
 | OPS-001 | [#15](https://github.com/Bixzare/baseline/issues/15) | In progress | Default-off workflows, coordinated stages and fixture operations; actual source/notification/activation gates remain. |
 | OPS-002 | [#16](https://github.com/Bixzare/baseline/issues/16) | In progress | Alert lifecycle and disposable Windows task tested; GitHub notice received, Windows desktop delivery failed; source/upload and hosted recovery remain gated. |
-| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | In progress | Shared-snapshot export, complete-set integrity and real Postgres restoration tested; real personal OneDrive current-state export/readback/restore passed; full archive coverage and daily execution remain gates. |
+| BACKUP-001 | [#17](https://github.com/Bixzare/baseline/issues/17) | In progress | Shared-snapshot export, complete-set integrity and real Postgres restoration tested; Actual October 30 OneDrive restore passed for 169 artifacts, 166 historical files and 27 tables; full seed graph resolves from downloaded bytes. Unattended daily execution/provider recovery remain gates. |
 | LAUNCH-001 | [#18](https://github.com/Bixzare/baseline/issues/18) | Backlog | All required prior tasks plus future-slate readiness. |
 
 Finished means implemented and owner-reviewed, normally demonstrated by a merged

@@ -229,8 +229,9 @@ source/download provenance, owner acceptance and original game-inventory proof.
 The measured graph contains 166 distinct files and 439,640,345 bytes. OneDrive
 capacity was checked before export. The first uncommitted-code preparation was
 stopped before finalization; no incomplete set counts as a verified backup.
-W-22 remains open pending independent readback/restore, daily execution and
-provider recovery setup. Broader history and hosted fact import stay unapproved.
+The October 30 independent download and isolated restore passed: 336 file
+references, 27 tables and all accepted-seed graph objects matched. W-22 remains
+open for unattended daily execution, cutoff health and provider recovery setup. Broader history and hosted fact import stay unapproved.
 
 ## Adding a development finding
 
