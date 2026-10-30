@@ -7,6 +7,24 @@ import sys
 from typing import Any
 
 SCRIPT = """$ErrorActionPreference='Stop'
+Add-Type -TypeDefinition '
+using System.Runtime.InteropServices;
+public static class BaselineNotificationState {
+  [DllImport("shell32.dll")]
+  public static extern int SHQueryUserNotificationState(out int state);
+}' 
+$baselineState=0
+$baselineStateResult=[BaselineNotificationState]::SHQueryUserNotificationState([ref]$baselineState)
+$baselineStateNames=@{1='not_present';2='busy';3='fullscreen';4='presentation';
+  5='accepts_notifications';6='quiet_time';7='app_mode'}
+if($baselineStateResult -ne 0 -or $baselineState -ne 5){
+  $baselineSuppression=if($baselineStateResult -ne 0){'query_failed'}
+    elseif($baselineStateNames.ContainsKey($baselineState)){$baselineStateNames[$baselineState]}
+    else{'unknown'}
+  @{queued=$false;shell_shown_event=$false;suppression_state=$baselineSuppression}|
+    ConvertTo-Json -Compress
+  exit 0
+}
 Add-Type -AssemblyName System.Windows.Forms
 $baselineContext = New-Object System.Windows.Forms.ApplicationContext
 $baselineTimer = New-Object System.Windows.Forms.Timer
@@ -28,7 +46,8 @@ try {
   $baselineNotice.ShowBalloonTip(10000, 'Baseline', $baselineMessage,
     [System.Windows.Forms.ToolTipIcon]::Info)
   [System.Windows.Forms.Application]::Run($baselineContext)
-  @{queued=$true;shell_shown_event=$script:baselineShown}|ConvertTo-Json -Compress
+  @{queued=$true;shell_shown_event=$script:baselineShown;
+    notification_state='accepts_notifications'}|ConvertTo-Json -Compress
 } finally {
   $baselineTimer.Stop()
   $baselineTimer.Dispose()
@@ -71,6 +90,23 @@ def notify(*, rehearsal: bool = False) -> dict[str, Any]:
         if result.returncode:
             return failed
         payload = json.loads(result.stdout)
+        if (
+            isinstance(payload, dict)
+            and payload.get("queued") is False
+            and payload.get("shell_shown_event") is False
+            and payload.get("suppression_state")
+            in {
+                "not_present",
+                "busy",
+                "fullscreen",
+                "presentation",
+                "quiet_time",
+                "app_mode",
+                "query_failed",
+                "unknown",
+            }
+        ):
+            return {**failed, "suppression_state": payload["suppression_state"]}
         if (
             not isinstance(payload, dict)
             or payload.get("queued") is not True

@@ -137,3 +137,20 @@ delivery check failed despite the shell callback. The cause remains unresolved.
 The earlier failed drill remains evidence, and production/fallback/desktop
 automation remain disabled.
 No current source collection, hosted recovery or production heartbeat is implied.
+
+
+### Notification-state diagnosis
+
+A read-only October 30 Shell API query returned `busy`. This describes the current
+session; it does not establish the cause of the earlier missed notice. The helper
+now queries [SHQueryUserNotificationState](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shqueryusernotificationstate)
+before creating a notification. It defers notices while Windows reports busy,
+locked/absent, full-screen, presentation, quiet-time or another blocked state.
+A query failure stays unverified. Suppression is recorded separately from queuing,
+so it cannot count as successful delivery or suppress a later eligible retry.
+
+No registry, Do Not Disturb, presentation or power setting is changed. Unit tests
+cover state acknowledgment and redaction; the exact native query succeeded in
+the actual session. A new visible-delivery drill is pending owner readiness in an
+unlocked, notification-accepting session. Production notification acceptance stays
+failed until that drill is observed.
