@@ -75,7 +75,7 @@ uv run --locked python scripts/check_kernel.py
 
 Linux and Windows CI passed 153 tests and fresh-kernel checks on SOURCE-001 commit 594bada; future commits need their own CI evidence.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
-Live probes are manual only. Released defaults are approved for bounded local inventory/repairs; stop on denial. Exact 2025-26 game IDs match, but seed quarantine and cloud CDN gates remain.
+Live probes are manual only. Released defaults cover approved bounded historical inventory/repairs. The owner-approved October 30 six-call current-season diagnostic is complete; ongoing collection awaits ADR 0019 lock and route acceptance. Stop on denial; cloud NBA access remains unverified.
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.
 In this cloud runner set `export UV_CACHE_DIR=/workspace/.cache/uv` before uv; its default home cache is read-only.
 Use the project environment, not global Python or an unrelated Conda environment.

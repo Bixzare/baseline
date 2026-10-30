@@ -241,7 +241,7 @@ Protected publication and disposable rehearsal: [LEDGER-002 operations](docs/pub
 The command uses actual restricted SQL roles with fixture sources and mock Storage; production gates remain open.
 
 Schedule/status/current roster commands and source gates: [collection](docs/collection.md).
-No source is enabled by the default configuration.
+No source is enabled by the default configuration. The [October 30 bounded local diagnostic](docs/reports/2026-10-30-local-operational-sources.json) verified six current-season samples. [ADR 0019](docs/decisions/0019-collect-current-nba-inputs-with-the-local-client.md) is a draft proposal for ongoing local collection, pending owner lock.
 
 Versioned finals, DNP/unknown handling, correction work and rehearsal: [outcomes](docs/outcomes.md).
 Use `uv run --locked python -m scripts.rehearse_publication --outcomes` only with disposable local Postgres.
