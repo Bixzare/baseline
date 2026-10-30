@@ -1,0 +1,237 @@
+{
+  "all_samples_verified": true,
+  "archived_diagnostic_script": "diagnostic-script.py",
+  "client_documentation": [
+    "https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/scheduleleaguev2.md",
+    "https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/scoreboardv3.md",
+    "https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/commonteamroster.md"
+  ],
+  "diagnostic_script_sha256": "3ace4444830bbeaae7b3da92b6f4b7b3aded4f382660b7393af54a295cb4868a",
+  "elapsed_seconds": 37.766,
+  "endpoint_calls": 6,
+  "header_policy": "unchanged_released_defaults",
+  "limitations": [
+    "Current source snapshots only; no historical pregame roster proof",
+    "Two roster teams sampled; completeness and upstream update lag remain unverified",
+    "Final participation and correction semantics need adapter tests",
+    "Six pending NBA Cup slots have unresolved teams; their reported times are not publication authority",
+    "No guarantee of full eventual season coverage or cloud NBA access",
+    "Permission covered this diagnostic, not recurring collection or forecast activation"
+  ],
+  "local_evidence_root": "artifacts/current-source-diagnostics/792fb93a8dd04cc388b5925d32c92192",
+  "maximum_endpoint_calls": 6,
+  "minimum_gap_seconds": 3,
+  "nba_api_version": "1.11.4",
+  "production_enabled": false,
+  "reported_on": "2026-10-30",
+  "retries": 0,
+  "reviewed_at_utc": "2026-10-30T08:37:22.606778+00:00",
+  "samples": [
+    {
+      "capability": "schedule",
+      "endpoint": "nba_api.ScheduleLeagueV2",
+      "explicit_parameters": {
+        "season": "2026-27"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "1-schedule",
+      "raw_bytes": 4075687,
+      "raw_sha256": "4c751cf9f6f5ee163b37bdf03fc2419e9817c77d768270b8c6ef67456399b7df",
+      "received_at": "2026-10-30T08:08:46.017441+00:00",
+      "requested_at": "2026-10-30T08:08:40.263285+00:00",
+      "summary": {
+        "final_sample": {
+          "away_team_id": "1610612763",
+          "game_id": "0022600146",
+          "home_team_id": "1610612757",
+          "start_utc": "2026-10-30T02:00:00+00:00",
+          "status": 3
+        },
+        "full_schedule_completeness_verified": false,
+        "unsupported_regular_rows": 6,
+        "upcoming_sample": {
+          "away_team_id": "1610612766",
+          "game_id": "0022600015",
+          "home_team_id": "1610612764",
+          "start_utc": "2026-10-30T23:00:00+00:00",
+          "status": 1
+        },
+        "verified_regular_rows": 1200
+      }
+    },
+    {
+      "capability": "status",
+      "endpoint": "nba_api.ScoreboardV3",
+      "explicit_parameters": {
+        "game_date": "2026-10-30"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "2-status",
+      "raw_bytes": 27451,
+      "raw_sha256": "fb5ba341e7aa60bd0fcbfb46e5ecdf38c8fe8a791f70236d8b6c65e0246b7f52",
+      "received_at": "2026-10-30T08:08:58.484433+00:00",
+      "requested_at": "2026-10-30T08:08:57.187930+00:00",
+      "summary": {
+        "game_date": "2026-10-30",
+        "game_rows": 10,
+        "schedule_game_ids_match": true,
+        "status_semantics_production_accepted": false
+      }
+    },
+    {
+      "capability": "roster",
+      "endpoint": "nba_api.CommonTeamRoster",
+      "explicit_parameters": {
+        "season": "2026-27",
+        "team_id": "1610612764"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "3-roster",
+      "raw_bytes": 4242,
+      "raw_sha256": "ebb0a18f67fdea09eced557e2b3aa6995816a094abc2aca3405af102ae47ced3",
+      "received_at": "2026-10-30T08:09:03.154477+00:00",
+      "requested_at": "2026-10-30T08:09:01.935005+00:00",
+      "summary": {
+        "availability": "unknown",
+        "player_rows": 18,
+        "team_id": "1610612764",
+        "unique_player_ids": 18,
+        "upstream_roster_completeness_verified": false
+      }
+    },
+    {
+      "capability": "roster",
+      "endpoint": "nba_api.CommonTeamRoster",
+      "explicit_parameters": {
+        "season": "2026-27",
+        "team_id": "1610612766"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "4-roster",
+      "raw_bytes": 4414,
+      "raw_sha256": "1b00a5c7078275e4c231d28a6dafe8547f45c52c5ae71fe7d6810353232a9e0d",
+      "received_at": "2026-10-30T08:09:08.013676+00:00",
+      "requested_at": "2026-10-30T08:09:06.603406+00:00",
+      "summary": {
+        "availability": "unknown",
+        "player_rows": 18,
+        "team_id": "1610612766",
+        "unique_player_ids": 18,
+        "upstream_roster_completeness_verified": false
+      }
+    },
+    {
+      "capability": "traditional",
+      "endpoint": "nba_api.BoxScoreTraditionalV3",
+      "explicit_parameters": {
+        "game_id": "0022600146"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "5-traditional",
+      "raw_bytes": 18958,
+      "raw_sha256": "4e264e264a785f90f6f8e24566c0506d22436f064a69bb395c6984670e7385de",
+      "received_at": "2026-10-30T08:09:12.726238+00:00",
+      "requested_at": "2026-10-30T08:09:11.439297+00:00",
+      "summary": {
+        "game_id": "0022600146",
+        "participation_semantics": "not yet accepted; zero or absent values do not establish DNP",
+        "player_rows_by_side": {
+          "away": 15,
+          "home": 13
+        },
+        "scores": {
+          "away": 124,
+          "home": 103
+        }
+      }
+    },
+    {
+      "capability": "summary",
+      "endpoint": "nba_api.BoxScoreSummaryV3",
+      "explicit_parameters": {
+        "game_id": "0022600146"
+      },
+      "http_status": 200,
+      "local_archive_subdir": "6-summary",
+      "raw_bytes": 16605,
+      "raw_sha256": "c14d869dc3bcefae85a86380a026b81a69c7891b0867479d6b38a96ffba4afa2",
+      "received_at": "2026-10-30T08:09:17.488583+00:00",
+      "requested_at": "2026-10-30T08:09:16.140273+00:00",
+      "summary": {
+        "final_scores_match": true,
+        "game_id": "0022600146",
+        "inactive_rows_by_side": {
+          "away": 3,
+          "home": 4
+        },
+        "production_source_accepted": false
+      }
+    }
+  ],
+  "scope": "Owner-approved six-call local capability diagnostic; no collection-route acceptance",
+  "source_accepted": false,
+  "source_publication_times_verified": false,
+  "timeout_seconds": 30,
+  "unresolved_schedule_slots": [
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601201",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/04/2026 00:00:00",
+      "source_time_utc": "2026-12-04T05:00:00Z",
+      "sublabel": "Quarterfinal"
+    },
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601202",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/04/2026 00:00:00",
+      "source_time_utc": "2026-12-04T05:00:00Z",
+      "sublabel": "Quarterfinal"
+    },
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601203",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/05/2026 00:00:00",
+      "source_time_utc": "2026-12-05T05:00:00Z",
+      "sublabel": "Quarterfinal"
+    },
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601204",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/05/2026 00:00:00",
+      "source_time_utc": "2026-12-05T05:00:00Z",
+      "sublabel": "Quarterfinal"
+    },
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601229",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/08/2026 00:00:00",
+      "source_time_utc": "2026-12-08T05:00:00Z",
+      "sublabel": "Semifinal"
+    },
+    {
+      "away_team_id": 0,
+      "disposition": "retain_as_pending_unforecastable_slot",
+      "game_id": "0022601230",
+      "home_team_id": 0,
+      "label": "Emirates NBA Cup",
+      "source_day": "12/08/2026 00:00:00",
+      "source_time_utc": "2026-12-08T05:00:00Z",
+      "sublabel": "Semifinal"
+    }
+  ]
+}
