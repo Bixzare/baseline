@@ -1,11 +1,12 @@
 # Baseline execution status
 
-Updated October 29, 2026. The owner merged PRs #37 through #42 into main.
+Updated October 29, 2026. The owner merged PRs #37 through #45 into main.
 The main-branch restricted database check (40921820389) and private Storage/raw
 archive check (40920359705) passed. DB-001 and DB-002 now meet their reviewed
 acceptance criteria and are closed/Finished. Actual cloud reconstruction verified
 all 438,321,084 original raw bytes without laptop files. No secrets allowlist
-changed. Seed quarantine/acceptance, prospective sources, complete daily backups,
+changed. Compact seed acceptance is recorded for the exact October 29 candidate.
+Hosted import, cloud repair-lineage verification, prospective sources, complete daily backups,
 notifications and launch supervision remain separate gates. Production is disabled.
 See [the measured acceptance report](reports/2026-10-29-hosted-acceptance.json).
 
@@ -16,7 +17,7 @@ See [the measured acceptance report](reports/2026-10-29-hosted-acceptance.json).
 | DATA-001 | [#5](https://github.com/Bixzare/baseline/issues/5) | Finished | Owner merged PR #19, including #20/#21, into main on October 26; seed acceptance is separate. |
 | DB-001 | [#6](https://github.com/Bixzare/baseline/issues/6) | Finished | Owner-reviewed fixes merged; migrations through 0010, Windows/Actions restricted TLS/roles and independent current-state restore verified; issue closed. |
 | DB-002 | [#7](https://github.com/Bixzare/baseline/issues/7) | Finished | Owner-reviewed Auth/Storage fixes merged; Windows and main Actions permissions/byte checks and full raw reconstruction pass; issue closed. |
-| DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | History schemas, dry planner and fixture import; real seed and hosted gates remain blocked. |
+| DB-003 | [#8](https://github.com/Bixzare/baseline/issues/8) | In progress | Exact compact seed accepted October 29; local plan has no blockers. One old orphan stays unknown. Approved cloud step awaits reviewed main merge/execution; hosted import is not authorized. |
 | MODEL-001 | [#9](https://github.com/Bixzare/baseline/issues/9) | In progress | Minutes/rate preparation, full saved-roster cohort and snapshots tested on fixtures; actual input gates remain. |
 | LEDGER-001 | [#10](https://github.com/Bixzare/baseline/issues/10) | In progress | Schema/role/bootstrap and concurrent-slot tests on real Postgres; hosted registration and actual publication remain gated. |
 | LEDGER-002 | [#11](https://github.com/Bixzare/baseline/issues/11) | In progress | Protected SQL/client and disposable rehearsal implemented; hosted and operational gates remain. |

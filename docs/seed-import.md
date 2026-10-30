@@ -193,6 +193,25 @@ the database-required counts and measured duration on success and failure.
 The first actual stage stored its objects but failed terminal audit recording;
 its missing required audit fields are fixed and covered by real Postgres tests.
 A separate read-only pass verified all 156 candidate/repair objects. Preserve the
-incomplete attempt and assess the corrected repeat separately. A proposed cloud
-workflow step is still subject to explicit owner authorization and review; no
-new credential-bearing workflow step has been applied.
+incomplete attempt and assess the corrected repeat separately. The owner approved
+the optional cloud step on October 29. It uses the existing restricted credentials,
+runs only from main with a nonempty explicit UUID input, and waits for owner merge
+before its first execution. No secrets allowlist changes are made.
+
+
+### October 29 compact acceptance
+
+The owner accepted exact manifest
+`29ebd610942d5a3aa5711fa22157e2f50c8d13ad8f5dba0b27137cde2b04656e`,
+parser `eoin-seed-v2`, for compact launch history only. The acceptance record is
+`docs/approvals/2026-10-29-compact-seed-review.json`. It approves verified calendar
+ordering and the exact retained orphan review under ADR 0018. That historical
+participation remains unknown; broader history and pregame rosters are not
+accepted. Immutable candidate manifests retain their original assessment flags;
+the separate owner review supplies the acceptance. Hosted fact import is not
+authorized by this decision. A clear local plan is not hosted readiness.
+
+After reviewed merge, manually dispatch `artifact-check.yml` on main with
+`seed_lineage_root_id=f7a31c6e-d3c0-4d68-a47f-814c8727c43c`. Inspect the saved
+`repair-lineage.json` before considering cloud lineage verified. The read-only
+check retains its rehearsal-scope markers and cannot import or accept sources.

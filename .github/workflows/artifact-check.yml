@@ -7,6 +7,11 @@ on:
         type: string
         required: false
         default: ""
+      seed_lineage_root_id:
+        description: Optional registered repair-lineage UUID for read-only main-branch verification
+        type: string
+        required: false
+        default: ""
 permissions:
   contents: read
 concurrency:
@@ -48,6 +53,19 @@ jobs:
         run: uv run --locked python -m scripts.rehearse_raw_archives check --confirm-rehearsal --report artifacts/artifact-check/raw-archives.json
         env:
           BASELINE_RAW_ARCHIVE_ROOT_IDS: ${{ inputs.archive_root_ids }}
+          BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
+          BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
+          BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}
+          BASELINE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.BASELINE_SUPABASE_PUBLISHABLE_KEY }}
+          BASELINE_ARTIFACT_USER_ID: ${{ vars.BASELINE_ARTIFACT_USER_ID }}
+          BASELINE_ARTIFACT_BUCKET: ${{ vars.BASELINE_ARTIFACT_BUCKET }}
+          BASELINE_ARTIFACT_EMAIL: ${{ secrets.BASELINE_ARTIFACT_EMAIL }}
+          BASELINE_ARTIFACT_PASSWORD: ${{ secrets.BASELINE_ARTIFACT_PASSWORD }}
+      - name: Verify registered seed repair lineage without laptop inputs
+        if: inputs.seed_lineage_root_id != '' && github.ref == 'refs/heads/main'
+        run: uv run --locked python -m hoop.domains.nba.history.lineage check --confirm-rehearsal --report artifacts/artifact-check/repair-lineage.json
+        env:
+          BASELINE_SEED_LINEAGE_ROOT_ID: ${{ inputs.seed_lineage_root_id }}
           BASELINE_RUNTIME_DSN: ${{ secrets.BASELINE_RUNTIME_DSN }}
           BASELINE_DB_CONNECTION_MODE: ${{ vars.BASELINE_DB_CONNECTION_MODE }}
           BASELINE_SUPABASE_URL: ${{ vars.BASELINE_SUPABASE_URL }}

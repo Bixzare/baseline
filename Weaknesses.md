@@ -154,7 +154,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 - **Evidence:** The [pinned comparison](docs/dataset-comparison.md) found Eoin 525 team ID 0 rows, blank player-team IDs, missing minutes/nonparticipation ambiguity, varying minute precision, and older-season coverage gaps. Internal row counts cannot prove exact game completeness. Wyatt 238 does not establish a recent player seed.
 - **Impact:** Silent filtering or guessed repairs could bias coverage, rates, historical evaluation, and later model promotion.
-- **Current mitigation:** October 29 inventory still matches all 1,230 game IDs. Locked ADR 0018 supports 129 source-confirmed inactive repairs, three positive zero-minute appearances and two invalid extra-team exclusions. The new candidate retains 32,308 player and 2,460 team rows, with one orphan player record still unresolved. Exact compact-window review and seed acceptance remain pending; no historical pregame cohorts are invented. See the [candidate review](docs/approvals/2026-10-29-compact-seed-review.json).
+- **Current mitigation:** October 29 inventory still matches all 1,230 game IDs. Locked ADR 0018 supports 129 source-confirmed inactive repairs, three positive zero-minute appearances and two invalid extra-team exclusions. The new candidate retains 32,308 player and 2,460 team rows, with one orphan player record still unresolved. The owner accepted the exact compact-window candidate on October 29; hosted import and broader history remain gated; no historical pregame cohorts are invented. See the [candidate review](docs/approvals/2026-10-29-compact-seed-review.json).
 - **Improvement / timing:** DATA-001 normalizes the reviewed 2025-26 seed and records unresolved cases. Repair earlier seasons only before they enter later training. Injury reconstruction and all-time comparison remain deferred.
 - **Closure evidence:** Exact coverage and source mapping checks, defensible DNP/unknown handling, replay/leakage tests, and reviewed seed acceptance. A weakness entry cannot waive a release gate.
 
@@ -170,7 +170,7 @@ All initial entries are open. Local launch issue specifications now exist; GitHu
 
 - **Evidence:** Owner-locked ADR 0017 preserves 438,321,084 original bytes as seven immutable compressed parts totaling 60,615,087 bytes. Actual Windows, independent OneDrive restoration and main-branch Actions run 40920359705 reconstructed the original hashes. The raw size obstacle is resolved.
 - **Impact:** Raw reconstruction alone does not verify the new candidate's repair overlays, complete backup or accepted facts.
-- **Current mitigation:** Keep exact source/physical identities and owner acceptance separate. The October 29 compact plan selects 5,447 player rows, 1,696 team sides and 848 games; it remains blocked pending exact candidate review.
+- **Current mitigation:** Keep exact source/physical identities and owner acceptance separate. The October 29 compact plan selects 5,447 player rows, 1,696 team sides and 848 games; its local review gates now clear under the exact owner acceptance. Hosted import remains unapproved.
 - **Improvement / timing:** Verify all candidate/repair lineage independently from cloud, then complete the accepted seed backup and daily execution before activation.
 - **Closure evidence:** Raw archival is verified. Broader DB-003 and backup gates remain explicit; no seed acceptance or fact import is implied.
 
@@ -252,8 +252,8 @@ accepted seed plus prospective source evidence, not their successful fixtures.
 Locked ADR 0018 keeps the single remaining orphan unknown, rather than inferring
 DNP. Sixteen strictly later played appearances exist; the compact seed selects
 ten after that date. This may support exact compact acceptance only, not full
-historical completeness or historical full-roster evaluation. The draft owner
-review remains non-authorizing. Repair evidence retention creates no NBA facts.
+historical completeness or historical full-roster evaluation. The owner accepted that exact compact review on October 29; hosted fact import
+remains unapproved. Repair evidence retention creates no NBA facts.
 
 DB-001 and DB-002 hosted acceptance checks now pass on Windows and actual main
 Actions, and their issues are closed. This narrows W-16's remaining work to source,
