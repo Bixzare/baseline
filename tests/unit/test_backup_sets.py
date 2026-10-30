@@ -272,3 +272,43 @@ def test_onedrive_keeps_windows_dns_environment_but_excludes_setup_secrets(
     assert client.env["SYSTEMROOT"] == "C:/Windows-fixture"
     assert "BASELINE_SUPABASE_ADMIN_KEY" not in client.env and "PGPASSWORD" not in client.env
     assert len(captured) == 2 and all(env == client.env for env in captured)
+
+
+@pytest.mark.parametrize("mode", ["complete", "missing", "corrupt"])
+def test_batch_transport_acknowledgment_still_requires_every_object_hash(tmp_path, mode):
+    stage, sync, manifest = fixture_set(tmp_path)
+    sha = finalize(stage, sync, manifest)
+    calls = []
+
+    class Batched:
+        evidence_kind = "synthetic_remote_fixture"
+
+        def download(self, relative, destination, limit):
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes((sync / relative).read_bytes()[:limit])
+
+        def download_many(self, files, destination, *, max_seconds):
+            calls.append(files)
+            assert 0 < max_seconds <= 1800
+            for relative in files:
+                if mode == "missing":
+                    continue
+                body = (sync / relative).read_bytes() if mode == "complete" else b"changed"
+                target = destination / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(body)
+
+    args = {
+        "backup_id": manifest["backup_id"],
+        "expected_hash": sha,
+        "source_project": "fixture",
+        "forbidden_roots": [sync, stage],
+    }
+    if mode == "complete":
+        result = remote_readback(Batched(), tmp_path / "download", **args)
+        assert not result["off_device_verified"]
+        assert result["represented_cutoff"] == "2026-10-27T08:00:00Z"
+    else:
+        with pytest.raises(BackupError, match="missing_or_corrupt"):
+            remote_readback(Batched(), tmp_path / "download", **args)
+    assert calls == [{manifest["files"][0]["path"]: 13}]

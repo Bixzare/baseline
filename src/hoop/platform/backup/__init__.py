@@ -170,16 +170,31 @@ def remote_readback(
         raise BackupError("remote_project_identity_mismatch")
     if manifest.get("backup_id") != identity or len(manifest.get("files", [])) > 100000:
         raise BackupError("remote_manifest_identity_mismatch")
-    downloaded = set()
+    objects: dict[str, int] = {}
     for item in manifest["files"]:
-        if time.monotonic() >= deadline:
-            raise BackupError("remote_readback_budget_exhausted")
         relative = item["path"]
-        if relative not in downloaded:
-            if not re.fullmatch(r"objects/[0-9a-f]{2}/[0-9a-f]{64}", relative):
-                raise BackupError("unsafe_remote_object_path")
-            remote.download(relative, contained(readback, relative), item["byte_count"] + 1)
-            downloaded.add(relative)
+        if (
+            not isinstance(relative, str)
+            or not re.fullmatch(r"objects/[0-9a-f]{2}/[0-9a-f]{64}", relative)
+            or type(item["byte_count"]) is not int
+            or item["byte_count"] < 0
+        ):
+            raise BackupError("unsafe_remote_object_path")
+        limit = item["byte_count"] + 1
+        if relative in objects and objects[relative] != limit:
+            raise BackupError("conflicting_remote_object_size")
+        objects[relative] = limit
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise BackupError("remote_readback_budget_exhausted")
+    batch = getattr(remote, "download_many", None)
+    if callable(batch):
+        batch(objects, readback, max_seconds=remaining)
+    else:
+        for relative, limit in objects.items():
+            if time.monotonic() >= deadline:
+                raise BackupError("remote_readback_budget_exhausted")
+            remote.download(relative, contained(readback, relative), limit)
     verify_set(readback, identity, expected_hash)
     return {
         "verification_id": str(uuid4()),

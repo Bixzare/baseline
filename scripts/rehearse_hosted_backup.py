@@ -236,8 +236,23 @@ def main() -> int:
         ValueError,
         KeyError,
         psycopg.Error,
-    ):
-        print(json.dumps({"verified": False, "reason_code": "hosted_backup_rehearsal_failed"}))
+    ) as error:
+        failure = {
+            "verified": False,
+            "reason_code": "hosted_backup_rehearsal_failed",
+            "failure_type": type(error).__name__,
+        }
+        safe_reasons = {
+            "remote_readback_budget_exhausted",
+            "onedrive_remote_readback_failed",
+            "onedrive_remote_readback_unavailable",
+            "onedrive_batch_readback_failed",
+            "onedrive_batch_readback_unavailable",
+            "backup_implementation_must_be_committed",
+        }
+        if isinstance(error, BackupError) and str(error) in safe_reasons:
+            failure["failure_detail"] = str(error)
+        print(json.dumps(failure))
         return 1
 
 

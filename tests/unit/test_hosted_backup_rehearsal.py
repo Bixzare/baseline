@@ -81,3 +81,21 @@ def test_dirty_backup_implementation_is_rejected_before_private_setup(tmp_path, 
     monkeypatch.setattr("scripts.rehearse_hosted_backup.project", forbidden)
     with pytest.raises(BackupError, match="implementation_must_be_committed"):
         export_current(tmp_path / "out")
+
+
+@pytest.mark.parametrize("reason", ["remote_readback_budget_exhausted", "private token text"])
+def test_rehearsal_failure_exposes_only_allowlisted_reason(tmp_path, monkeypatch, capsys, reason):
+    import json
+
+    def failed(*args, **kwargs):
+        raise BackupError(reason)
+
+    monkeypatch.setattr("scripts.rehearse_hosted_backup.restore_downloaded", failed)
+    monkeypatch.setattr("sys.argv", ["hosted-backup", "restore", "--output", str(tmp_path)])
+    assert main() == 1
+    body = json.loads(capsys.readouterr().out)
+    assert body["failure_type"] == "BackupError"
+    assert body.get("failure_detail") == (
+        "remote_readback_budget_exhausted" if reason.startswith("remote_") else None
+    )
+    assert "private token" not in json.dumps(body)

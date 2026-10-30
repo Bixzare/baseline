@@ -216,3 +216,23 @@ verify every required file, and restore its database into an isolated target.
 These manual commands keep automation and the launch backup gate false. Daily
 execution, provider recovery setup and a later accepted operational state remain
 separate release requirements.
+
+
+### Bounded object transfer
+
+The 180-object drill measured approximately 18 minutes for 128 objects with one
+rclone process per file, putting the 20-minute readback budget at risk. OneDrive
+now downloads the exact validated object list in a single remote-to-local command,
+with two transfer workers, two metadata checkers, no extra multithread streams,
+a hard total-byte cap and the remaining readback time. A fresh object directory
+is required. Metadata and the completion marker are still read first; every
+required size/hash is still checked afterward, before creating a restore target.
+Missing/corrupt objects and a successful process exit without all bytes still fail.
+
+This adds a small optional batch transport to reduce repeated process/path lookup
+cost. Other provider fixtures retain the sequential interface. The read-only
+account and exact source/destination order preserve the permission boundary;
+no cloud upload/delete or local-source substitution occurs. The behavior follows
+[rclone copy](https://rclone.org/commands/rclone_copy/),
+[explicit file lists](https://rclone.org/filtering/#files-from-raw-read-list-of-source-file-names)
+and [transfer limits](https://rclone.org/docs/#max-transfer-size).
