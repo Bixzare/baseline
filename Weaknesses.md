@@ -265,5 +265,5 @@ season capacity and complete recovery gates; it does not activate production.
 The replacement helper now processes Windows UI messages within a ten-second
 bound and reports shell acknowledgment separately from visibility. An actual
 disposable task exited 0 and reported a shown event, then was removed. Owner
-confirmation is pending. W-21 remains open for that confirmation, unattended
-recovery and accepted sources; no persistent task or production flag was enabled.
+confirmation on October 30 reported no visible notice. W-21 remains open for
+verified notification delivery, unattended recovery and accepted sources; no persistent task or production flag was enabled.

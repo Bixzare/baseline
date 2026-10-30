@@ -132,6 +132,8 @@ See [ShowBalloonTip](https://learn.microsoft.com/en-us/dotnet/api/system.windows
 The actual disposable task reported exit 0 and `shell_shown_event=true`; its exact
 task was removed afterward. The report in
 `docs/reports/2026-10-29-windows-notification.json` records the actual UTC check
-time. Owner confirmation of visibility is pending. The earlier failed delivery
-drill remains evidence, and production/fallback/desktop automation remain disabled.
+time. On October 30 the owner confirmed that the notice was not visible, so this
+delivery check failed despite the shell callback. The cause remains unresolved.
+The earlier failed drill remains evidence, and production/fallback/desktop
+automation remain disabled.
 No current source collection, hosted recovery or production heartbeat is implied.

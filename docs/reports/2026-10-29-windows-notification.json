@@ -1,6 +1,8 @@
 {
   "actual_provider_access": false,
+  "cause": "unresolved; shell callback is not proof of visible delivery",
   "checked_at_actual_utc": "2026-10-29T21:04:50.451016+00:00",
+  "delivery_acceptance": "failed",
   "disposable_task_removed": true,
   "invocation_id": "a52ae59f-6dd4-4018-95db-624cf464bd94",
   "local_checks": "12 focused tests, lint, format, mypy and platform boundary passed",
@@ -10,7 +12,8 @@
     "queued": true,
     "shell_shown_event": true
   },
-  "owner_visible_delivery": "pending_confirmation",
+  "owner_confirmation_on": "2026-10-30",
+  "owner_visible_delivery": "not_seen_by_owner",
   "persistent_tasks_enabled": false,
   "production_enabled": false,
   "reported_on": "2026-10-29",
