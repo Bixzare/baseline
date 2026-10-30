@@ -2,8 +2,8 @@
 
 OPS-002 adds a separate checker, append-only alert migration and versioned Task
 Scheduler definitions. Production, local fallback and automatic desktop notices
-remain disabled. Migrations 0009 and 0010 await owner review; no hosted migration
-or actual source acceptance is established by these checks.
+remain disabled. Reviewed migrations 0009 and 0010 are applied to the hosted
+project; this does not establish accepted operational sources or recovery.
 
 ## Health and recovery
 
@@ -112,3 +112,45 @@ These are manual fixture rehearsals. Unattended operation, actual notification
 delivery, accepted sources, real backup restoration and future-slate timely
 publication remain release gates. The independent recovery reliability gate is
 not passed merely because XML, a task exit code or a queued notice exists.
+
+
+## October 29 notification follow-up
+
+The old helper slept for 3.5 seconds without a UI message loop. The replacement
+runs a hidden WinForms application context for at most ten seconds, disposes its
+tray icon/timer, and returns a bounded JSON acknowledgment. It runs in a child
+process with only Windows/session path settings and the rehearsal flag; database,
+provider and Auth credentials are not inherited. No Windows settings, installed
+apps or persistent tasks change.
+
+Microsoft documents the [NotifyIcon message-loop example](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon?view=netframework-4.8.1)
+and the [BalloonTipShown event](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon.balloontipshown).
+A shell event is separate from owner-visible delivery. Notification timing is
+controlled by system settings, so the helper's lifetime is bounded independently.
+See [ShowBalloonTip](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon.showballoontip).
+
+The actual disposable task reported exit 0 and `shell_shown_event=true`; its exact
+task was removed afterward. The report in
+`docs/reports/2026-10-29-windows-notification.json` records the actual UTC check
+time. On October 30 the owner confirmed that the notice was not visible, so this
+delivery check failed despite the shell callback. The cause remains unresolved.
+The earlier failed drill remains evidence, and production/fallback/desktop
+automation remain disabled.
+No current source collection, hosted recovery or production heartbeat is implied.
+
+
+### Notification-state diagnosis
+
+A read-only October 30 Shell API query returned `busy`. This describes the current
+session; it does not establish the cause of the earlier missed notice. The helper
+now queries [SHQueryUserNotificationState](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shqueryusernotificationstate)
+before creating a notification. It defers notices while Windows reports busy,
+locked/absent, full-screen, presentation, quiet-time or another blocked state.
+A query failure stays unverified. Suppression is recorded separately from queuing,
+so it cannot count as successful delivery or suppress a later eligible retry.
+
+No registry, Do Not Disturb, presentation or power setting is changed. Unit tests
+cover state acknowledgment and redaction; the exact native query succeeded in
+the actual session. A new visible-delivery drill is pending owner readiness in an
+unlocked, notification-accepting session. Production notification acceptance stays
+failed until that drill is observed.
