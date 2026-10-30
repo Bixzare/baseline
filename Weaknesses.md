@@ -221,6 +221,18 @@ target was removed. This closes the current-state delivery uncertainty only;
 W-22 remains open for full historical inventory and daily execution. No partial
 rehearsal was logged as a complete launch backup or production heartbeat.
 
+
+### October 29 historical backup inventory
+
+A manifest-derived inventory now covers every required accepted-seed object,
+source/download provenance, owner acceptance and original game-inventory proof.
+The measured graph contains 166 distinct files and 439,640,345 bytes. OneDrive
+capacity was checked before export. The first uncommitted-code preparation was
+stopped before finalization; no incomplete set counts as a verified backup.
+The October 30 independent download and isolated restore passed: 336 file
+references, 27 tables and all accepted-seed graph objects matched. W-22 remains
+open for unattended daily execution, cutoff health and provider recovery setup. Broader history and hosted fact import stay unapproved.
+
 ## Adding a development finding
 
 Use the next unused W-ID and record: title; first observed date and affected version; evidence/issue link; user impact; current mitigation; proposed action and review trigger; release-blocking status; and closure evidence. Keep the explanation concise. Do not put secrets, personal backup paths, or raw private logs here.

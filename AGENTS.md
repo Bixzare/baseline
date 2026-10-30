@@ -73,7 +73,7 @@ uv run --locked python -m ipykernel install --sys-prefix --name baseline --displ
 uv run --locked python scripts/check_kernel.py
 ```
 
-Linux and Windows CI passed 153 tests and fresh-kernel checks on SOURCE-001 commit 594bada; future commits need their own CI evidence.
+BACKUP-001: `python -m hoop.domains.nba.history.backup_inventory` prepares the private accepted-seed file list; manual export uses `python -m scripts.rehearse_hosted_backup export --archive-inventory PATH`. Follow [backup scope and verification](docs/backups.md); preparation alone proves no off-device recovery.
 SOURCE-001 commands, retained manifests, and unresolved cloud/local gates: [source report](docs/source-verification.md).
 Live probes are manual only. Released defaults are approved for bounded local inventory/repairs; stop on denial. Exact 2025-26 game IDs match, but seed quarantine and cloud CDN gates remain.
 Local Windows setup and fresh project-kernel execution passed; hosted CI is separate evidence.

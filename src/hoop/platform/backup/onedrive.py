@@ -1,7 +1,9 @@
 """OneDrive readback via a verified rclone remote; no local substitute or upload."""
 
+import math
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -96,3 +98,72 @@ class OneDrive:
                     raise BackupError("onedrive_remote_readback_failed")
         except (OSError, subprocess.TimeoutExpired):
             raise BackupError("onedrive_remote_readback_unavailable") from None
+
+    def download_many(
+        self, files: dict[str, int], destination: Path, *, max_seconds: float
+    ) -> None:
+        """One remote-to-local process, exact paths, two workers and hard byte/time caps."""
+        if (
+            not files
+            or len(files) > 100000
+            or isinstance(max_seconds, bool)
+            or not math.isfinite(max_seconds)
+            or not 1 <= max_seconds <= 1800
+        ):
+            raise BackupError("bounded_batch_readback_required")
+        if any(
+            not re.fullmatch(r"objects/[0-9a-f]{2}/[0-9a-f]{64}", path)
+            or type(limit) is not int
+            or limit <= 0
+            for path, limit in files.items()
+        ):
+            raise BackupError("unsafe_batch_object_inventory")
+        destination = destination.resolve()
+        if not destination.is_dir() or (destination / "objects").exists():
+            raise BackupError("batch_requires_fresh_object_directory")
+        maximum = sum(files.values())
+        if shutil.disk_usage(destination).free < maximum + 16 * 1024 * 1024:
+            raise BackupError("insufficient_readback_disk_capacity")
+        listing = destination / "requested-objects.txt"
+        with listing.open("x", encoding="ascii", newline="\n") as stream:
+            stream.write("\n".join(sorted(files)) + "\n")
+        try:
+            result = subprocess.run(
+                [
+                    str(self.binary),
+                    "copy",
+                    self.remote,
+                    str(destination),
+                    "--files-from-raw",
+                    str(listing),
+                    "--transfers",
+                    "2",
+                    "--checkers",
+                    "2",
+                    "--multi-thread-streams",
+                    "0",
+                    "--max-transfer",
+                    str(maximum),
+                    "--max-duration",
+                    str(max_seconds) + "s",
+                    "--cutoff-mode",
+                    "hard",
+                    "--immutable",
+                    "--retries",
+                    "1",
+                    "--low-level-retries",
+                    "1",
+                    "--contimeout",
+                    "10s",
+                    "--timeout",
+                    "60s",
+                ],
+                capture_output=True,
+                env=self.env,
+                timeout=max_seconds,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            )
+            if result.returncode:
+                raise BackupError("onedrive_batch_readback_failed")
+        except (OSError, subprocess.TimeoutExpired):
+            raise BackupError("onedrive_batch_readback_unavailable") from None

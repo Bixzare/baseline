@@ -182,3 +182,80 @@ eca4c72459efe08ec8a632b9a5a649850a1c5fd21446372ceafc4bccebd84016,
 represented cutoff October 28 at 09:40:26 UTC, the same 27 table digests and one
 artifact, 173,969 bytes downloaded and verified, 36.359 seconds for readback plus
 restore, and its isolated target removed. The launch gate remains false.
+
+
+## Complete accepted seed inventory
+
+The offline `python -m hoop.domains.nba.history.backup_inventory` command derives
+required files from the exact accepted candidate manifest. It verifies every
+referenced raw/normalized/repair object, original source manifest and download
+receipts, owner acceptance, and the original NBA inventory body hash. Unrelated
+files are excluded. Missing/corrupt inputs, stale or pending acceptance and changed
+proof block preparation; a directory scan cannot establish completeness.
+
+Supply explicit `--archive`, `--source-manifest`, `--downloads`, `--acceptance`,
+`--inventory-raw`, optional `--raw-archives`, and `--output` paths. The output is
+a private JSON list containing absolute source paths; keep it under ignored
+artifacts. Standard output contains only a sanitized count/hash/scope summary.
+The existing backup adapter consumes this reviewed list without changing original
+bytes or public metadata. It preserves the full normalized seed and the retained
+unknown, but does not accept broader history or historical pregame rosters.
+
+After reviewing and committing the implementation, explicitly include that list:
+
+```powershell
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup export --archive-inventory PATH_TO_PRIVATE_INVENTORY --output PATH_TO_REHEARSAL_REPORTS
+uv run --locked --env-file .env python -m scripts.rehearse_hosted_backup restore --output PATH_TO_REHEARSAL_REPORTS --readback-seconds 900
+```
+
+The export refuses uncommitted backup implementation changes so its saved code
+version identifies executable code. A first October 29 preparation was stopped
+before finalization to correct that provenance issue; its incomplete staging is
+preserved. A finalized set alone is insufficient: independently download it,
+verify every required file, and restore its database into an isolated target.
+These manual commands keep automation and the launch backup gate false. Daily
+execution, provider recovery setup and a later accepted operational state remain
+separate release requirements.
+
+
+### Bounded object transfer
+
+The 180-object drill measured approximately 18 minutes for 128 objects with one
+rclone process per file, putting the 20-minute readback budget at risk. OneDrive
+now downloads the exact validated object list in a single remote-to-local command,
+with two transfer workers, two metadata checkers, no extra multithread streams,
+a hard total-byte cap and the remaining readback time. A fresh object directory
+is required. Metadata and the completion marker are still read first; every
+required size/hash is still checked afterward, before creating a restore target.
+Missing/corrupt objects and a successful process exit without all bytes still fail.
+
+This adds a small optional batch transport to reduce repeated process/path lookup
+cost. Other provider fixtures retain the sequential interface. The read-only
+account and exact source/destination order preserve the permission boundary;
+no cloud upload/delete or local-source substitution occurs. The behavior follows
+[rclone copy](https://rclone.org/commands/rclone_copy/),
+[explicit file lists](https://rclone.org/filtering/#files-from-raw-read-list-of-source-file-names)
+and [transfer limits](https://rclone.org/docs/#max-transfer-size).
+
+
+### October 30 actual accepted-seed recovery
+
+The [measured drill](reports/2026-10-30-accepted-seed-backup.json) passed from
+OneDrive: 336 required references (180 distinct objects), 501,050,403 logical
+bytes, 169 registered artifacts and 166 historical archive files. All 27 table
+inventories matched; restricted runtime mutation was refused and the isolated
+target was removed. Download/readback/restore took 367 seconds. The represented
+cutoff remains October 29 at 21:23:05 UTC; a later verification does not refresh it.
+
+A separate original-namespace check resolved all 162 accepted-seed objects from
+the downloaded store, without original laptop CSVs. The original candidate
+manifest and each `objects/<prefix>/<hash>` path remain unchanged. The backed-up
+owner review and source/download metadata are identified by their archive labels;
+they can restore the local seed inputs without inventing new collection times.
+The immutable manifest, not a regenerated candidate, identifies the accepted data.
+
+Earlier incomplete/failed attempts remain recorded. This verifies this set only.
+Actual unattended daily delivery, freshness events and managed provider API
+reprovisioning are still open; automation and the launch backup flag remain false.
+There are no official forecasts in this prelaunch snapshot and no source or
+hosted fact import is authorized by successful restoration.
