@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 public static class BaselineNotificationState {
   [DllImport("shell32.dll")]
   public static extern int SHQueryUserNotificationState(out int state);
-}' 
+}'
 $baselineState=0
 $baselineStateResult=[BaselineNotificationState]::SHQueryUserNotificationState([ref]$baselineState)
 $baselineStateNames=@{1='not_present';2='busy';3='fullscreen';4='presentation';
